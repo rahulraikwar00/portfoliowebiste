@@ -32,239 +32,65 @@ interface BlogPost {
   content: string;
 }
 
-const blogPosts: BlogPost[] = [
-  {
-    slug: 'hermes-agent-setup',
-    title: 'Setting Up Hermes Agent for Development',
-    date: 'April 20, 2026',
-    content: `# Setting Up Hermes Agent for Development
-
-A quick guide to installing and configuring Hermes Agent on WSL for your daily development workflow.
-
-## What is Hermes Agent?
-
-Hermes Agent is a terminal-based AI assistant that helps you with coding, research, file operations, and automation. It's designed to work alongside you, handling the repetitive stuff so you can focus on the creative parts of development.
-
-## Prerequisites
-
-Before installing, make sure you have:
-
-- Node.js 18 or higher
-- npm or pnpm package manager
-- An OpenAI API key (optional, for advanced features)
-
-## Installation
-
-Open your terminal and run:
-
-\`\`\`bash
-npm install -g hermes-agent
-\`\`\`
-
-That's it! The package installs globally so you can use it from any directory.
-
-## Configuration
-
-After installation, create a config file at \`~/.hermes/config.json\`:
-
-\`\`\`json
-{
-  "model": "gpt-4",
-  "apiKey": "your-api-key-here",
-  "editor": "vim",
-  "shell": "zsh"
+interface BlogMeta {
+  title: string;
+  date: string;
+  slug: string;
 }
-\`\`\`
 
-You can also use environment variables:
+function parseFrontmatter(content: string): { meta: BlogMeta; content: string } {
+  const lines = content.split('\n');
+  const meta: Partial<BlogMeta> = {};
+  let contentStart = 0;
+  let inFrontmatter = false;
 
-\`\`\`bash
-export OPENAI_API_KEY="your-key"
-\`\`\`
-
-## Your First Conversation
-
-Start hermes-agent by running:
-
-\`\`\`bash
-hermes-agent
-\`\`\`
-
-You'll see a prompt where you can type naturally. Try asking:
-
-- "Explain this code I'm looking at"
-- "Write a function to parse CSV files"
-- "Find all TODO comments in this project"
-
-## Keyboard Shortcuts
-
-- \`Ctrl+C\` - Cancel current task
-- \`Ctrl+D\` - Exit hermes-agent
-- \`Ctrl+L\` - Clear screen
-
-## Tips for Better Results
-
-1. **Be specific** - "Create a React component for a login form" works better than "make something"
-
-2. **Use context** - Navigate to your project first so hermes-agent can read the files
-
-3. **Iterate** - It's a conversation, not a magic wand. Refine your requests.
-
-## Troubleshooting
-
-**API errors**: Check your API key is set correctly in config or environment
-
-**Slow responses**: Try using gpt-3.5-turbo instead of gpt-4 for faster results
-
-**Permission errors**: Make sure your config directory is writable
-
-## What's Next
-
-Once you're comfortable, explore:
-
-- Custom prompts for your team
-- Integration with git hooks
-- Automated code reviews
-
-Happy coding!`
-  },
-  {
-    slug: 'obsidian-vault-wsl',
-    title: 'Managing Obsidian Vault on Linux WSL',
-    date: 'April 19, 2026',
-    content: `# Managing Obsidian Vault on Linux WSL
-
-How to structure your Obsidian vault when using WSL with a Windows host — keeping your notes organized and accessible.
-
-## The Problem
-
-When using WSL (Windows Subsystem for Linux) alongside Windows, you have two file systems to choose from. Each has pros and cons:
-
-- **Windows drive** (\`/mnt/c/...\`) - Accessible from Windows apps but slower
-- **Linux drive** (\`~/...\`) - Fast but harder to access from Windows
-
-Finding the right setup for your knowledge management system matters more than you'd think.
-
-## Option 1: Windows Drive
-
-Store your vault in Windows and access it via \`/mnt/c\`:
-
-\`\`\`
-/mnt/c/Users/YourName/Documents/Obsidian/Vault
-\`\`\`
-
-### Pros
-- Full access from the Windows Obsidian app
-- Easy backup via OneDrive or iCloud
-- Syncs across your Windows devices
-- No permission headaches
-
-### Cons
-- Noticeably slower file operations in WSL
-- Path handling can be tricky
-- Some Linux tools may choke on Windows line endings
-
-### Best For
-- Using Obsidian primarily on Windows
-- Team environments on Windows
-- Quick setup without migration
-
-## Option 2: Linux Drive
-
-Keep everything in Linux:
-
-\`\`\`
-~/notes/vault
-\`\`\`
-
-Then use Obsidian for Linux or access via WSLg.
-
-### Pros
-- Blazing fast file access
-- Native Linux experience
-- Perfect for terminal-based workflows
-- Easy git integration
-
-### Cons
-- Can't easily open from Windows Obsidian
-- Requires WSLg or X server for GUI apps
-- Sync across devices needs manual setup
-
-### Best For
-- Terminal-first workflows
-- Running Obsidian in WSL only
-- Developers who live in the Linux ecosystem
-
-## Option 3: Hybrid Approach (Recommended)
-
-Use two vaults:
-
-1. **Windows vault** (\`/mnt/c/...\`) - For general notes, meeting notes, anything sharing with Windows apps
-
-2. **Linux vault** (\`~/notes/dev\`) - For development notes, code snippets, technical documentation
-
-### How to Link Them
-
-Use symbolic links to keep them organized:
-
-\`\`\`bash
-# In your Linux home
-mkdir -p ~/notes
-ln -s /mnt/c/Users/YourName/Documents/Obsidian/General ~/notes/windows
-\`\`\`
-
-Now \`~/notes/windows\` points to your Windows vault.
-
-## Vault Structure
-
-Whatever option you choose, structure matters. Here's what works:
-
-\`\`\`
-Vault/
-├── 00-Inbox/       # Quick captures
-├── 10-Projects/    # Project-specific notes
-├── 20-Code/        # Code snippets, commands
-├── 30-Learning/    # Tutorials, articles
-└── 40-Reference/  # API docs, cheatsheets
-\`\`\`
-
-The numeric prefix keeps things alphabetically sorted.
-
-## Syncing
-
-For the Linux-only approach, use git or a sync service:
-
-\`\`\`bash
-# Simple git sync
-cd ~/notes
-git init
-git remote add origin your-repo
-\`\`\`
-
-Or use Syncthing for automatic sync between machines.
-
-## My Setup
-
-I'm currently using Option 3 with:
-
-- Windows vault for general notes
-- Linux vault for dev stuff
-- Git-backed code notes
-
-It takes a bit of maintenance but gives me the best of both worlds.
-
-## Decision Framework
-
-Ask yourself:
-
-1. **Where do I primarily use Obsidian?** That's your main vault location.
-2. **Do I need cross-platform access?** Use Windows drive.
-3. **Am I terminal-first?** Go Linux-native.
-4. **Do I work with non-technical teammates?** Windows drive.
-
-Start simple, iterate as needed.`
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (line === '---') {
+      if (inFrontmatter) {
+        contentStart = i + 1;
+        break;
+      }
+      inFrontmatter = true;
+      continue;
+    }
+    if (inFrontmatter && line.includes(':')) {
+      const [key, ...valueParts] = line.split(':');
+      const value = valueParts.join(':').trim();
+      if (key === 'title') meta.title = value;
+      else if (key === 'date') meta.date = value;
+      else if (key === 'slug') meta.slug = value;
+    }
   }
-];
+
+  return {
+    meta: meta as BlogMeta,
+    content: lines.slice(contentStart).join('\n')
+  };
+}
+
+let blogPosts: BlogPost[] = [];
+
+async function fetchBlogPosts(): Promise<BlogPost[]> {
+  const indexResponse = await fetch('/blog/blog-index.json');
+  const files: string[] = await indexResponse.json();
+  
+  const posts: BlogPost[] = await Promise.all(
+    files.map(async (filename) => {
+      const response = await fetch(`/blog/${filename}`);
+      const raw = await response.text();
+      const { meta, content } = parseFrontmatter(raw);
+      return {
+        slug: meta.slug,
+        title: meta.title,
+        date: meta.date,
+        content: content
+      };
+    })
+  );
+
+  return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+}
 
 function getSlugFromUrl(): string | null {
   const hash = window.location.hash.slice(1);
@@ -302,10 +128,27 @@ async function renderBlogPost(slug: string) {
   addCopyButtons();
 }
 
+function renderBlogList() {
+  const blogSection = document.querySelector('#blog');
+  if (!blogSection) return;
+
+  const cards = blogPosts.map(post => `
+    <article class="card">
+      <h3><a href="#${post.slug}">${post.title}</a></h3>
+      <span class="date">${post.date}</span>
+    </article>
+  `).join('');
+
+  blogSection.innerHTML = `<h2>Blog</h2>${cards}`;
+}
+
 async function init() {
   const savedTheme = localStorage.getItem('theme') || 'light';
   document.documentElement.setAttribute('data-theme', savedTheme);
   updateThemeButton(savedTheme);
+
+  blogPosts = await fetchBlogPosts();
+  renderBlogList();
 
   const slug = getSlugFromUrl();
 
@@ -340,6 +183,6 @@ const moonIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
 function updateThemeButton(theme: string) {
   const btn = document.querySelector('.theme-toggle');
   if (btn) {
-    btn.innerHTML = theme === 'dark' ? moonIcon : sunIcon;
+    btn.innerHTML = theme === 'light' ? moonIcon : sunIcon;
   }
 }
