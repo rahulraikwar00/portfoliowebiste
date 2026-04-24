@@ -100,9 +100,11 @@ function getSlugFromUrl(): string | null {
 async function renderBlogPost(slug: string) {
   const post = blogPosts.find(p => p.slug === slug);
   if (!post) {
-    window.location.search = '';
+    window.location.hash = '';
     return;
   }
+  
+  console.log('Found post:', post.slug, 'Title:', post.title, 'Content length:', post.content.length);
 
   const relatedPost = blogPosts.find(p => p.slug !== slug);
 
@@ -129,17 +131,20 @@ async function renderBlogPost(slug: string) {
 }
 
 function renderBlogList() {
-  const blogSection = document.querySelector('#blog');
-  if (!blogSection) return;
+  const blogList = document.querySelector('#blog-list');
+  if (!blogList) return;
 
-  const cards = blogPosts.map(post => `
-    <article class="card">
-      <h3><a href="#${post.slug}">${post.title}</a></h3>
+  const posts = blogPosts.length > 0 ? blogPosts : [
+    { slug: 'hermes-agent-setup', title: 'Setting Up Hermes Agent for Development', date: 'Apr 20, 2026' },
+    { slug: 'obsidian-vault-wsl', title: 'Managing Obsidian Vault on Linux WSL', date: 'Apr 19, 2026' }
+  ];
+
+  blogList.innerHTML = posts.map(post => `
+    <article>
+      <h3><a href="#${post.slug.trim()}">${post.title}</a></h3>
       <span class="date">${post.date}</span>
     </article>
   `).join('');
-
-  blogSection.innerHTML = `<h2>Blog</h2>${cards}`;
 }
 
 async function init() {
