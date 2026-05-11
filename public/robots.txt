@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://iamrahulraikwar.online/sitemap.xml

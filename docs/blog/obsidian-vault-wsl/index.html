@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Managing Obsidian Vault on Linux WSL | Rahul Raikwar</title>
+    <meta name="description" content="How to structure your Obsidian vault when using WSL with a Windows host — keeping your notes organized and accessible." />
+    <link rel="canonical" href="https://iamrahulraikwar.online/blog/obsidian-vault-wsl/" />
+    <meta property="og:title" content="Managing Obsidian Vault on Linux WSL" />
+    <meta property="og:description" content="How to structure your Obsidian vault when using WSL with a Windows host — keeping your notes organized and accessible." />
+    <meta property="og:url" content="https://iamrahulraikwar.online/blog/obsidian-vault-wsl/" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Rahul Raikwar" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Managing Obsidian Vault on Linux WSL" />
+    <meta name="twitter:description" content="How to structure your Obsidian vault when using WSL with a Windows host — keeping your notes organized and accessible." />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "Managing Obsidian Vault on Linux WSL",
+      "datePublished": "April 19, 2026",
+      "author": {
+        "@type": "Person",
+        "name": "Rahul Raikwar",
+        "url": "https://iamrahulraikwar.online"
+      }
+    }
+    </script>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <main>
+      <section>
+        <p><a href="../">&larr; All Posts</a></p>
+        <h1>Managing Obsidian Vault on Linux WSL</h1>
+        <p>April 19, 2026</p>
+        <div><h1>Managing Obsidian Vault on Linux WSL</h1>
+<p>How to structure your Obsidian vault when using WSL with a Windows host — keeping your notes organized and accessible.</p>
+<h2>The Problem</h2>
+<p>When using WSL (Windows Subsystem for Linux) alongside Windows, you have two file systems to choose from. Each has pros and cons:</p>
+<ul>
+<li><strong>Windows drive</strong> (<code>/mnt/c/...</code>) - Accessible from Windows apps but slower</li>
+<li><strong>Linux drive</strong> (<code>~/...</code>) - Fast but harder to access from Windows</li>
+</ul>
+<p>Finding the right setup for your knowledge management system matters more than you&#39;d think.</p>
+<h2>Option 1: Windows Drive</h2>
+<p>Store your vault in Windows and access it via <code>/mnt/c</code>:</p>
+<pre><code>/mnt/c/Users/YourName/Documents/Obsidian/Vault
+</code></pre>
+<h3>Pros</h3>
+<ul>
+<li>Full access from the Windows Obsidian app</li>
+<li>Easy backup via OneDrive or iCloud</li>
+<li>Syncs across your Windows devices</li>
+<li>No permission headaches</li>
+</ul>
+<h3>Cons</h3>
+<ul>
+<li>Noticeably slower file operations in WSL</li>
+<li>Path handling can be tricky</li>
+<li>Some Linux tools may choke on Windows line endings</li>
+</ul>
+<h3>Best For</h3>
+<ul>
+<li>Using Obsidian primarily on Windows</li>
+<li>Team environments on Windows</li>
+<li>Quick setup without migration</li>
+</ul>
+<h2>Option 2: Linux Drive</h2>
+<p>Keep everything in Linux:</p>
+<pre><code>~/notes/vault
+</code></pre>
+<p>Then use Obsidian for Linux or access via WSLg.</p>
+<h3>Pros</h3>
+<ul>
+<li>Blazing fast file access</li>
+<li>Native Linux experience</li>
+<li>Perfect for terminal-based workflows</li>
+<li>Easy git integration</li>
+</ul>
+<h3>Cons</h3>
+<ul>
+<li>Can&#39;t easily open from Windows Obsidian</li>
+<li>Requires WSLg or X server for GUI apps</li>
+<li>Sync across devices needs manual setup</li>
+</ul>
+<h3>Best For</h3>
+<ul>
+<li>Terminal-first workflows</li>
+<li>Running Obsidian in WSL only</li>
+<li>Developers who live in the Linux ecosystem</li>
+</ul>
+<h2>Option 3: Hybrid Approach (Recommended)</h2>
+<p>Use two vaults:</p>
+<ol>
+<li><p><strong>Windows vault</strong> (<code>/mnt/c/...</code>) - For general notes, meeting notes, anything sharing with Windows apps</p>
+</li>
+<li><p><strong>Linux vault</strong> (<code>~/notes/dev</code>) - For development notes, code snippets, technical documentation</p>
+</li>
+</ol>
+<h3>How to Link Them</h3>
+<p>Use symbolic links to keep them organized:</p>
+<pre><code class="language-bash"># In your Linux home
+mkdir -p ~/notes
+ln -s /mnt/c/Users/YourName/Documents/Obsidian/General ~/notes/windows
+</code></pre>
+<p>Now <code>~/notes/windows</code> points to your Windows vault.</p>
+<h2>Vault Structure</h2>
+<p>Whatever option you choose, structure matters. Here&#39;s what works:</p>
+<pre><code>Vault/
+├── 00-Inbox/       # Quick captures
+├── 10-Projects/    # Project-specific notes
+├── 20-Code/        # Code snippets, commands
+├── 30-Learning/    # Tutorials, articles
+└── 40-Reference/  # API docs, cheatsheets
+</code></pre>
+<p>The numeric prefix keeps things alphabetically sorted.</p>
+<h2>Syncing</h2>
+<p>For the Linux-only approach, use git or a sync service:</p>
+<pre><code class="language-bash"># Simple git sync
+cd ~/notes
+git init
+git remote add origin your-repo
+</code></pre>
+<p>Or use Syncthing for automatic sync between machines.</p>
+<h2>My Setup</h2>
+<p>I&#39;m currently using Option 3 with:</p>
+<ul>
+<li>Windows vault for general notes</li>
+<li>Linux vault for dev stuff</li>
+<li>Git-backed code notes</li>
+</ul>
+<p>It takes a bit of maintenance but gives me the best of both worlds.</p>
+<h2>Decision Framework</h2>
+<p>Ask yourself:</p>
+<ol>
+<li><strong>Where do I primarily use Obsidian?</strong> That&#39;s your main vault location.</li>
+<li><strong>Do I need cross-platform access?</strong> Use Windows drive.</li>
+<li><strong>Am I terminal-first?</strong> Go Linux-native.</li>
+<li><strong>Do I work with non-technical teammates?</strong> Windows drive.</li>
+</ol>
+<p>Start simple, iterate as needed.</p>
+</div>
+      </section>
+    </main>
+    <footer>
+      <p>&copy; 2026 Rahul Raikwar</p>
+  </body>
+</html>

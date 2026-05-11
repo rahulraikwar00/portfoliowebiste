@@ -1,5 +1,6 @@
 import './style.css';
 import { marked } from 'marked';
+import { createIcons, icons } from 'lucide';
 
 function addCopyButtons() {
   const preBlocks = document.querySelectorAll('#blog-post pre');
@@ -11,18 +12,21 @@ function addCopyButtons() {
     
     const button = document.createElement('button');
     button.className = 'copy-btn';
-    button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
+    button.innerHTML = `<i data-lucide="copy" width="14" height="14"></i>`;
     button.onclick = () => {
       const code = pre.textContent || '';
       navigator.clipboard.writeText(code).then(() => {
-        button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>`;
+        button.innerHTML = `<i data-lucide="check" width="14" height="14"></i>`;
+        createIcons({ icons });
         setTimeout(() => {
-          button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
+          button.innerHTML = `<i data-lucide="copy" width="14" height="14"></i>`;
+          createIcons({ icons });
         }, 2000);
       });
     };
     wrapper.appendChild(button);
   });
+  createIcons({ icons });
 }
 
 interface BlogPost {
@@ -30,6 +34,7 @@ interface BlogPost {
   title: string;
   date: string;
   content: string;
+  readingTime: string;
 }
 
 interface BlogMeta {
@@ -60,6 +65,7 @@ function parseFrontmatter(content: string): { meta: BlogMeta; content: string } 
       if (key === 'title') meta.title = value;
       else if (key === 'date') meta.date = value;
       else if (key === 'slug') meta.slug = value;
+
     }
   }
 
@@ -80,11 +86,14 @@ async function fetchBlogPosts(): Promise<BlogPost[]> {
       const response = await fetch(`/blog/${filename}`);
       const raw = await response.text();
       const { meta, content } = parseFrontmatter(raw);
+      const words = content.split(/\s+/).length;
+      const mins = Math.max(1, Math.round(words / 200));
       return {
         slug: meta.slug,
         title: meta.title,
         date: meta.date,
-        content: content
+        content: content,
+        readingTime: `${mins} min read`,
       };
     })
   );
@@ -104,7 +113,8 @@ async function renderBlogPost(slug: string) {
     return;
   }
 
-  const relatedPost = blogPosts.find(p => p.slug !== slug);
+  const idx = blogPosts.indexOf(post);
+  const related = [blogPosts[idx - 1], blogPosts[idx + 1]].filter(Boolean);
 
   const header = document.getElementById('main-header');
   const footer = document.querySelector('footer');
@@ -115,14 +125,23 @@ async function renderBlogPost(slug: string) {
   if (!main) return;
 
   const html = await marked.parse(post.content.replace(/^# .+$/m, '').trim());
-  main.innerHTML = `<section id="blog-post">
-      <a href="#" class="back-link">← All Posts</a>
+  main.innerHTML = `<section id="blog-post" class="fade-in">
+      <a href="#" class="back-link" id="back-link">← Back to Blog</a>
       <h1>${post.title}</h1>
-      <span class="meta">${post.date}</span>
+      <div class="meta">${post.date} · ${post.readingTime}</div>
       <div class="content">${html}</div>
-      ${relatedPost ? `<div class="related"><p>What's next?</p><a href="#${relatedPost.slug}">${relatedPost.title}</a></div>` : ''}
+      ${related.length ? `<div class="related"><p>More posts</p><div class="related-grid">${related.map(p => `<a href="#${p.slug}">${p.title}</a>`).join('')}</div></div>` : ''}
     </section>`;
   
+  const backLink = document.getElementById('back-link');
+  if (backLink) {
+    backLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.location.hash = '';
+      window.location.reload();
+    });
+  }
+  createIcons({ icons });
   addCopyButtons();
 }
 
@@ -130,19 +149,48 @@ function renderBlogList() {
   const blogSection = document.querySelector('#blog');
   if (!blogSection) return;
 
-  const cards = blogPosts.map(post => `
-    <article class="card">
-      <h3><a href="#${post.slug}">${post.title}</a></h3>
-      <span class="date">${post.date}</span>
-    </article>
-  `).join('');
+  let currentYear = '';
+  const items = blogPosts.map(post => {
+    const year = post.date.match(/\d{4}/)?.[0] ?? '';
+    const yearHeader = year !== currentYear ? (currentYear = year, `<div class="blog-year">${year}</div>`) : '';
+    return `${yearHeader}
+    <article>
+      <div class="blog-top">
+        <h3><a href="#${post.slug}">${post.title}</a></h3>
+        <span class="date">${post.date}</span>
+      </div>
+      <span class="reading-time">${post.readingTime}</span>
+    </article>`;
+  }).join('');
 
-  blogSection.innerHTML = `<h2>Blog</h2>${cards}`;
+  blogSection.innerHTML = `<h2>Blog <span class="post-count">· ${blogPosts.length} posts</span></h2>${items}`;
+  createIcons({ icons });
 }
 
 async function init() {
+  const saved = localStorage.getItem('theme');
+  if (saved) {
+    document.documentElement.setAttribute('data-theme', saved);
+  } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  }
+
+  const toggle = document.getElementById('theme-toggle');
+  if (toggle) {
+    toggle.addEventListener('click', () => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      const next = isDark ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      const icon = toggle.querySelector('[data-lucide]');
+      if (icon) icon.setAttribute('data-lucide', isDark ? 'moon' : 'sun');
+      createIcons({ icons });
+    });
+  }
+
   blogPosts = await fetchBlogPosts();
   renderBlogList();
+  createIcons({ icons });
 
   const slug = getSlugFromUrl();
 
