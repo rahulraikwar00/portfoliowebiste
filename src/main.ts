@@ -108,10 +108,8 @@ async function renderBlogPost(slug: string) {
 
   const header = document.getElementById('main-header');
   const footer = document.querySelector('footer');
-  const toggle = document.querySelector('.theme-toggle');
   if (header) header.style.display = 'none';
   if (footer) footer.style.display = 'none';
-  if (toggle) (toggle as HTMLElement).style.display = 'none';
 
   const main = document.querySelector('main');
   if (!main) return;
@@ -143,10 +141,6 @@ function renderBlogList() {
 }
 
 async function init() {
-  const savedTheme = localStorage.getItem('theme') || 'light';
-  document.documentElement.setAttribute('data-theme', savedTheme);
-  updateThemeButton(savedTheme);
-
   blogPosts = await fetchBlogPosts();
   renderBlogList();
 
@@ -167,22 +161,3 @@ window.addEventListener('hashchange', async () => {
 });
 
 init();
-
-(window as any).toggleTheme = function() {
-  const html = document.documentElement;
-  const current = html.getAttribute('data-theme');
-  const next = current === 'dark' ? 'light' : 'dark';
-  html.setAttribute('data-theme', next);
-  localStorage.setItem('theme', next);
-  updateThemeButton(next);
-};
-
-const sunIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`;
-const moonIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
-
-function updateThemeButton(theme: string) {
-  const btn = document.querySelector('.theme-toggle');
-  if (btn) {
-    btn.innerHTML = theme === 'light' ? moonIcon : sunIcon;
-  }
-}

@@ -2,36 +2,16 @@
 :root {
   --bg: #ffffff;
   --bg-alt: #f6f5f3;
-  --bg-dark: #0a0a0a;
   --text: #1a1a1a;
   --text-secondary: #6b6b6b;
-  --text-light: #fafafa;
   --border: #e5e5e5;
   --border-strong: #a3a3a3;
   --link: #0066cc;
-  --link-dark: #60a5fa;
   --accent: #0066cc;
   --accent-hover: #004999;
   --badge-bg: #f0f0f0;
   --badge-text: #1a1a1a;
   --card-shadow: rgba(0,0,0,0.08);
-}
-[data-theme="dark"] {
-  --bg: #0c0c0c;
-  --bg-alt: #161616;
-  --bg-dark: #000000;
-  --text: #f3f3f3;
-  --text-secondary: #a1a1a1;
-  --text-light: #fafafa;
-  --border: #2a2a2a;
-  --border-strong: #555555;
-  --link: #60a5fa;
-  --link-dark: #93c5fd;
-  --accent: #60a5fa;
-  --accent-hover: #93c5fd;
-  --badge-bg: #262626;
-  --badge-text: #e5e5e5;
-  --card-shadow: rgba(0,0,0,0.3);
 }
 html { font-size: 16px; }
 body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", Helvetica, Arial, sans-serif; line-height: 1.5; max-width: 960px; margin: 0 auto; padding: 0 1rem; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
@@ -49,9 +29,6 @@ nav a:hover { color: var(--text); text-decoration: none; }
 .social a { display: flex; align-items: center; justify-content: center; color: var(--text-secondary); opacity: 0.75; transition: opacity 0.2s ease, color 0.2s ease; }
 .social a:hover { opacity: 1; color: var(--text); text-decoration: none; }
 .social svg { display: block; }
-
-.theme-toggle { background: transparent; border: none; cursor: pointer; color: var(--text-secondary); opacity: 0.7; padding: 0.5rem; transition: opacity 0.2s ease, background 0.2s ease; border-radius: 50%; }
-.theme-toggle:hover { opacity: 1; background: var(--bg-alt); }
 
 main { padding-bottom: 3rem; }
 section { margin-bottom: 3rem; }
