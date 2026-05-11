@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vim Tips for Developers | Rahul Raikwar</title>
+    <meta name="description" content="Essential Vim tips for developers who want to be more productive in the terminal." />
+    <link rel="canonical" href="https://iamrahulraikwar.online/blog/vim-tips-developers/" />
+    <meta property="og:title" content="Vim Tips for Developers" />
+    <meta property="og:description" content="Essential Vim tips for developers who want to be more productive in the terminal." />
+    <meta property="og:url" content="https://iamrahulraikwar.online/blog/vim-tips-developers/" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Rahul Raikwar" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Vim Tips for Developers" />
+    <meta name="twitter:description" content="Essential Vim tips for developers who want to be more productive in the terminal." />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "Vim Tips for Developers",
+      "datePublished": "April 18, 2026",
+      "author": {
+        "@type": "Person",
+        "name": "Rahul Raikwar",
+        "url": "https://iamrahulraikwar.online"
+      }
+    }
+    </script>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <main>
+      <section>
+        <p><a href="../">&larr; All Posts</a></p>
+        <h1>Vim Tips for Developers</h1>
+        <p>April 18, 2026</p>
+        <div><h1>Vim Tips for Developers</h1>
+<p>Essential Vim tips for developers who want to be more productive in the terminal.</p>
+<h2>Why Vim?</h2>
+<p>Vim is modal — this means it takes time to learn but pays off in speed once mastered. Here&#39;s how to make the most of it.</p>
+<h2>Essential Movements</h2>
+<ul>
+<li><code>h j k l</code> — Basic movement (or arrow keys, but learn the defaults)</li>
+<li><code>w</code> — Next word start</li>
+<li><code>e</code> — Next word end</li>
+<li><code>b</code> — Previous word start</li>
+<li><code>0</code> — Line start</li>
+<li><code>$</code> — Line end</li>
+<li><code>gg</code> — File start</li>
+<li><code>G</code> — File end</li>
+</ul>
+<h2>Text Objects Are Your Friend</h2>
+<p>Text objects let you operate on blocks of text:</p>
+<ul>
+<li><code>iw</code> — inner word</li>
+<li><code>aw</code> — a word (includes space)</li>
+<li><code>i(</code> — inner parentheses</li>
+<li><code>a(</code> — a parentheses</li>
+<li><code>i&quot;</code> — inner quotes</li>
+<li><code>ip</code> — inner paragraph</li>
+<li><code>ap</code> — a paragraph</li>
+</ul>
+<p>Combine with <code>d</code>, <code>c</code>, <code>y</code>:</p>
+<ul>
+<li><code>ciw</code> — change inner word</li>
+<li><code>da&quot;</code> — delete a quote</li>
+<li><code>yip</code> — yank inner paragraph</li>
+</ul>
+<h2>Search and Replace</h2>
+<ul>
+<li><code>*</code> — Search for word under cursor</li>
+<li><code>n</code> — Next match</li>
+<li><code>N</code> — Previous match</li>
+<li><code>/pattern</code> — Search forward</li>
+<li><code>?pattern</code> — Search backward</li>
+</ul>
+<p>In command mode:</p>
+<ul>
+<li><code>:%s/old/new/g</code> — Replace all</li>
+<li><code>:%s/old/new/gc</code> — Replace all with confirm</li>
+</ul>
+<h2>Windows and Tabs</h2>
+<ul>
+<li><code>:sp</code> — Split horizontal</li>
+<li><code>:vsp</code> — Split vertical</li>
+<li><code>Ctrl+w h/j/k/l</code> — Navigate splits</li>
+<li><code>:tabnew</code> — New tab</li>
+<li><code>gt</code> — Next tab</li>
+<li><code>gT</code> — Previous tab</li>
+</ul>
+<h2>Macros</h2>
+<p>Record and replay:</p>
+<ul>
+<li><code>qa</code> — Start recording to register a</li>
+<li><code>q</code> — Stop recording</li>
+<li><code>@a</code> — Play back register a</li>
+<li><code>@@</code> — Repeat last macro</li>
+</ul>
+<p>Example: Number lines</p>
+<pre><code>qa
+yyp
+Ctrl+a
+q
+</code></pre>
+<p>Then press <code>@a</code> repeatedly.</p>
+<h2>Buffers</h2>
+<ul>
+<li><code>:ls</code> — List buffers</li>
+<li><code>:b next</code> — Switch to next buffer</li>
+<li><code>:b name</code> — Switch by name</li>
+<li><code>:bd</code> — Delete buffer</li>
+</ul>
+<h2>Dot Command</h2>
+<p>The <code>.</code> repeats your last change. This alone makes Vim powerful.</p>
+<p>Make a change once, then use <code>.</code> to repeat it elsewhere.</p>
+<h2>Config</h2>
+<p>Add to <code>~/.vimrc</code>:</p>
+<pre><code class="language-vim">&quot; Enable syntax highlighting
+syntax on
+
+&quot; Show line numbers
+set number
+
+&quot; Use relative line numbers
+set relativenumber
+
+&quot; Enable mouse
+set mouse=a
+
+&quot; Search case insensitive
+set ignorecase
+set smartcase
+
+&quot; Highlight search
+set hlsearch
+
+&quot; Auto indent
+set autoindent
+set smartindent
+
+&quot; Use spaces instead of tabs
+set expandtab
+set shiftwidth=2
+set tabstop=2
+</code></pre>
+<h2>Getting Started</h2>
+<ol>
+<li>Start with basic movements</li>
+<li>Learn one new command per day</li>
+<li>Try using Vim for small edits first</li>
+<li>Gradually replace your editor</li>
+</ol>
+<p>Start with <code>vimtutor</code> in your terminal — it comes with Vim and takes 30 minutes.</p>
+</div>
+      </section>
+    </main>
+    <footer>
+      <p>&copy; 2026 Rahul Raikwar</p>
+  </body>
+</html>

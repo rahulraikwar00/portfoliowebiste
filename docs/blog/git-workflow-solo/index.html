@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Git Workflow for Solo Developers | Rahul Raikwar</title>
+    <meta name="description" content="A simple Git workflow for working alone on personal projects." />
+    <link rel="canonical" href="https://iamrahulraikwar.online/blog/git-workflow-solo/" />
+    <meta property="og:title" content="Git Workflow for Solo Developers" />
+    <meta property="og:description" content="A simple Git workflow for working alone on personal projects." />
+    <meta property="og:url" content="https://iamrahulraikwar.online/blog/git-workflow-solo/" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Rahul Raikwar" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Git Workflow for Solo Developers" />
+    <meta name="twitter:description" content="A simple Git workflow for working alone on personal projects." />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "Git Workflow for Solo Developers",
+      "datePublished": "April 17, 2026",
+      "author": {
+        "@type": "Person",
+        "name": "Rahul Raikwar",
+        "url": "https://iamrahulraikwar.online"
+      }
+    }
+    </script>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <main>
+      <section>
+        <p><a href="../">&larr; All Posts</a></p>
+        <h1>Git Workflow for Solo Developers</h1>
+        <p>April 17, 2026</p>
+        <div><h1>Git Workflow for Solo Developers</h1>
+<p>A simple Git workflow for working alone on personal projects.</p>
+<h2>The Basic Workflow</h2>
+<h3>Starting a new feature</h3>
+<pre><code class="language-bash"># Make sure you&#39;re on main and up to date
+git checkout main
+git pull
+
+# Create a new branch
+git checkout -b feature/my-feature
+</code></pre>
+<h3>Making commits</h3>
+<pre><code class="language-bash"># Stage your changes
+git add .
+
+# Commit with a message
+git commit -m &quot;Add user authentication&quot;
+</code></pre>
+<h3>Keeping up to date</h3>
+<pre><code class="language-bash"># Fetch the latest from origin
+git fetch origin
+
+# Pull main into your branch
+git merge origin/main
+</code></pre>
+<p>Or use rebase for a cleaner history:</p>
+<pre><code class="language-bash">git rebase main
+</code></pre>
+<h3>Merging back</h3>
+<pre><code class="language-bash"># Switch to main
+git checkout main
+
+# Merge your feature
+git merge feature/my-feature
+
+# Delete the branch (optional)
+git branch -d feature/my-feature
+</code></pre>
+<h2>Writing Good Commit Messages</h2>
+<p>A good commit message has:</p>
+<ol>
+<li><strong>Subject line</strong> — Short description (under 50 chars)</li>
+<li><strong>Body</strong> — Explain what and why, not how</li>
+</ol>
+<p>Example:</p>
+<pre><code>Add user authentication
+
+- Implement login/logout with JWT
+- Add password hashing with bcrypt
+- Create auth middleware for protected routes
+
+Closes #12
+</code></pre>
+<h2>When to Commit</h2>
+<ul>
+<li>Commit early, commit often</li>
+<li>Each commit should be a logical unit</li>
+<li>Don&#39;t mix unrelated changes</li>
+<li>Run tests before committing</li>
+</ul>
+<h2>Useful Commands</h2>
+<ul>
+<li><code>git status</code> — See what&#39;s changed</li>
+<li><code>git diff</code> — View changes</li>
+<li><code>git log --oneline</code> — Compact history</li>
+<li><code>git stash</code> — Save changes temporarily</li>
+<li><code>git stash pop</code> —恢复 stashed changes</li>
+</ul>
+<h2>Undoing Things</h2>
+<pre><code class="language-bash"># Unstage a file
+git reset HEAD filename
+
+# Undo last commit (keep changes)
+git reset --soft HEAD~1
+
+# Discard changes to a file
+git checkout -- filename
+
+# Reset to a previous commit
+git reset --hard commit-hash
+</code></pre>
+<h2>Branch Naming</h2>
+<p>A simple convention:</p>
+<ul>
+<li><code>feature/description</code> — New features</li>
+<li><code>fix/description</code> — Bug fixes</li>
+<li><code>experiment/description</code> — Trying things out</li>
+</ul>
+<h2>A Solo Workflow That Works</h2>
+<ol>
+<li><code>main</code> is always deployable</li>
+<li>Create a branch for each piece of work</li>
+<li>Commit frequently with clear messages</li>
+<li>Merge back when ready</li>
+<li>Delete branches when done</li>
+</ol>
+<p>This keeps things simple and prevents <code>main</code> from getting messy.</p>
+</div>
+      </section>
+    </main>
+    <footer>
+      <p>&copy; 2026 Rahul Raikwar</p>
+  </body>
+</html>
