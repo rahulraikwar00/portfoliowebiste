@@ -131,6 +131,9 @@ async function renderBlogPost(slug: string) {
       <div class="meta">${post.date} · ${post.readingTime}</div>
       <div class="content">${html}</div>
       ${related.length ? `<div class="related"><p>More posts</p><div class="related-grid">${related.map(p => `<a href="#${p.slug}">${p.title}</a>`).join('')}</div></div>` : ''}
+      <div class="blog-support" style="text-align:center;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border)">
+        <button class="coffee-btn" id="blog-support-btn">☕ Support me</button>
+      </div>
     </section>`;
   
   const backLink = document.getElementById('back-link');
@@ -167,6 +170,39 @@ function renderBlogList() {
   createIcons({ icons });
 }
 
+function initSupportModal() {
+  const btn = document.getElementById('support-btn');
+  const blogBtn = document.getElementById('blog-support-btn');
+  const modal = document.getElementById('support-modal');
+  const close = document.getElementById('modal-close');
+  const upiEl = document.getElementById('upi-id');
+
+  if (!btn || !modal || !close) return;
+
+  const open = () => modal.classList.remove('hidden');
+  const closeModal = () => modal.classList.add('hidden');
+
+  btn.addEventListener('click', open);
+  if (blogBtn) blogBtn.addEventListener('click', open);
+  close.addEventListener('click', closeModal);
+  modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+  if (upiEl) {
+    upiEl.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText('8519098609@ybl');
+        upiEl.textContent = 'Copied!';
+        upiEl.classList.add('copied');
+        setTimeout(() => {
+          upiEl.textContent = '8519098609@ybl';
+          upiEl.classList.remove('copied');
+        }, 2000);
+      } catch {}
+    });
+  }
+}
+
 async function init() {
   const saved = localStorage.getItem('theme');
   if (saved) {
@@ -190,6 +226,7 @@ async function init() {
 
   blogPosts = await fetchBlogPosts();
   renderBlogList();
+  initSupportModal();
   createIcons({ icons });
 
   const slug = getSlugFromUrl();

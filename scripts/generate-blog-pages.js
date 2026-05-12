@@ -103,6 +103,9 @@ for (const file of files) {
         <h1>${escHtml(meta.title)}</h1>
         <p>${escHtml(meta.date)}</p>
         <div>${htmlContent}</div>
+        <div style="text-align:center;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border)">
+          <a href="https://iamrahulraikwar.online/" style="display:inline-flex;align-items:center;gap:0.35rem;padding:0.5rem 1.2rem;background:#0d9488;color:#fff;border-radius:8px;font-weight:600;text-decoration:none">☕ Support me</a>
+        </div>
       </section>
     </main>
     <footer>

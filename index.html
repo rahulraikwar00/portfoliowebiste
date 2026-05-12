@@ -54,6 +54,7 @@
           <div class="header-links">
           <a href="https://github.com/rahulraikwar00" target="_blank" aria-label="GitHub"><i data-lucide="github" width="20" height="20" aria-hidden="true"></i></a>
           <a href="https://linkedin.com/in/rahulraikwar" target="_blank" aria-label="LinkedIn"><i data-lucide="linkedin" width="20" height="20" aria-hidden="true"></i></a>
+          <button id="support-btn" class="support-header-btn" aria-label="Support"><i data-lucide="coffee" width="18" height="18" aria-hidden="true"></i></button>
         </div>
         </div>
       </div>
@@ -156,6 +157,20 @@
         <div class="blog-list"></div>
       </section>
     </main>
+
+    <div id="support-modal" class="modal-overlay hidden">
+      <div class="modal-card">
+        <button id="modal-close" class="modal-close">&times;</button>
+        <div class="modal-content">
+          <h3>☕ Support Rahul</h3>
+          <p>Scan with any UPI app (GPay, PhonePe, Paytm)</p>
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=upi://pay?pa=8519098609%40ybl&pn=Rahul%20Raikwar"
+               alt="UPI QR Code" width="280" height="280" class="qr-code" loading="lazy" />
+          <p class="upi-id" id="upi-id">8519098609@ybl</p>
+          <p class="upi-hint">Tap UPI ID to copy</p>
+        </div>
+      </div>
+    </div>
 
     <footer>
       <p>&copy; 2026 Rahul Raikwar</p>
