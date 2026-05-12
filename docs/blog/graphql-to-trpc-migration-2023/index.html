@@ -59,6 +59,9 @@ const user = await trpc.getUser.query(&quot;123&quot;)
 <p>tRPC is TypeScript-only. If your backend is in Go, Python, or Rust, tRPC doesn&#39;t help. GraphQL&#39;s language-agnostic schema makes sense for polyglot architectures. GraphQL also wins for public APIs — external developers benefit from self-documenting schemas, introspection queries, and GraphQL IDE tools. tRPC&#39;s type safety is internal-only.</p>
 <p>Our migration was pragmatic: new endpoints as tRPC procedures alongside existing GraphQL resolvers. After about three months, we had migrated all active use cases to tRPC and deprecated the GraphQL schema. Not revolutionary — just fewer layers between the code and the database. The result was faster development velocity and fewer type-related bugs.</p>
 </div>
+        <div style="text-align:center;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border)">
+          <a href="https://iamrahulraikwar.online/" style="display:inline-flex;align-items:center;gap:0.35rem;padding:0.5rem 1.2rem;background:#0d9488;color:#fff;border-radius:8px;font-weight:600;text-decoration:none">☕ Support me</a>
+        </div>
       </section>
     </main>
     <footer>

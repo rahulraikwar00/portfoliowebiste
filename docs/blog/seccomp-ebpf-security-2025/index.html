@@ -51,6 +51,9 @@
 <p>Seccomp and eBPF are complementary. Seccomp sets static boundaries on what syscalls are available. eBPF provides dynamic visibility and control within those boundaries. Think of seccomp as the guardrails — it defines the allowed paths. eBPF as the traffic camera — it watches what happens on those paths and alerts or blocks suspicious behavior.</p>
 <p>A secure container stack uses both. Enable <code>seccompProfile: RuntimeDefault</code> on all workloads today. Then add Falco for runtime threat detection and Cilium for network policy enforcement. Kubernetes v1.36 makes seccomp GA and enabled by default. If you&#39;re on an older version, enable it manually. The security benefit far outweighs the configuration effort — it&#39;s a one-line YAML change that blocks an entire class of kernel attacks.</p>
 </div>
+        <div style="text-align:center;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border)">
+          <a href="https://iamrahulraikwar.online/" style="display:inline-flex;align-items:center;gap:0.35rem;padding:0.5rem 1.2rem;background:#0d9488;color:#fff;border-radius:8px;font-weight:600;text-decoration:none">☕ Support me</a>
+        </div>
       </section>
     </main>
     <footer>
