@@ -3,23 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The Return of Static Sites Generated at Build Time | Rahul Raikwar</title>
-    <meta name="description" content="Static Sites Build Time 2024 has fundamentally changed how we build software. What started as an experimental approach in 2021 is now production-standard across" />
+    <title>Static Sites and Build Time in 2024 | Rahul Raikwar</title>
+    <meta name="description" content="Static site generation is the default for content websites. The tools are mature, the performance is excellent, and the hosting is cheap or free. The main chall" />
     <link rel="canonical" href="https://iamrahulraikwar.online/blog/static-sites-build-time-2024/" />
-    <meta property="og:title" content="The Return of Static Sites Generated at Build Time" />
-    <meta property="og:description" content="Static Sites Build Time 2024 has fundamentally changed how we build software. What started as an experimental approach in 2021 is now production-standard across" />
+    <meta property="og:title" content="Static Sites and Build Time in 2024" />
+    <meta property="og:description" content="Static site generation is the default for content websites. The tools are mature, the performance is excellent, and the hosting is cheap or free. The main chall" />
     <meta property="og:url" content="https://iamrahulraikwar.online/blog/static-sites-build-time-2024/" />
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="Rahul Raikwar" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="The Return of Static Sites Generated at Build Time" />
-    <meta name="twitter:description" content="Static Sites Build Time 2024 has fundamentally changed how we build software. What started as an experimental approach in 2021 is now production-standard across" />
+    <meta name="twitter:title" content="Static Sites and Build Time in 2024" />
+    <meta name="twitter:description" content="Static site generation is the default for content websites. The tools are mature, the performance is excellent, and the hosting is cheap or free. The main chall" />
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
-      "headline": "The Return of Static Sites Generated at Build Time",
-      "datePublished": "May 2, 2024",
+      "headline": "Static Sites and Build Time in 2024",
+      "datePublished": "May 15, 2024",
       "author": {
         "@type": "Person",
         "name": "Rahul Raikwar",
@@ -33,41 +33,19 @@
     <main>
       <section>
         <p><a href="../">&larr; All Posts</a></p>
-        <h1>The Return of Static Sites Generated at Build Time</h1>
-        <p>May 2, 2024</p>
-        <div><p>Static Sites Build Time 2024 has fundamentally changed how we build software. What started as an experimental approach in 2021 is now production-standard across the industry.</p>
-<h2>Why This Matters</h2>
-<p>The shift toward static sites build time 2024 represents a significant evolution in developer productivity and system reliability. Companies adopting this approach see measurable improvements in deployment frequency and mean time to recovery.</p>
-<p>Key benefits observed in production:</p>
-<ul>
-<li>Reduced cognitive load on development teams</li>
-<li>Faster feedback loops through automation</li>
-<li>Consistent environments across development and production</li>
-<li>Improved security posture via standardized practices</li>
-</ul>
-<h2>Real-World Implementation</h2>
-<p>Here&#39;s how teams are implementing static sites build time 2024 today:</p>
-<pre><code class="language-typescript">// Example implementation pattern
-export class StaticSitesBuildTime2024Service {
-  async deploy(options: DeployOptions) {
-    const config = await this.validate(options);
-    const result = await this.execute(config);
-    return this.monitor(result);
-  }
-}
-</code></pre>
-<p>The key insight? Abstraction without sacrificing control. We provide golden paths that cover 80% of use cases while supporting escape hatches for edge cases.</p>
-<h2>Measurable Outcomes</h2>
-<p>Organizations that have fully adopted static sites build time 2024 report:</p>
-<ul>
-<li>3x faster onboarding for new engineers</li>
-<li>60% reduction in configuration drift</li>
-<li>90% decrease in &quot;works on my machine&quot; incidents</li>
-<li>Significant improvement in DORA metrics</li>
-</ul>
-<h2>Looking Ahead</h2>
-<p>As we move into 2025, static sites build time 2024 will continue evolving toward greater simplicity and automation. The most successful teams balance standardization with flexibility — enforcing guardrails without stifling innovation.</p>
-<p>The question isn&#39;t whether to adopt static sites build time 2024 but how to do it effectively for your organization&#39;s context and constraints.</p>
+        <h1>Static Sites and Build Time in 2024</h1>
+        <p>May 15, 2024</p>
+        <div><p>Static site generation is the default for content websites. The tools are mature, the performance is excellent, and the hosting is cheap or free. The main challenge became build time. As sites grew, build times ballooned. A 500-page marketing site built in 30 seconds. A 50,000-page documentation site built in 30 minutes. The tooling ecosystem responded with incremental builds, which became the deciding factor in framework choice.</p>
+<h2>The Build Time Problem</h2>
+<p>Early static site generators rebuilt the entire site on every change. For a 1,000-page site, this took 30 seconds. For a 50,000-page site, it took 30 minutes. Incremental builds solved this. By 2024, most frameworks supported building only the pages that changed.</p>
+<p>The build time problem is acute in the development workflow. A 10-minute build means you can&#39;t iterate quickly. You make a change, wait 10 minutes, see the result, make another change, wait 10 minutes. The feedback loop kills productivity. Incremental builds reduced this to seconds or milliseconds.</p>
+<p>Astro&#39;s content collections with incremental builds rebuild only pages referencing changed content. If you update one Markdown file, Astro rebuilds only the pages that use that content. For a 10,000-page site, a change to one page rebuilds one page. Build time drops from 10 minutes to 100 milliseconds.</p>
+<p>Next.js&#39;s Static Generation with <code>revalidate</code> rebuilds incrementally on demand. When a request comes in for a stale page, Next.js rebuilds that page in the background. This is ideal for content that changes regularly but doesn&#39;t need instant updates.</p>
+<p>Eleventy (11ty) has incremental builds built in since version 2. It tracks file dependencies and rebuilds only affected pages. For a 1,000-page site, the first build takes 20 seconds and subsequent builds take 200 milliseconds.</p>
+<p>Hugo was always fast — sub-second builds for 10,000 pages — because it&#39;s written in Go. Hugo doesn&#39;t need incremental builds because it&#39;s fast enough to rebuild everything in milliseconds. For very large sites (100,000+ pages), Hugo is still the fastest option.</p>
+<h2>The Framework Decision in 2026</h2>
+<p>Choose Astro for content-focused sites with rich components — best developer experience for most sites. Choose Eleventy for simpler content sites where you want minimal JavaScript overhead. Choose Hugo for very large sites (10,000+ pages) where build speed matters. Choose Next.js for sites that also need server-side rendering, API routes, or dynamic features.</p>
+<p>Build times are no longer a bottleneck for static sites if you choose the right tool for your scale. The frameworks have solved incremental builds. What matters now is ecosystem fit and developer experience. Pick the tool that makes you fastest for your specific use case, not the one with the most features.</p>
 </div>
       </section>
     </main>

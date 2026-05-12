@@ -3,23 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Building CI/CD Pipelines with GitLab CI | Rahul Raikwar</title>
-    <meta name="description" content="Cicd Gitlab Pipelines 2019 has fundamentally changed how we build software. What started as an experimental approach in 2016 is now production-standard across t" />
+    <title>CI/CD With GitLab Pipelines — What We Learned | Rahul Raikwar</title>
+    <meta name="description" content="GitLab CI/CD was ahead of its time in 2019. While GitHub Actions was still in beta, GitLab had a mature pipeline system with built-in container registry, artifa" />
     <link rel="canonical" href="https://iamrahulraikwar.online/blog/cicd-gitlab-pipelines-2019/" />
-    <meta property="og:title" content="Building CI/CD Pipelines with GitLab CI" />
-    <meta property="og:description" content="Cicd Gitlab Pipelines 2019 has fundamentally changed how we build software. What started as an experimental approach in 2016 is now production-standard across t" />
+    <meta property="og:title" content="CI/CD With GitLab Pipelines — What We Learned" />
+    <meta property="og:description" content="GitLab CI/CD was ahead of its time in 2019. While GitHub Actions was still in beta, GitLab had a mature pipeline system with built-in container registry, artifa" />
     <meta property="og:url" content="https://iamrahulraikwar.online/blog/cicd-gitlab-pipelines-2019/" />
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="Rahul Raikwar" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Building CI/CD Pipelines with GitLab CI" />
-    <meta name="twitter:description" content="Cicd Gitlab Pipelines 2019 has fundamentally changed how we build software. What started as an experimental approach in 2016 is now production-standard across t" />
+    <meta name="twitter:title" content="CI/CD With GitLab Pipelines — What We Learned" />
+    <meta name="twitter:description" content="GitLab CI/CD was ahead of its time in 2019. While GitHub Actions was still in beta, GitLab had a mature pipeline system with built-in container registry, artifa" />
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
-      "headline": "Building CI/CD Pipelines with GitLab CI",
-      "datePublished": "October 30, 2019",
+      "headline": "CI/CD With GitLab Pipelines — What We Learned",
+      "datePublished": "October 10, 2019",
       "author": {
         "@type": "Person",
         "name": "Rahul Raikwar",
@@ -33,41 +33,43 @@
     <main>
       <section>
         <p><a href="../">&larr; All Posts</a></p>
-        <h1>Building CI/CD Pipelines with GitLab CI</h1>
-        <p>October 30, 2019</p>
-        <div><p>Cicd Gitlab Pipelines 2019 has fundamentally changed how we build software. What started as an experimental approach in 2016 is now production-standard across the industry.</p>
-<h2>Why This Matters</h2>
-<p>The shift toward cicd gitlab pipelines 2019 represents a significant evolution in developer productivity and system reliability. Companies adopting this approach see measurable improvements in deployment frequency and mean time to recovery.</p>
-<p>Key benefits observed in production:</p>
-<ul>
-<li>Reduced cognitive load on development teams</li>
-<li>Faster feedback loops through automation</li>
-<li>Consistent environments across development and production</li>
-<li>Improved security posture via standardized practices</li>
-</ul>
-<h2>Real-World Implementation</h2>
-<p>Here&#39;s how teams are implementing cicd gitlab pipelines 2019 today:</p>
-<pre><code class="language-typescript">// Example implementation pattern
-export class CicdGitlabPipelines2019Service {
-  async deploy(options: DeployOptions) {
-    const config = await this.validate(options);
-    const result = await this.execute(config);
-    return this.monitor(result);
-  }
-}
+        <h1>CI/CD With GitLab Pipelines — What We Learned</h1>
+        <p>October 10, 2019</p>
+        <div><p>GitLab CI/CD was ahead of its time in 2019. While GitHub Actions was still in beta, GitLab had a mature pipeline system with built-in container registry, artifact management, and auto DevOps. I&#39;ve used GitLab CI across three different companies, from early-stage startups to established enterprises. The experience varies significantly depending on how large your pipeline gets and how much YAML complexity you&#39;re willing to tolerate.</p>
+<h2>The Pipeline Model</h2>
+<p>GitLab CI uses <code>.gitlab-ci.yml</code> with stages and jobs. Each job runs in a stage. Jobs in the same stage run in parallel. Jobs in subsequent stages wait for previous stages to complete. This model is simple and scales reasonably well.</p>
+<pre><code class="language-yaml">stages:
+  - build
+  - test
+  - deploy
+
+build:
+  stage: build
+  script:
+    - npm ci
+    - npm run build
+  artifacts:
+    paths:
+      - dist/
 </code></pre>
-<p>The key insight? Abstraction without sacrificing control. We provide golden paths that cover 80% of use cases while supporting escape hatches for edge cases.</p>
-<h2>Measurable Outcomes</h2>
-<p>Organizations that have fully adopted cicd gitlab pipelines 2019 report:</p>
-<ul>
-<li>3x faster onboarding for new engineers</li>
-<li>60% reduction in configuration drift</li>
-<li>90% decrease in &quot;works on my machine&quot; incidents</li>
-<li>Significant improvement in DORA metrics</li>
-</ul>
-<h2>Looking Ahead</h2>
-<p>As we move into 2020, cicd gitlab pipelines 2019 will continue evolving toward greater simplicity and automation. The most successful teams balance standardization with flexibility — enforcing guardrails without stifling innovation.</p>
-<p>The question isn&#39;t whether to adopt cicd gitlab pipelines 2019 but how to do it effectively for your organization&#39;s context and constraints.</p>
+<p>The <code>rules:</code> keyword (replacing <code>only:/except:</code>) provides flexible conditionals. <code>needs:</code> allows DAG-style pipelines where jobs depend on specific earlier jobs, not entire stages. This is a significant improvement over linear stage execution and was ahead of what most other CI providers offered in 2019.</p>
+<p>One pattern I&#39;ve used extensively is the DAG pipeline with <code>needs:</code>. Instead of waiting for an entire stage to complete, jobs can start as soon as their specific dependencies finish. For a monorepo with multiple packages, this means the frontend tests can start as soon as the frontend build completes, without waiting for the backend to finish building. This cut our pipeline times by about 40%.</p>
+<h2>What Works Well</h2>
+<p><strong>Built-in container registry.</strong> Every GitLab project gets a container registry. CI builds push images there. Deployments pull from there. No external registry needed. This integration is seamless — the CI job has built-in authentication for the registry. You don&#39;t manage credentials or configure Docker login.</p>
+<p><strong>Auto DevOps.</strong> GitLab&#39;s Auto DevOps provides a default CI/CD pipeline for projects that don&#39;t want to write YAML. It detects the language, runs tests, builds containers, and deploys. It works for simple projects. Complex projects need custom YAML, but the auto-detection is a good starting point. For internal tools and prototypes, Auto DevOps is often sufficient without any configuration.</p>
+<p><strong>Review apps.</strong> GitLab deploys a temporary environment for each merge request. The environment URL is posted as a comment on the MR. This is excellent for previewing changes before merging. The review app is automatically destroyed when the MR is merged or closed. Setting this up for our staging environment eliminated the &quot;works on my machine&quot; class of bugs because reviewers could test changes in a real environment.</p>
+<p><strong>Security scanning.</strong> Built-in SAST, dependency scanning, container scanning, and secret detection. One configuration enables security scanning in your pipeline without external tools. The results appear in the merge request widget, so developers see security issues without leaving their workflow. This is significantly better than running security scans separately and emailing PDF reports.</p>
+<h2>What Doesn&#39;t Work</h2>
+<p><strong>YAML complexity.</strong> GitLab CI YAML becomes complex fast. The <code>extends:</code> keyword, <code>!reference</code> tags, and <code>rules:</code> conditionals can produce pipelines that are hard to understand. A 300-line GitLab CI YAML is common for moderate projects. I&#39;ve seen 800-line <code>.gitlab-ci.yml</code> files that take 15 minutes to understand. The complexity grows because GitLab CI encourages putting everything in a single file instead of composing pipelines from smaller files.</p>
+<p><strong>Job run times.</strong> GitLab&#39;s shared runners are slower than GitHub Actions hosted runners. In my experience, GitLab shared runners are about 30-50% slower for the same workload. Self-hosting runners with appropriate hardware solves this but adds operational overhead. You need to manage runner registration, scaling, and updates.</p>
+<p><strong>Pipeline visualization.</strong> GitLab&#39;s pipeline graph is functional but visually noisy for complex pipelines with parallel stages and DAG dependencies. When a 50-job pipeline fails in the middle, finding the failed job requires scrolling through a dense graph. GitHub Actions&#39; tabbed job view is easier to navigate.</p>
+<p><strong>Cache invalidation.</strong> GitLab CI&#39;s caching mechanism works but cache invalidation is confusing. The cache key supports variables but the behavior of <code>cache:key:files</code> isn&#39;t always intuitive. I&#39;ve spent hours debugging &quot;why is my cache not updating&quot; issues.</p>
+<h2>Real-World Patterns</h2>
+<p>For monorepos, use the <code>needs:</code> keyword to build DAG pipelines that only run affected packages. For multi-project pipelines, use the <code>trigger:</code> keyword to chain pipelines across projects. For deployment, use <code>environment:</code> with manual approvals for production gates.</p>
+<p>One pattern I particularly like is using GitLab CI&#39;s <code>parallel</code> matrix for cross-browser or cross-version testing. Define the matrix once, and GitLab CI creates a job for each combination. This is cleaner than generating jobs dynamically.</p>
+<h2>The Verdict</h2>
+<p>GitLab CI/CD is a strong, mature choice. It&#39;s best for organizations already using GitLab and teams that value integrated DevOps. The YAML complexity is the main cost — it grows faster than you expect and becomes a maintenance burden. If you&#39;re starting fresh with GitHub, GitHub Actions has better integration and simpler syntax. If you&#39;re on GitLab, the built-in CI is excellent — use it and invest in keeping the YAML organized.</p>
+<p>My recommendation: if your pipeline is under 100 lines of YAML, GitLab CI is great. If it grows beyond 200 lines, invest in splitting it into includes and templates before it becomes unmanageable. The tool is solid; the complexity is self-inflicted.</p>
 </div>
       </section>
     </main>

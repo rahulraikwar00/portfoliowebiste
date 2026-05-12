@@ -1,50 +1,39 @@
 ---
-title: Kubernetes Chaos Engineering with LitmusChaos
-date: July 14, 2023
+title: Kubernetes Chaos Engineering With Litmus
+date: July 20, 2023
 slug: k8s-chaos-engineering-litmus-2023
 ---
 
-K8S Chaos Engineering Litmus 2023 has fundamentally changed how we build software. What started as an experimental approach in 2020 is now production-standard across the industry.
+Chaos engineering in Kubernetes has evolved from "let's kill some pods and see what happens" to a structured practice with mature tooling. LitmusChaos, now a CNCF project, is the most popular tool for this. When we started our chaos engineering practice, we found bugs that had been in production for months — services with no retry logic, timeouts that were too short, dependencies that couldn't tolerate failures. Chaos engineering found them in hours.
 
-## Why This Matters
+## What Litmus Does
 
-The shift toward k8s chaos engineering litmus 2023 represents a significant evolution in developer productivity and system reliability. Companies adopting this approach see measurable improvements in deployment frequency and mean time to recovery.
+Litmus injects failures into Kubernetes clusters — pod failures, node failures, network latency, CPU stress, DNS failures, and more. You define experiments as Kubernetes custom resources. The experiments run as jobs, inject the failure, monitor the system's response, and generate a report.
 
-Key benefits observed in production:
+Experiments are organized into charts. The Litmus Hub hosts community-contributed experiments covering common failure scenarios. You can install an experiment with a single `kubectl apply` and run it immediately. The experiment defines the failure injection, the steady-state validation (probes that verify the system is healthy), and the rollback procedure.
 
-- Reduced cognitive load on development teams
-- Faster feedback loops through automation
-- Consistent environments across development and production
-- Improved security posture via standardized practices
+## The Right Way to Do Chaos
 
-## Real-World Implementation
+Start small. Run experiments in a staging environment that mirrors production. The goal isn't to break things — it's to validate that your system survives failures. Each experiment should have a clear hypothesis: "When a pod in the user-service deployment fails, the API should return 503 errors for no more than 5 seconds while Kubernetes reschedules the pod."
 
-Here's how teams are implementing k8s chaos engineering litmus 2023 today:
+A typical progression we followed:
 
-```typescript
-// Example implementation pattern
-export class K8SChaosEngineeringLitmus2023Service {
-  async deploy(options: DeployOptions) {
-    const config = await this.validate(options);
-    const result = await this.execute(config);
-    return this.monitor(result);
-  }
-}
-```
+1. **Pod failures.** Kill a pod in a deployment. Does the deployment recover? Does the service route around the failure? How long does recovery take? We discovered that our liveness probes were too aggressive — the service took 15 seconds to start, but the probe started checking at 10 seconds, causing a restart loop. Fix: increased `initialDelaySeconds` to 30.
 
-The key insight? Abstraction without sacrificing control. We provide golden paths that cover 80% of use cases while supporting escape hatches for edge cases.
+2. **Network latency.** Add latency between services. Do timeouts trigger? Are retries configured correctly? Does the degraded performance cause cascading failures? We found that service A had a 500ms timeout calling service B, but B's p99 response time was 600ms. The timeout should have been 2 seconds. Fix: increased timeouts and added exponential backoff.
 
-## Measurable Outcomes
+3. **Node failures.** Drain a node. Do pods reschedule correctly? Does the load balancer handle the reduced capacity? We discovered that our pod disruption budgets weren't configured, so draining a node evicted all pods simultaneously, causing a temporary outage. Fix: configured PDBs with `minAvailable: 1`.
 
-Organizations that have fully adopted k8s chaos engineering litmus 2023 report:
+4. **DNS failures.** Block DNS resolution. Do services have cached DNS entries? Do they handle resolution failures gracefully? Our services had no DNS caching — they made DNS queries for every request. When CoreDNS had an issue (which happened during a cluster upgrade), all services were affected. Fix: added DNS caching to our service mesh configuration.
 
-- 3x faster onboarding for new engineers
-- 60% reduction in configuration drift
-- 90% decrease in "works on my machine" incidents
-- Significant improvement in DORA metrics
+## Automating Chaos
 
-## Looking Ahead
+Litmus supports continuous chaos — running experiments on a schedule in production. This is the end state: you have ongoing validation that your system's resilience properties hold. We started with weekly experiments in staging, moved successful experiments to production after validation, and eventually ran critical experiments (pod failures for deployed services) on a daily schedule.
 
-As we move into 2024, k8s chaos engineering litmus 2023 will continue evolving toward greater simplicity and automation. The most successful teams balance standardization with flexibility — enforcing guardrails without stifling innovation.
+The automation pattern: schedule experiments to run during low-traffic hours, use the Litmus result CRD to capture outcomes, and integrate with alerting (PagerDuty, Slack) for failures. A failing experiment triggers an incident, just like a production alert.
 
-The question isn't whether to adopt k8s chaos engineering litmus 2023 but how to do it effectively for your organization's context and constraints.
+## The Investment
+
+Litmus is open-source and free. The investment is in setting up experiments, building a hypothesis framework, and creating the observability to measure results. Plan for two weeks to set up a basic chaos program for a moderate Kubernetes deployment. Start with the Litmus community experiments — run pod-delete, node-drain, and network-latency against your staging environment. Those three experiments will catch the most common resilience gaps.
+
+Chaos engineering pays for itself the first time it catches a resilience gap before a real incident does. For us, that happened in week two of our program — a pod-delete experiment revealed that our payment processing service couldn't handle any pod failure because all replicas were on the same node. A real incident would have caused payment processing downtime. The chaos experiment cost 30 minutes of setup.

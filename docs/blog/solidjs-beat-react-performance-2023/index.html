@@ -3,23 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Why SolidJS Beat React in Our Performance Benchmark | Rahul Raikwar</title>
-    <meta name="description" content="Solidjs Beat React Performance 2023 has fundamentally changed how we build software. What started as an experimental approach in 2020 is now production-standard" />
+    <title>SolidJS vs React — Performance Where It Matters | Rahul Raikwar</title>
+    <meta name="description" content="SolidJS is the React alternative that delivers on React&#039;s promises. The same component model, the same JSX, the same mental model — but without the virtual DOM" />
     <link rel="canonical" href="https://iamrahulraikwar.online/blog/solidjs-beat-react-performance-2023/" />
-    <meta property="og:title" content="Why SolidJS Beat React in Our Performance Benchmark" />
-    <meta property="og:description" content="Solidjs Beat React Performance 2023 has fundamentally changed how we build software. What started as an experimental approach in 2020 is now production-standard" />
+    <meta property="og:title" content="SolidJS vs React — Performance Where It Matters" />
+    <meta property="og:description" content="SolidJS is the React alternative that delivers on React&#039;s promises. The same component model, the same JSX, the same mental model — but without the virtual DOM" />
     <meta property="og:url" content="https://iamrahulraikwar.online/blog/solidjs-beat-react-performance-2023/" />
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="Rahul Raikwar" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Why SolidJS Beat React in Our Performance Benchmark" />
-    <meta name="twitter:description" content="Solidjs Beat React Performance 2023 has fundamentally changed how we build software. What started as an experimental approach in 2020 is now production-standard" />
+    <meta name="twitter:title" content="SolidJS vs React — Performance Where It Matters" />
+    <meta name="twitter:description" content="SolidJS is the React alternative that delivers on React&#039;s promises. The same component model, the same JSX, the same mental model — but without the virtual DOM" />
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
-      "headline": "Why SolidJS Beat React in Our Performance Benchmark",
-      "datePublished": "February 3, 2023",
+      "headline": "SolidJS vs React — Performance Where It Matters",
+      "datePublished": "February 5, 2023",
       "author": {
         "@type": "Person",
         "name": "Rahul Raikwar",
@@ -33,41 +33,22 @@
     <main>
       <section>
         <p><a href="../">&larr; All Posts</a></p>
-        <h1>Why SolidJS Beat React in Our Performance Benchmark</h1>
-        <p>February 3, 2023</p>
-        <div><p>Solidjs Beat React Performance 2023 has fundamentally changed how we build software. What started as an experimental approach in 2020 is now production-standard across the industry.</p>
-<h2>Why This Matters</h2>
-<p>The shift toward solidjs beat react performance 2023 represents a significant evolution in developer productivity and system reliability. Companies adopting this approach see measurable improvements in deployment frequency and mean time to recovery.</p>
-<p>Key benefits observed in production:</p>
-<ul>
-<li>Reduced cognitive load on development teams</li>
-<li>Faster feedback loops through automation</li>
-<li>Consistent environments across development and production</li>
-<li>Improved security posture via standardized practices</li>
-</ul>
-<h2>Real-World Implementation</h2>
-<p>Here&#39;s how teams are implementing solidjs beat react performance 2023 today:</p>
-<pre><code class="language-typescript">// Example implementation pattern
-export class SolidjsBeatReactPerformance2023Service {
-  async deploy(options: DeployOptions) {
-    const config = await this.validate(options);
-    const result = await this.execute(config);
-    return this.monitor(result);
-  }
-}
-</code></pre>
-<p>The key insight? Abstraction without sacrificing control. We provide golden paths that cover 80% of use cases while supporting escape hatches for edge cases.</p>
-<h2>Measurable Outcomes</h2>
-<p>Organizations that have fully adopted solidjs beat react performance 2023 report:</p>
-<ul>
-<li>3x faster onboarding for new engineers</li>
-<li>60% reduction in configuration drift</li>
-<li>90% decrease in &quot;works on my machine&quot; incidents</li>
-<li>Significant improvement in DORA metrics</li>
-</ul>
-<h2>Looking Ahead</h2>
-<p>As we move into 2024, solidjs beat react performance 2023 will continue evolving toward greater simplicity and automation. The most successful teams balance standardization with flexibility — enforcing guardrails without stifling innovation.</p>
-<p>The question isn&#39;t whether to adopt solidjs beat react performance 2023 but how to do it effectively for your organization&#39;s context and constraints.</p>
+        <h1>SolidJS vs React — Performance Where It Matters</h1>
+        <p>February 5, 2023</p>
+        <div><p>SolidJS is the React alternative that delivers on React&#39;s promises. The same component model, the same JSX, the same mental model — but without the virtual DOM overhead. By 2023, benchmarks showed Solid significantly outperforming React. By 2026, it&#39;s a proven production framework with a growing ecosystem. But &quot;performance&quot; isn&#39;t the only factor in choosing a framework.</p>
+<h2>How Solid Works</h2>
+<p>Solid compiles JSX to real DOM manipulations, not virtual DOM diffs. When state changes, Solid updates the specific DOM nodes that depend on that state. No diffing. No reconciliation. Just direct updates. This is possible because Solid compiles your templates at build time, analyzing which DOM elements depend on which reactive values. The compiler generates fine-grained update code for each element.</p>
+<p>In React, when a component&#39;s state changes, the entire component re-renders. React creates a new virtual DOM tree, diffs it against the previous tree, and applies the minimum set of DOM changes. This works well, but the diffing process itself costs CPU time. For complex components with deep trees, this cost adds up.</p>
+<p>In Solid, when state changes, only the specific DOM elements that depend on that state are updated. No diffing. No reconciliation. Just targeted DOM operations. The compiler generates the update code, so the runtime doesn&#39;t need a virtual DOM. This is why Solid is fast: it does less work per state change.</p>
+<p>This means Solid is consistently faster than React in benchmarks. But the real advantage isn&#39;t the benchmark numbers — it&#39;s the predictability. Solid doesn&#39;t have batching oddities, stale closure bugs, or unnecessary re-renders. What you expect to happen is what happens.</p>
+<p>Signals are Solid&#39;s state primitive. They&#39;re like React state but more granular. A signal holds a value and notifies dependents when it changes. No <code>useState</code> or <code>useEffect</code> needed — Solid compiles the dependency tracking automatically. When you write <code>const [count, setCount] = createSignal(0)</code>, accessing <code>count()</code> in JSX creates a reactive dependency. The compiler knows exactly which DOM elements depend on <code>count</code> and will update them when <code>setCount</code> is called.</p>
+<h2>The Practical Difference</h2>
+<p>Solid apps are smaller. A Solid bundle for a typical app is about 30% smaller than the equivalent React app. No virtual DOM runtime, no scheduler, no event system overhead. Fewer bytes, faster loads, simpler debugging.</p>
+<p>Development is simpler. No <code>useCallback</code> or <code>useMemo</code> to prevent unnecessary re-renders — Solid doesn&#39;t have unnecessary re-renders. No custom comparison functions. No <code>React.memo</code> wrappers. The mental model maps directly to the execution model. When you write code in Solid, the performance characteristics are immediately apparent. A state update causes an exact set of DOM updates. There&#39;s no mystery about why a component re-rendered.</p>
+<p>The control flow components (<code>&lt;Show&gt;</code>, <code>&lt;For&gt;</code>, <code>&lt;Switch&gt;</code>) are reactive, not functional. <code>&lt;For each={items}&gt;</code> doesn&#39;t re-render the entire list when items change — it uses referential identity to track individual items and updates only the items that changed. This eliminates the need for <code>key</code> props and list reconciliation.</p>
+<h2>The Ecosystem Gap</h2>
+<p>The ecosystem is Solid&#39;s weakness. React has 10 years of libraries, components, and tooling. Solid is compatible with many React libraries through <code>solidjs/react-compat</code>, but it&#39;s not seamless. If you need a specialized charting library, a complex form library, or a mature component library, check Solid compatibility before committing. The Solid ecosystem is growing — Solid UI, Kobalte, and Hope UI provide component libraries — but it doesn&#39;t match React&#39;s breadth.</p>
+<p>For new projects where performance matters and the ecosystem requirement is manageable, Solid is worth serious consideration. For projects that depend on React&#39;s ecosystem breadth (charting, data grids, form builders, drag-and-drop), React remains the pragmatic choice. Solid is excellent at what it does. What it does is provide a performant, predictable UI framework. What it doesn&#39;t do is provide the vast library ecosystem that React has accumulated over a decade.</p>
 </div>
       </section>
     </main>

@@ -4,40 +4,29 @@ date: April 17, 2026
 slug: git-workflow-solo
 ---
 
-# Git Workflow for Solo Developers
-
-A simple Git workflow for working alone on personal projects.
+A simple Git workflow for working alone on personal projects. When you're the only developer, you don't need the elaborate branching strategies that enterprise teams use (Git Flow, trunk-based development with feature flags, release trains). You need something simple that keeps your history clean and your main branch deployable.
 
 ## The Basic Workflow
 
 ### Starting a new feature
 
 ```bash
-# Make sure you're on main and up to date
 git checkout main
 git pull
-
-# Create a new branch
 git checkout -b feature/my-feature
 ```
 
 ### Making commits
 
 ```bash
-# Stage your changes
 git add .
-
-# Commit with a message
 git commit -m "Add user authentication"
 ```
 
 ### Keeping up to date
 
 ```bash
-# Fetch the latest from origin
 git fetch origin
-
-# Pull main into your branch
 git merge origin/main
 ```
 
@@ -50,49 +39,37 @@ git rebase main
 ### Merging back
 
 ```bash
-# Switch to main
 git checkout main
-
-# Merge your feature
 git merge feature/my-feature
-
-# Delete the branch (optional)
 git branch -d feature/my-feature
 ```
 
 ## Writing Good Commit Messages
 
-A good commit message has:
-
-1. **Subject line** — Short description (under 50 chars)
-2. **Body** — Explain what and why, not how
+A good commit message has a subject line (short description under 50 chars) and a body that explains what and why, not how. The why is the most important part — six months later, you won't remember why you made a change, but the commit message should tell you.
 
 Example:
 
 ```
 Add user authentication
 
-- Implement login/logout with JWT
-- Add password hashing with bcrypt
-- Create auth middleware for protected routes
+Implement login/logout with JWT. Add password hashing with bcrypt.
+Create auth middleware for protected routes. Previously, the API
+was completely open. This change adds authentication for all
+routes except the health check endpoint.
 
 Closes #12
 ```
 
+The subject line helps you scan the history. The body helps you understand context. The prefix conventions (feat:, fix:, chore:, docs:) are useful for automated changelog generation but not essential for solo projects.
+
 ## When to Commit
 
-- Commit early, commit often
-- Each commit should be a logical unit
-- Don't mix unrelated changes
-- Run tests before committing
+Commit early, commit often. Each commit should be a logical unit of change. Don't mix unrelated changes in the same commit — if you fix a typo and add a feature in the same file, that's two commits. Run tests before committing. If you're using TypeScript, run the type checker before committing. The commit should be a coherent package that compiles and passes tests.
 
-## Useful Commands
+## Branch Naming
 
-- `git status` — See what's changed
-- `git diff` — View changes
-- `git log --oneline` — Compact history
-- `git stash` — Save changes temporarily
-- `git stash pop` —恢复 stashed changes
+A simple convention: `feature/description` for new features, `fix/description` for bug fixes, `experiment/description` for things you might throw away. The prefix helps you find branches later. Delete branches after merging — `git branch -d feature/my-feature` keeps your branch list clean.
 
 ## Undoing Things
 
@@ -110,20 +87,8 @@ git checkout -- filename
 git reset --hard commit-hash
 ```
 
-## Branch Naming
-
-A simple convention:
-
-- `feature/description` — New features
-- `fix/description` — Bug fixes
-- `experiment/description` — Trying things out
+The `--soft` vs `--hard` distinction matters. `--soft` keeps your changes staged. `--hard` discards everything. For solo work, `--hard` is safe because nobody else depends on your commits. For shared branches, avoid rewriting history that others have based work on.
 
 ## A Solo Workflow That Works
 
-1. `main` is always deployable
-2. Create a branch for each piece of work
-3. Commit frequently with clear messages
-4. Merge back when ready
-5. Delete branches when done
-
-This keeps things simple and prevents `main` from getting messy.
+Keep main always deployable. Create a branch for each piece of work. Commit frequently with clear messages. Merge back when ready. Delete branches when done. This keeps things simple and prevents main from getting messy. The whole point of a solo workflow is minimizing overhead — you don't need code review, you don't need release branches, you don't need hotfix branches. You just need a clean history and a deployable main branch.

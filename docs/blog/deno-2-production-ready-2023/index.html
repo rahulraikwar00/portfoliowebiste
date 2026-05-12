@@ -3,23 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Deno 2.0: Is It Production Ready? | Rahul Raikwar</title>
-    <meta name="description" content="Deno 2 Production Ready 2023 has fundamentally changed how we build software. What started as an experimental approach in 2020 is now production-standard across" />
+    <title>Deno 2 in Production — Is It Ready? | Rahul Raikwar</title>
+    <meta name="description" content="Deno 2.0 shipped in October 2024 with a fundamental change: full npm compatibility. The runtime that had rejected Node.js compatibility as a matter of principle" />
     <link rel="canonical" href="https://iamrahulraikwar.online/blog/deno-2-production-ready-2023/" />
-    <meta property="og:title" content="Deno 2.0: Is It Production Ready?" />
-    <meta property="og:description" content="Deno 2 Production Ready 2023 has fundamentally changed how we build software. What started as an experimental approach in 2020 is now production-standard across" />
+    <meta property="og:title" content="Deno 2 in Production — Is It Ready?" />
+    <meta property="og:description" content="Deno 2.0 shipped in October 2024 with a fundamental change: full npm compatibility. The runtime that had rejected Node.js compatibility as a matter of principle" />
     <meta property="og:url" content="https://iamrahulraikwar.online/blog/deno-2-production-ready-2023/" />
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="Rahul Raikwar" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Deno 2.0: Is It Production Ready?" />
-    <meta name="twitter:description" content="Deno 2 Production Ready 2023 has fundamentally changed how we build software. What started as an experimental approach in 2020 is now production-standard across" />
+    <meta name="twitter:title" content="Deno 2 in Production — Is It Ready?" />
+    <meta name="twitter:description" content="Deno 2.0 shipped in October 2024 with a fundamental change: full npm compatibility. The runtime that had rejected Node.js compatibility as a matter of principle" />
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
-      "headline": "Deno 2.0: Is It Production Ready?",
-      "datePublished": "November 28, 2023",
+      "headline": "Deno 2 in Production — Is It Ready?",
+      "datePublished": "November 5, 2023",
       "author": {
         "@type": "Person",
         "name": "Rahul Raikwar",
@@ -33,41 +33,20 @@
     <main>
       <section>
         <p><a href="../">&larr; All Posts</a></p>
-        <h1>Deno 2.0: Is It Production Ready?</h1>
-        <p>November 28, 2023</p>
-        <div><p>Deno 2 Production Ready 2023 has fundamentally changed how we build software. What started as an experimental approach in 2020 is now production-standard across the industry.</p>
-<h2>Why This Matters</h2>
-<p>The shift toward deno 2 production ready 2023 represents a significant evolution in developer productivity and system reliability. Companies adopting this approach see measurable improvements in deployment frequency and mean time to recovery.</p>
-<p>Key benefits observed in production:</p>
-<ul>
-<li>Reduced cognitive load on development teams</li>
-<li>Faster feedback loops through automation</li>
-<li>Consistent environments across development and production</li>
-<li>Improved security posture via standardized practices</li>
-</ul>
-<h2>Real-World Implementation</h2>
-<p>Here&#39;s how teams are implementing deno 2 production ready 2023 today:</p>
-<pre><code class="language-typescript">// Example implementation pattern
-export class Deno2ProductionReady2023Service {
-  async deploy(options: DeployOptions) {
-    const config = await this.validate(options);
-    const result = await this.execute(config);
-    return this.monitor(result);
-  }
-}
-</code></pre>
-<p>The key insight? Abstraction without sacrificing control. We provide golden paths that cover 80% of use cases while supporting escape hatches for edge cases.</p>
-<h2>Measurable Outcomes</h2>
-<p>Organizations that have fully adopted deno 2 production ready 2023 report:</p>
-<ul>
-<li>3x faster onboarding for new engineers</li>
-<li>60% reduction in configuration drift</li>
-<li>90% decrease in &quot;works on my machine&quot; incidents</li>
-<li>Significant improvement in DORA metrics</li>
-</ul>
-<h2>Looking Ahead</h2>
-<p>As we move into 2024, deno 2 production ready 2023 will continue evolving toward greater simplicity and automation. The most successful teams balance standardization with flexibility — enforcing guardrails without stifling innovation.</p>
-<p>The question isn&#39;t whether to adopt deno 2 production ready 2023 but how to do it effectively for your organization&#39;s context and constraints.</p>
+        <h1>Deno 2 in Production — Is It Ready?</h1>
+        <p>November 5, 2023</p>
+        <div><p>Deno 2.0 shipped in October 2024 with a fundamental change: full npm compatibility. The runtime that had rejected Node.js compatibility as a matter of principle reversed course and embraced the ecosystem. By early 2026, Deno Deploy reported handling over 300 billion requests monthly. JSR, Deno&#39;s package registry, grew from 2,000 to 8,000 packages. The question in 2026 is no longer &quot;can Deno run my code&quot; — it&#39;s &quot;should it run my code.&quot;</p>
+<h2>Where Deno Wins</h2>
+<p><strong>TypeScript native.</strong> Zero configuration. No <code>tsconfig.json</code>, no <code>ts-node</code>, no build step. <code>deno run main.ts</code> just works. This alone saves significant setup time on new projects. Node.js added native TypeScript stripping in version 23, closing the gap, but Deno&#39;s experience is still smoother because it doesn&#39;t require configuration to enable.</p>
+<p><strong>Single binary deploys.</strong> <code>deno compile</code> produces a self-contained ~80MB binary with no runtime dependencies. For Docker images, this means <code>FROM scratch</code> instead of <code>FROM node:22-slim</code>. Smaller images, fewer vulnerabilities, simpler deployments. The <code>deno compile</code> output includes the runtime, your code, and all dependencies in one executable. No <code>node_modules</code> directory, no runtime installation step.</p>
+<p><strong>Permissions model.</strong> Deno&#39;s <code>--allow-net=api.stripe.com</code> means a compromised dependency can&#39;t exfiltrate data to arbitrary domains. For security-conscious deployments, this is a genuine advantage over Node.js where any dependency can make any network call. The permissions model is explicit and fine-grained — network, file system, environment variables, and subprocess execution are all gated by flags.</p>
+<p><strong>Built-in toolchain.</strong> <code>deno test</code>, <code>deno fmt</code>, <code>deno lint</code>, <code>deno check</code> — all built in. No Jest, no ESLint, no Prettier, no tsconfig. One binary replaces your entire toolchain. This reduces CI configuration complexity and eliminates version mismatch issues between tools.</p>
+<h2>Where Deno Struggles</h2>
+<p><strong>npm compatibility is ~90%, not 100%.</strong> Most packages work. The exceptions are native addons (node-gyp), packages relying on Node.js internals (some stream implementations), and some WebSocket libraries with Node-specific behavior. A production migration documented hitting a memory leak from a WebSocket library behaving differently under Deno&#39;s runtime.</p>
+<p><strong>Enterprise adoption is slow.</strong> Deno is viable but not dominant. The Node.js ecosystem has 15 years of hardening, enterprise tooling, and operational knowledge. For risk-averse teams, Deno remains an evaluation item rather than a default choice. Enterprise support (APM integration, security scanning, compliance tooling) is still catching up.</p>
+<p><strong>Framework compatibility.</strong> Don&#39;t try Next.js or Remix on Deno. Express, Fastify, and Hono work fine. Heavy Node.js framework users need to check compatibility before committing. The migration story for existing applications is improving but not seamless.</p>
+<h2>Bun vs Deno in 2026</h2>
+<p>Bun is faster and has better npm compatibility (~98%). Deno has better security primitives and a more opinionated toolchain. For greenfield projects, choose Bun if performance matters most. Choose Deno if security matters most. Both runtimes are production-ready for TypeScript backends. The choice comes down to which tradeoffs align with your constraints. Neither is obviously wrong, and both are significantly better than using Node.js with TypeScript configuration overhead.</p>
 </div>
       </section>
     </main>

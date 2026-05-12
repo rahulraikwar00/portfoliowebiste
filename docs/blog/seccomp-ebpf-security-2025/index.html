@@ -3,23 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Seccomp eBPF: The Security Layer You&#039;re Not Using | Rahul Raikwar</title>
-    <meta name="description" content="Seccomp Ebpf Security 2025 has fundamentally changed how we build software. What started as an experimental approach in 2022 is now production-standard across t" />
+    <title>Seccomp and eBPF for Cloud-Native Security | Rahul Raikwar</title>
+    <meta name="description" content="Seccomp and eBPF are both Linux kernel security technologies, but they work at different levels. Seccomp filters system calls — it creates a static allowlist of" />
     <link rel="canonical" href="https://iamrahulraikwar.online/blog/seccomp-ebpf-security-2025/" />
-    <meta property="og:title" content="Seccomp eBPF: The Security Layer You&#039;re Not Using" />
-    <meta property="og:description" content="Seccomp Ebpf Security 2025 has fundamentally changed how we build software. What started as an experimental approach in 2022 is now production-standard across t" />
+    <meta property="og:title" content="Seccomp and eBPF for Cloud-Native Security" />
+    <meta property="og:description" content="Seccomp and eBPF are both Linux kernel security technologies, but they work at different levels. Seccomp filters system calls — it creates a static allowlist of" />
     <meta property="og:url" content="https://iamrahulraikwar.online/blog/seccomp-ebpf-security-2025/" />
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="Rahul Raikwar" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Seccomp eBPF: The Security Layer You&#039;re Not Using" />
-    <meta name="twitter:description" content="Seccomp Ebpf Security 2025 has fundamentally changed how we build software. What started as an experimental approach in 2022 is now production-standard across t" />
+    <meta name="twitter:title" content="Seccomp and eBPF for Cloud-Native Security" />
+    <meta name="twitter:description" content="Seccomp and eBPF are both Linux kernel security technologies, but they work at different levels. Seccomp filters system calls — it creates a static allowlist of" />
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
-      "headline": "Seccomp eBPF: The Security Layer You're Not Using",
-      "datePublished": "April 20, 2025",
+      "headline": "Seccomp and eBPF for Cloud-Native Security",
+      "datePublished": "April 5, 2025",
       "author": {
         "@type": "Person",
         "name": "Rahul Raikwar",
@@ -33,41 +33,23 @@
     <main>
       <section>
         <p><a href="../">&larr; All Posts</a></p>
-        <h1>Seccomp eBPF: The Security Layer You&#039;re Not Using</h1>
-        <p>April 20, 2025</p>
-        <div><p>Seccomp Ebpf Security 2025 has fundamentally changed how we build software. What started as an experimental approach in 2022 is now production-standard across the industry.</p>
-<h2>Why This Matters</h2>
-<p>The shift toward seccomp ebpf security 2025 represents a significant evolution in developer productivity and system reliability. Companies adopting this approach see measurable improvements in deployment frequency and mean time to recovery.</p>
-<p>Key benefits observed in production:</p>
-<ul>
-<li>Reduced cognitive load on development teams</li>
-<li>Faster feedback loops through automation</li>
-<li>Consistent environments across development and production</li>
-<li>Improved security posture via standardized practices</li>
-</ul>
-<h2>Real-World Implementation</h2>
-<p>Here&#39;s how teams are implementing seccomp ebpf security 2025 today:</p>
-<pre><code class="language-typescript">// Example implementation pattern
-export class SeccompEbpfSecurity2025Service {
-  async deploy(options: DeployOptions) {
-    const config = await this.validate(options);
-    const result = await this.execute(config);
-    return this.monitor(result);
-  }
-}
-</code></pre>
-<p>The key insight? Abstraction without sacrificing control. We provide golden paths that cover 80% of use cases while supporting escape hatches for edge cases.</p>
-<h2>Measurable Outcomes</h2>
-<p>Organizations that have fully adopted seccomp ebpf security 2025 report:</p>
-<ul>
-<li>3x faster onboarding for new engineers</li>
-<li>60% reduction in configuration drift</li>
-<li>90% decrease in &quot;works on my machine&quot; incidents</li>
-<li>Significant improvement in DORA metrics</li>
-</ul>
-<h2>Looking Ahead</h2>
-<p>As we move into 2026, seccomp ebpf security 2025 will continue evolving toward greater simplicity and automation. The most successful teams balance standardization with flexibility — enforcing guardrails without stifling innovation.</p>
-<p>The question isn&#39;t whether to adopt seccomp ebpf security 2025 but how to do it effectively for your organization&#39;s context and constraints.</p>
+        <h1>Seccomp and eBPF for Cloud-Native Security</h1>
+        <p>April 5, 2025</p>
+        <div><p>Seccomp and eBPF are both Linux kernel security technologies, but they work at different levels. Seccomp filters system calls — it creates a static allowlist of syscalls a process can make. eBPF runs sandboxed programs in the kernel to observe and control system behavior dynamically. Together, they form the foundation of cloud-native security in 2026. Understanding both helps you build more secure container deployments.</p>
+<h2>The Linux Kernel Security Model</h2>
+<p>The Linux kernel exposes hundreds of system calls to user-space processes. Each syscall is a potential attack vector. A container breakout typically involves exploiting an application vulnerability to execute a syscall that grants kernel access — like <code>mount</code>, <code>pivot_root</code>, or <code>bpf</code>. Seccomp and eBPF address this from different angles.</p>
+<p><strong>Seccomp</strong> acts as a static filter. You define a profile that lists allowed syscalls at container startup. Any syscall not in the profile is blocked — either the process is killed or the syscall returns an error. This is enforced at the kernel level, before the syscall is executed. Seccomp is simple, predictable, and effective.</p>
+<p><strong>eBPF</strong> acts as a dynamic observer. You load custom programs into the kernel that execute on events — syscalls, network packets, function entries. These programs can observe behavior, collect data, filter events, or modify behavior. eBPF is more flexible than seccomp but requires more configuration.</p>
+<h2>Seccomp</h2>
+<p>In Kubernetes, the default seccomp profile (<code>RuntimeDefault</code>) blocks around 40 dangerous syscalls including <code>clone</code>, <code>mount</code>, <code>pivot_root</code>, and <code>bpf</code>. This prevents container breakout attacks that rely on these syscalls. The profile is reasonable — it blocks known-dangerous syscalls while allowing normal application operations.</p>
+<p>Since Kubernetes 1.24, seccomp profiles are GA and can be configured per pod or per container level. The <code>securityContext.seccompProfile</code> field accepts <code>RuntimeDefault</code>, <code>Localhost</code> (for custom profiles), or <code>Unconfined</code> (not recommended).</p>
+<p>The <code>RuntimeDefault</code> profile should be the minimum for all workloads. It blocks the most dangerous syscalls without breaking common applications. For higher security, create custom profiles that only allow the syscalls your application actually needs. Use tools like <code>inspektor-gadget</code> or <code>falco</code> to observe which syscalls your application makes in production, then create a custom profile that allows only those.</p>
+<h2>eBPF</h2>
+<p>eBPF goes further than seccomp. It lets you load custom programs into the kernel that fire on events — system calls, network packets, function entries. These programs can observe, filter, or modify behavior in real time. eBPF programs are verified by the kernel before loading, ensuring they terminate and don&#39;t crash the kernel.</p>
+<p>Tools like Falco use eBPF to detect runtime threats. When a process opens a sensitive file, creates a network connection to a known malicious IP, or executes a shell in a container, Falco generates an alert. Cilium uses eBPF for network security — it enforces network policies at the kernel level without iptables overhead, providing better performance and scalability.</p>
+<h2>How They Work Together</h2>
+<p>Seccomp and eBPF are complementary. Seccomp sets static boundaries on what syscalls are available. eBPF provides dynamic visibility and control within those boundaries. Think of seccomp as the guardrails — it defines the allowed paths. eBPF as the traffic camera — it watches what happens on those paths and alerts or blocks suspicious behavior.</p>
+<p>A secure container stack uses both. Enable <code>seccompProfile: RuntimeDefault</code> on all workloads today. Then add Falco for runtime threat detection and Cilium for network policy enforcement. Kubernetes v1.36 makes seccomp GA and enabled by default. If you&#39;re on an older version, enable it manually. The security benefit far outweighs the configuration effort — it&#39;s a one-line YAML change that blocks an entire class of kernel attacks.</p>
 </div>
       </section>
     </main>

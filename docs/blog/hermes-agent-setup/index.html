@@ -4,16 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Setting Up Hermes Agent for Development | Rahul Raikwar</title>
-    <meta name="description" content="A quick guide to installing and configuring Hermes Agent on WSL for your daily development workflow." />
+    <meta name="description" content="A quick guide to installing and configuring Hermes Agent on your development machine for coding, research, file operations, and automation. Hermes Agent is a te" />
     <link rel="canonical" href="https://iamrahulraikwar.online/blog/hermes-agent-setup/" />
     <meta property="og:title" content="Setting Up Hermes Agent for Development" />
-    <meta property="og:description" content="A quick guide to installing and configuring Hermes Agent on WSL for your daily development workflow." />
+    <meta property="og:description" content="A quick guide to installing and configuring Hermes Agent on your development machine for coding, research, file operations, and automation. Hermes Agent is a te" />
     <meta property="og:url" content="https://iamrahulraikwar.online/blog/hermes-agent-setup/" />
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="Rahul Raikwar" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Setting Up Hermes Agent for Development" />
-    <meta name="twitter:description" content="A quick guide to installing and configuring Hermes Agent on WSL for your daily development workflow." />
+    <meta name="twitter:description" content="A quick guide to installing and configuring Hermes Agent on your development machine for coding, research, file operations, and automation. Hermes Agent is a te" />
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -35,22 +35,21 @@
         <p><a href="../">&larr; All Posts</a></p>
         <h1>Setting Up Hermes Agent for Development</h1>
         <p>April 20, 2026</p>
-        <div><h1>Setting Up Hermes Agent for Development</h1>
-<p>A quick guide to installing and configuring Hermes Agent on WSL for your daily development workflow.</p>
+        <div><p>A quick guide to installing and configuring Hermes Agent on your development machine for coding, research, file operations, and automation. Hermes Agent is a terminal-based AI assistant that works alongside you, handling the repetitive stuff so you can focus on the creative parts of development.</p>
 <h2>What is Hermes Agent?</h2>
-<p>Hermes Agent is a terminal-based AI assistant that helps you with coding, research, file operations, and automation. It&#39;s designed to work alongside you, handling the repetitive stuff so you can focus on the creative parts of development.</p>
+<p>Hermes Agent is an open-source, terminal-based AI assistant for developers. It helps with coding tasks, research questions, file operations, and automation. It runs entirely in your terminal, integrates with your local development environment, and can read and write files in your project. Unlike cloud-based coding assistants, Hermes Agent operates on your local machine with direct access to your files and tools.</p>
+<p>The agent works best when you provide context about what you&#39;re working on. Navigate to your project directory before starting a session. The agent will read your project files, understand the structure, and provide more relevant assistance.</p>
 <h2>Prerequisites</h2>
-<p>Before installing, make sure you have:</p>
-<ul>
-<li>Node.js 18 or higher</li>
-<li>npm or pnpm package manager</li>
-<li>An OpenAI API key (optional, for advanced features)</li>
-</ul>
+<p>Before installing, make sure you have Node.js 18 or higher installed on your system. Verify with <code>node --version</code>. You also need npm or pnpm as your package manager. An OpenAI API key is optional but recommended for advanced features like code explanation, debugging assistance, and complex task automation.</p>
 <h2>Installation</h2>
 <p>Open your terminal and run:</p>
 <pre><code class="language-bash">npm install -g hermes-agent
 </code></pre>
-<p>That&#39;s it! The package installs globally so you can use it from any directory.</p>
+<p>The package installs globally so you can use it from any directory. Installation takes about 30 seconds depending on your internet connection speed.</p>
+<p>After installation, verify it works:</p>
+<pre><code class="language-bash">hermes-agent --version
+</code></pre>
+<p>You should see the version number printed in your terminal.</p>
 <h2>Configuration</h2>
 <p>After installation, create a config file at <code>~/.hermes/config.json</code>:</p>
 <pre><code class="language-json">{
@@ -60,46 +59,34 @@
   &quot;shell&quot;: &quot;zsh&quot;
 }
 </code></pre>
-<p>You can also use environment variables:</p>
+<p>Set the model to one you have access to — <code>gpt-4</code> offers higher quality responses, while <code>gpt-3.5-turbo</code> is faster and cheaper. Set <code>editor</code> to your preferred editor (vim, nano, code for VS Code). Set <code>shell</code> to your default shell (bash, zsh, fish).</p>
+<p>You can also use environment variables for the API key:</p>
 <pre><code class="language-bash">export OPENAI_API_KEY=&quot;your-key&quot;
 </code></pre>
+<p>This approach keeps your API key out of config files, which is better for security if you commit your config to a dotfiles repository.</p>
 <h2>Your First Conversation</h2>
 <p>Start hermes-agent by running:</p>
 <pre><code class="language-bash">hermes-agent
 </code></pre>
-<p>You&#39;ll see a prompt where you can type naturally. Try asking:</p>
+<p>You&#39;ll see a prompt where you can type naturally. Try asking questions about your current project:</p>
 <ul>
 <li>&quot;Explain this code I&#39;m looking at&quot;</li>
 <li>&quot;Write a function to parse CSV files&quot;</li>
 <li>&quot;Find all TODO comments in this project&quot;</li>
+<li>&quot;What dependencies does this project use?&quot;</li>
 </ul>
+<p>The agent reads your project files to provide context-aware responses. Navigate to a project directory before starting for the best results.</p>
 <h2>Keyboard Shortcuts</h2>
 <ul>
-<li><code>Ctrl+C</code> - Cancel current task</li>
-<li><code>Ctrl+D</code> - Exit hermes-agent</li>
-<li><code>Ctrl+L</code> - Clear screen</li>
+<li><code>Ctrl+C</code> cancels the current task</li>
+<li><code>Ctrl+D</code> exits hermes-agent  </li>
+<li><code>Ctrl+L</code> clears the screen</li>
+<li><code>Ctrl+P</code> pastes the current clipboard contents</li>
 </ul>
 <h2>Tips for Better Results</h2>
-<ol>
-<li><p><strong>Be specific</strong> - &quot;Create a React component for a login form&quot; works better than &quot;make something&quot;</p>
-</li>
-<li><p><strong>Use context</strong> - Navigate to your project first so hermes-agent can read the files</p>
-</li>
-<li><p><strong>Iterate</strong> - It&#39;s a conversation, not a magic wand. Refine your requests.</p>
-</li>
-</ol>
+<p>Be specific with your requests. &quot;Create a React component for a login form with email and password fields, validation, and error handling&quot; works better than &quot;make a form.&quot; Use context by navigating to your project first so the agent can read the files. Iterate by refining your requests based on the output — it&#39;s a conversation, not a magic wand.</p>
 <h2>Troubleshooting</h2>
-<p><strong>API errors</strong>: Check your API key is set correctly in config or environment</p>
-<p><strong>Slow responses</strong>: Try using gpt-3.5-turbo instead of gpt-4 for faster results</p>
-<p><strong>Permission errors</strong>: Make sure your config directory is writable</p>
-<h2>What&#39;s Next</h2>
-<p>Once you&#39;re comfortable, explore:</p>
-<ul>
-<li>Custom prompts for your team</li>
-<li>Integration with git hooks</li>
-<li>Automated code reviews</li>
-</ul>
-<p>Happy coding!</p>
+<p><strong>API errors.</strong> Check your API key is set correctly in config or environment. Run <code>echo $OPENAI_API_KEY</code> to verify the environment variable. <strong>Slow responses.</strong> Try using gpt-3.5-turbo instead of gpt-4 for faster results on simpler tasks. <strong>Permission errors.</strong> Make sure your config directory is writable. Run <code>chmod 755 ~/.hermes</code> to fix permissions.</p>
 </div>
       </section>
     </main>

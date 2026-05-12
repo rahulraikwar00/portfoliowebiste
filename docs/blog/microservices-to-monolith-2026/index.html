@@ -4,16 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Why We Moved From Microservices Back to Monoliths | Rahul Raikwar</title>
-    <meta name="description" content="Microservices To Monolith 2026 has fundamentally changed how we build software. What started as an experimental approach in 2023 is now production-standard acro" />
+    <meta name="description" content="In 2023, Amazon Prime Video published a case study that made the industry do a double take. They migrated a critical monitoring service from microservices back" />
     <link rel="canonical" href="https://iamrahulraikwar.online/blog/microservices-to-monolith-2026/" />
     <meta property="og:title" content="Why We Moved From Microservices Back to Monoliths" />
-    <meta property="og:description" content="Microservices To Monolith 2026 has fundamentally changed how we build software. What started as an experimental approach in 2023 is now production-standard acro" />
+    <meta property="og:description" content="In 2023, Amazon Prime Video published a case study that made the industry do a double take. They migrated a critical monitoring service from microservices back" />
     <meta property="og:url" content="https://iamrahulraikwar.online/blog/microservices-to-monolith-2026/" />
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="Rahul Raikwar" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Why We Moved From Microservices Back to Monoliths" />
-    <meta name="twitter:description" content="Microservices To Monolith 2026 has fundamentally changed how we build software. What started as an experimental approach in 2023 is now production-standard acro" />
+    <meta name="twitter:description" content="In 2023, Amazon Prime Video published a case study that made the industry do a double take. They migrated a critical monitoring service from microservices back" />
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -35,39 +35,40 @@
         <p><a href="../">&larr; All Posts</a></p>
         <h1>Why We Moved From Microservices Back to Monoliths</h1>
         <p>April 18, 2026</p>
-        <div><p>Microservices To Monolith 2026 has fundamentally changed how we build software. What started as an experimental approach in 2023 is now production-standard across the industry.</p>
-<h2>Why This Matters</h2>
-<p>The shift toward microservices to monolith 2026 represents a significant evolution in developer productivity and system reliability. Companies adopting this approach see measurable improvements in deployment frequency and mean time to recovery.</p>
-<p>Key benefits observed in production:</p>
+        <div><p>In 2023, Amazon Prime Video published a case study that made the industry do a double take. They migrated a critical monitoring service from microservices back to a monolith and cut costs by 90%. Not 30%. Ninety percent. If Amazon — the company that practically invented modern microservices — was publicly admitting over-engineering, something had shifted.</p>
+<h2>What Went Wrong</h2>
+<p>Microservices were sold as the default architecture for any serious project. The promise: independent scaling, team autonomy, faster deployments. In practice, many teams discovered a different equation:</p>
 <ul>
-<li>Reduced cognitive load on development teams</li>
-<li>Faster feedback loops through automation</li>
-<li>Consistent environments across development and production</li>
-<li>Improved security posture via standardized practices</li>
+<li>Every internal function call became an HTTP request with latency, retries, and potential failure</li>
+<li>Observability required distributed tracing across dozens of services just to debug a single user request</li>
+<li>CI/CD pipelines multiplied — one per service, each with its own build, test, and deploy</li>
+<li>Cloud bills ballooned from NAT gateways, load balancers, cross-AZ data transfer, and always-on sidecars</li>
 </ul>
-<h2>Real-World Implementation</h2>
-<p>Here&#39;s how teams are implementing microservices to monolith 2026 today:</p>
-<pre><code class="language-typescript">// Example implementation pattern
-export class MicroservicesToMonolith2026Service {
-  async deploy(options: DeployOptions) {
-    const config = await this.validate(options);
-    const result = await this.execute(config);
-    return this.monitor(result);
-  }
-}
-</code></pre>
-<p>The key insight? Abstraction without sacrificing control. We provide golden paths that cover 80% of use cases while supporting escape hatches for edge cases.</p>
-<h2>Measurable Outcomes</h2>
-<p>Organizations that have fully adopted microservices to monolith 2026 report:</p>
+<p>The killer? According to DORA research, 90% of microservices teams batch deploy everything together anyway. You get all the complexity of distributed systems with none of the independent deployment benefit. That&#39;s the distributed monolith — the worst of both worlds.</p>
+<h2>When Microservices Actually Make Sense</h2>
+<p>This isn&#39;t an argument that microservices are always wrong. They work well when:</p>
 <ul>
-<li>3x faster onboarding for new engineers</li>
-<li>60% reduction in configuration drift</li>
-<li>90% decrease in &quot;works on my machine&quot; incidents</li>
-<li>Significant improvement in DORA metrics</li>
+<li>You have multiple teams that genuinely deploy independently</li>
+<li>Different services have very different scaling profiles</li>
+<li>Strict compliance isolation is required</li>
+<li>You need polyglot runtimes for specific workloads</li>
 </ul>
-<h2>Looking Ahead</h2>
-<p>As we move into 2027, microservices to monolith 2026 will continue evolving toward greater simplicity and automation. The most successful teams balance standardization with flexibility — enforcing guardrails without stifling innovation.</p>
-<p>The question isn&#39;t whether to adopt microservices to monolith 2026 but how to do it effectively for your organization&#39;s context and constraints.</p>
+<p>If you have 30+ engineers and clear domain boundaries, microservices still make sense. The problem was treating them as the default starting point for teams of 5-10 people.</p>
+<h2>What Teams Are Doing Instead</h2>
+<p>The trend in 2026 is the modular monolith. Same clear module boundaries and domain separation as microservices, but deployed as a single unit. Modules communicate through function calls instead of network RPC. You keep the organizational benefits without the operational nightmare.</p>
+<p>Shopify has been running this way for years. They serve millions of merchants on a single Ruby application with strict module boundaries. When they do need to extract a service, the boundaries already exist — it&#39;s a clean cut, not a rewrite.</p>
+<p>Istio did the same thing. After years of microservice complexity, they merged everything into a single <code>istiod</code> process and cut deployment complexity by 90%.</p>
+<h2>How to Migrate Back</h2>
+<p>If you&#39;re stuck in microservices hell, the playbook is straightforward:</p>
+<ol>
+<li>Identify the services that are always deployed together. These are your distributed monolith candidates.</li>
+<li>Merge them one domain at a time, not all at once.</li>
+<li>Keep the module boundaries clean. Extract later if needed.</li>
+<li>Measure what matters: deployment frequency, MTTR, cloud spend.</li>
+</ol>
+<p>Most teams see 40-60% reduction in infrastructure costs and noticeable improvements in latency just from removing network hops.</p>
+<h2>The Bottom Line</h2>
+<p>Microservices are a specialized tool, not a default architecture. If you&#39;re a small team building a product, start with a well-structured monolith. Extract services only when you have actual evidence that distribution solves a real problem. Boring technology wins.</p>
 </div>
       </section>
     </main>

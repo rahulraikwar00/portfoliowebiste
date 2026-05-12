@@ -3,23 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Why We Switched from Jenkins to GitHub Actions | Rahul Raikwar</title>
-    <meta name="description" content="Jenkins To Github Actions 2021 has fundamentally changed how we build software. What started as an experimental approach in 2018 is now production-standard acro" />
+    <title>From Jenkins to GitHub Actions — Our Migration Story | Rahul Raikwar</title>
+    <meta name="description" content="We ran Jenkins for six years. We migrated to GitHub Actions in a weekend. The only regret was not doing it sooner. If you&#039;re still running Jenkins in 2026, here" />
     <link rel="canonical" href="https://iamrahulraikwar.online/blog/jenkins-to-github-actions-2021/" />
-    <meta property="og:title" content="Why We Switched from Jenkins to GitHub Actions" />
-    <meta property="og:description" content="Jenkins To Github Actions 2021 has fundamentally changed how we build software. What started as an experimental approach in 2018 is now production-standard acro" />
+    <meta property="og:title" content="From Jenkins to GitHub Actions — Our Migration Story" />
+    <meta property="og:description" content="We ran Jenkins for six years. We migrated to GitHub Actions in a weekend. The only regret was not doing it sooner. If you&#039;re still running Jenkins in 2026, here" />
     <meta property="og:url" content="https://iamrahulraikwar.online/blog/jenkins-to-github-actions-2021/" />
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="Rahul Raikwar" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Why We Switched from Jenkins to GitHub Actions" />
-    <meta name="twitter:description" content="Jenkins To Github Actions 2021 has fundamentally changed how we build software. What started as an experimental approach in 2018 is now production-standard acro" />
+    <meta name="twitter:title" content="From Jenkins to GitHub Actions — Our Migration Story" />
+    <meta name="twitter:description" content="We ran Jenkins for six years. We migrated to GitHub Actions in a weekend. The only regret was not doing it sooner. If you&#039;re still running Jenkins in 2026, here" />
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
-      "headline": "Why We Switched from Jenkins to GitHub Actions",
-      "datePublished": "September 13, 2021",
+      "headline": "From Jenkins to GitHub Actions — Our Migration Story",
+      "datePublished": "September 12, 2021",
       "author": {
         "@type": "Person",
         "name": "Rahul Raikwar",
@@ -33,41 +33,35 @@
     <main>
       <section>
         <p><a href="../">&larr; All Posts</a></p>
-        <h1>Why We Switched from Jenkins to GitHub Actions</h1>
-        <p>September 13, 2021</p>
-        <div><p>Jenkins To Github Actions 2021 has fundamentally changed how we build software. What started as an experimental approach in 2018 is now production-standard across the industry.</p>
-<h2>Why This Matters</h2>
-<p>The shift toward jenkins to github actions 2021 represents a significant evolution in developer productivity and system reliability. Companies adopting this approach see measurable improvements in deployment frequency and mean time to recovery.</p>
-<p>Key benefits observed in production:</p>
-<ul>
-<li>Reduced cognitive load on development teams</li>
-<li>Faster feedback loops through automation</li>
-<li>Consistent environments across development and production</li>
-<li>Improved security posture via standardized practices</li>
-</ul>
-<h2>Real-World Implementation</h2>
-<p>Here&#39;s how teams are implementing jenkins to github actions 2021 today:</p>
-<pre><code class="language-typescript">// Example implementation pattern
-export class JenkinsToGithubActions2021Service {
-  async deploy(options: DeployOptions) {
-    const config = await this.validate(options);
-    const result = await this.execute(config);
-    return this.monitor(result);
-  }
-}
+        <h1>From Jenkins to GitHub Actions — Our Migration Story</h1>
+        <p>September 12, 2021</p>
+        <div><p>We ran Jenkins for six years. We migrated to GitHub Actions in a weekend. The only regret was not doing it sooner. If you&#39;re still running Jenkins in 2026, here&#39;s what the migration looks like, what you gain, and what you lose.</p>
+<h2>The Jenkins Tax</h2>
+<p>Jenkins is powerful but expensive. The cost isn&#39;t the software — it&#39;s free. The cost is the maintenance. Someone needs to manage the master node, install plugins, handle plugin compatibility issues, fix the Groovy DSL scripts when they break, and maintain the CI infrastructure. Jenkins plugins have a bad habit of breaking with version upgrades. A security update to the Jenkins core can break 10 plugins. Each broken plugin is a support ticket.</p>
+<p>At our peak, we had a Jenkins master with 40 plugins, 8 build agents (EC2 instances), and a part-time DevOps engineer whose primary responsibility was Jenkins maintenance. The monthly cost was about $2,000 in EC2 instances and 40 hours of engineering time. For a CI system. That&#39;s Jenkins running on AWS infrastructure that needs patching, monitoring, and capacity planning.</p>
+<p>GitHub Actions eliminated the infrastructure. There&#39;s no CI server to maintain. Actions runners can be self-hosted if needed, but the default hosted runners cover most use cases. The YAML syntax is simpler than Jenkins&#39; Groovy DSL or Pipelines. Integration with GitHub is seamless — PR checks, status updates, branch protections all work together.</p>
+<h2>The Migration</h2>
+<p>We exported Jenkins jobs as shell scripts and wrapped them in GitHub Actions YAML. The migration took one weekend for 30 jobs. Most were straightforward: <code>npm run build</code>, <code>npm test</code>, <code>docker build</code>. Complex pipelines with post-build actions required more work, but GitHub Actions&#39; <code>needs</code> and <code>matrix</code> strategies covered our requirements.</p>
+<p>The hardest part was migrating credential management. Jenkins had a centralized credentials store with 50+ entries. GitHub Actions uses secrets per repository and OIDC for cloud provider access. We had to audit every credential, determine which repositories needed it, and migrate them individually. This took longer than the pipeline migration itself, but the result was significantly more secure. Each repository had only the permissions it needed, not the union of permissions needed by all projects.</p>
+<p>The matrix strategy was a revelation. Our Jenkins configuration for testing against multiple Node.js versions was a complex Groovy script. In GitHub Actions:</p>
+<pre><code class="language-yaml">test:
+  strategy:
+    matrix:
+      node-version: [18, 20, 22]
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
 </code></pre>
-<p>The key insight? Abstraction without sacrificing control. We provide golden paths that cover 80% of use cases while supporting escape hatches for edge cases.</p>
-<h2>Measurable Outcomes</h2>
-<p>Organizations that have fully adopted jenkins to github actions 2021 report:</p>
-<ul>
-<li>3x faster onboarding for new engineers</li>
-<li>60% reduction in configuration drift</li>
-<li>90% decrease in &quot;works on my machine&quot; incidents</li>
-<li>Significant improvement in DORA metrics</li>
-</ul>
-<h2>Looking Ahead</h2>
-<p>As we move into 2022, jenkins to github actions 2021 will continue evolving toward greater simplicity and automation. The most successful teams balance standardization with flexibility — enforcing guardrails without stifling innovation.</p>
-<p>The question isn&#39;t whether to adopt jenkins to github actions 2021 but how to do it effectively for your organization&#39;s context and constraints.</p>
+<p>Four lines instead of 50. This is the pattern throughout: GitHub Actions reduces boilerplate by 60-80% compared to Jenkins.</p>
+<h2>What We Lost</h2>
+<p><strong>Flexible triggers.</strong> Jenkins can trigger builds from almost anything — cron schedules, file system changes, email, other jobs, REST API calls. GitHub Actions integrates tightly with GitHub events (push, PR, issue, release, schedule). If you need non-GitHub triggers (Slack command, custom webhook), you&#39;re adding complexity through repository_dispatch events.</p>
+<p><strong>Custom plugins.</strong> Jenkins&#39; plugins ecosystem is vast with thousands of plugins covering every tool and integration. Actions has a growing marketplace but hasn&#39;t matched Jenkins&#39; breadth. For uncommon integrations, you might need to write a custom action or fall back to shell commands.</p>
+<p><strong>Control.</strong> You don&#39;t control the Actions infrastructure. When GitHub has an outage, your CI is down. This has happened a few times over the years, typically for 30-60 minutes. Self-hosted runners mitigate this but add operational overhead. For organizations with strict SLA requirements, the hosted model is a concern.</p>
+<p><strong>Pipeline debugging.</strong> Jenkins&#39; Blue Ocean UI provides visual pipeline debugging with replay capabilities. GitHub Actions logs are text-based. For complex pipelines, Jenkins&#39; debugging tools are still better.</p>
+<h2>The Verdict</h2>
+<p>For most teams, GitHub Actions is better than Jenkins. Less maintenance, simpler syntax, tighter GitHub integration. The migration is easier than you expect — most Jenkins jobs translate to Actions workflows in a few hours. The credential cleanup is the most time-consuming part, but it&#39;s also the most valuable security improvement.</p>
+<p>If you have complex multi-platform build pipelines (building for Windows, Linux, and macOS with different toolchains), extensive plugin needs, or strict SLA requirements for CI uptime, Jenkins still has advantages. But the maintenance cost of self-hosted CI is substantial — measure it honestly before deciding. We estimated our Jenkins TCO at $25,000/year for a team of 20. GitHub Actions costs about $2,000/year for the same workload. The math is clear for most teams.</p>
 </div>
       </section>
     </main>

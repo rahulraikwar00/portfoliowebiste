@@ -1,50 +1,33 @@
 ---
-title: Infrastructure as Code is Dead, Long Live Desired State
+title: Is IaC Dead? The Rise of Desired State
 date: January 22, 2025
 slug: iac-dead-desired-state-2025
 ---
 
-Iac Dead Desired State 2025 has fundamentally changed how we build software. What started as an experimental approach in 2022 is now production-standard across the industry.
+Every few years someone declares Infrastructure as Code dead. The arguments sound compelling. "YAML is not code!" "Terraform is too verbose!" "Just use Pulumi in TypeScript!" But IaC isn't dying. It's evolving from imperative provisioning toward desired state management.
 
-## Why This Matters
+## The Problem with Classic IaC
 
-The shift toward iac dead desired state 2025 represents a significant evolution in developer productivity and system reliability. Companies adopting this approach see measurable improvements in deployment frequency and mean time to recovery.
+Traditional IaC (Terraform, CloudFormation, ARM templates) works well for initial provisioning. You define resources, run `apply`, and infrastructure appears. The problems start afterward.
 
-Key benefits observed in production:
+**Drift is inevitable.** Someone goes into the AWS console to fix a production issue at 2 AM. They change a security group rule. They resize an instance. They add a tag. The IaC template no longer matches reality. The next `terraform plan` shows changes that might overwrite the emergency fix. Now you have a decision to make — revert the change or update the template.
 
-- Reduced cognitive load on development teams
-- Faster feedback loops through automation
-- Consistent environments across development and production
-- Improved security posture via standardized practices
+AWS CloudFormation addressed this in 2025 with drift-aware change sets that do a three-way diff between your template, last deployed state, and actual infrastructure. Terraform has health assessments for the same purpose. But these are band-aids on a fundamental problem: reconciling declarative config with imperative reality.
 
-## Real-World Implementation
+**Configuration management isn't deployment.** IaC tools are great at saying "make the infrastructure look like this." They're less good at ongoing management — certificate rotation, auto-scaling adjustments, gradual rollouts. You end up layering scripts on top of IaC.
 
-Here's how teams are implementing iac dead desired state 2025 today:
+## What Desired State Means
 
-```typescript
-// Example implementation pattern
-export class IacDeadDesiredState2025Service {
-  async deploy(options: DeployOptions) {
-    const config = await this.validate(options);
-    const result = await this.execute(config);
-    return this.monitor(result);
-  }
-}
-```
+The desired state model flips the approach. Instead of running a tool that makes infrastructure match a template, you have a continuous reconciliation loop. The system constantly compares actual state to desired state and corrects drift automatically.
 
-The key insight? Abstraction without sacrificing control. We provide golden paths that cover 80% of use cases while supporting escape hatches for edge cases.
+Kubernetes operators are the canonical example. You define a desired state in a custom resource. The operator watches for drift and reconciles. No manual `apply` needed. GitOps tools like Argo CD and Flux extend this pattern to the entire deployment pipeline.
 
-## Measurable Outcomes
+Crossplane takes this further — managing cloud resources (databases, buckets, queues) through Kubernetes-style reconciliation. Your infrastructure becomes custom resources in a cluster. Drift is corrected automatically.
 
-Organizations that have fully adopted iac dead desired state 2025 report:
+## What This Means for Practitioners
 
-- 3x faster onboarding for new engineers
-- 60% reduction in configuration drift
-- 90% decrease in "works on my machine" incidents
-- Significant improvement in DORA metrics
+Terraform isn't dead. Pulumi isn't dead. They're still the right tools for initial provisioning and for teams that don't run Kubernetes. But the direction is clear: continuous reconciliation replaces periodic apply.
 
-## Looking Ahead
+If you're starting a new project in 2026, consider whether desired state makes sense for your use case. If you're already on Kubernetes, Crossplane or the AWS Controllers for Kubernetes (ACK) give you desired state for cloud resources. If you're not on Kubernetes, Terraform with automated drift detection is the pragmatic choice.
 
-As we move into 2026, iac dead desired state 2025 will continue evolving toward greater simplicity and automation. The most successful teams balance standardization with flexibility — enforcing guardrails without stifling innovation.
-
-The question isn't whether to adopt iac dead desired state 2025 but how to do it effectively for your organization's context and constraints.
+The "IaC is dead" headlines are wrong. But the practice is changing. IaC used to mean "I run a script to configure infrastructure." Increasingly, it means "I declare what I want and the system makes it so."

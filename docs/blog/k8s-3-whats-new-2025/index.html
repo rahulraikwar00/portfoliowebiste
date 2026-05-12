@@ -3,22 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kubernetes 3.0: What&#039;s New and What&#039;s Gone | Rahul Raikwar</title>
-    <meta name="description" content="K8S 3 Whats New 2025 has fundamentally changed how we build software. What started as an experimental approach in 2022 is now production-standard across the ind" />
+    <title>Kubernetes 3.0? What the 2026 Releases Actually Mean | Rahul Raikwar</title>
+    <meta name="description" content="There&#039;s no Kubernetes 3.0. The version numbering hasn&#039;t changed — we&#039;re at Kubernetes 1.36 as of May 2026, and the project is still going strong. But the conver" />
     <link rel="canonical" href="https://iamrahulraikwar.online/blog/k8s-3-whats-new-2025/" />
-    <meta property="og:title" content="Kubernetes 3.0: What&#039;s New and What&#039;s Gone" />
-    <meta property="og:description" content="K8S 3 Whats New 2025 has fundamentally changed how we build software. What started as an experimental approach in 2022 is now production-standard across the ind" />
+    <meta property="og:title" content="Kubernetes 3.0? What the 2026 Releases Actually Mean" />
+    <meta property="og:description" content="There&#039;s no Kubernetes 3.0. The version numbering hasn&#039;t changed — we&#039;re at Kubernetes 1.36 as of May 2026, and the project is still going strong. But the conver" />
     <meta property="og:url" content="https://iamrahulraikwar.online/blog/k8s-3-whats-new-2025/" />
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="Rahul Raikwar" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Kubernetes 3.0: What&#039;s New and What&#039;s Gone" />
-    <meta name="twitter:description" content="K8S 3 Whats New 2025 has fundamentally changed how we build software. What started as an experimental approach in 2022 is now production-standard across the ind" />
+    <meta name="twitter:title" content="Kubernetes 3.0? What the 2026 Releases Actually Mean" />
+    <meta name="twitter:description" content="There&#039;s no Kubernetes 3.0. The version numbering hasn&#039;t changed — we&#039;re at Kubernetes 1.36 as of May 2026, and the project is still going strong. But the conver" />
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
-      "headline": "Kubernetes 3.0: What's New and What's Gone",
+      "headline": "Kubernetes 3.0? What the 2026 Releases Actually Mean",
       "datePublished": "April 2, 2025",
       "author": {
         "@type": "Person",
@@ -33,41 +33,30 @@
     <main>
       <section>
         <p><a href="../">&larr; All Posts</a></p>
-        <h1>Kubernetes 3.0: What&#039;s New and What&#039;s Gone</h1>
+        <h1>Kubernetes 3.0? What the 2026 Releases Actually Mean</h1>
         <p>April 2, 2025</p>
-        <div><p>K8S 3 Whats New 2025 has fundamentally changed how we build software. What started as an experimental approach in 2022 is now production-standard across the industry.</p>
-<h2>Why This Matters</h2>
-<p>The shift toward k8s 3 whats new 2025 represents a significant evolution in developer productivity and system reliability. Companies adopting this approach see measurable improvements in deployment frequency and mean time to recovery.</p>
-<p>Key benefits observed in production:</p>
-<ul>
-<li>Reduced cognitive load on development teams</li>
-<li>Faster feedback loops through automation</li>
-<li>Consistent environments across development and production</li>
-<li>Improved security posture via standardized practices</li>
-</ul>
-<h2>Real-World Implementation</h2>
-<p>Here&#39;s how teams are implementing k8s 3 whats new 2025 today:</p>
-<pre><code class="language-typescript">// Example implementation pattern
-export class K8S3WhatsNew2025Service {
-  async deploy(options: DeployOptions) {
-    const config = await this.validate(options);
-    const result = await this.execute(config);
-    return this.monitor(result);
-  }
-}
-</code></pre>
-<p>The key insight? Abstraction without sacrificing control. We provide golden paths that cover 80% of use cases while supporting escape hatches for edge cases.</p>
-<h2>Measurable Outcomes</h2>
-<p>Organizations that have fully adopted k8s 3 whats new 2025 report:</p>
-<ul>
-<li>3x faster onboarding for new engineers</li>
-<li>60% reduction in configuration drift</li>
-<li>90% decrease in &quot;works on my machine&quot; incidents</li>
-<li>Significant improvement in DORA metrics</li>
-</ul>
-<h2>Looking Ahead</h2>
-<p>As we move into 2026, k8s 3 whats new 2025 will continue evolving toward greater simplicity and automation. The most successful teams balance standardization with flexibility — enforcing guardrails without stifling innovation.</p>
-<p>The question isn&#39;t whether to adopt k8s 3 whats new 2025 but how to do it effectively for your organization&#39;s context and constraints.</p>
+        <div><p>There&#39;s no Kubernetes 3.0. The version numbering hasn&#39;t changed — we&#39;re at Kubernetes 1.36 as of May 2026, and the project is still going strong. But the conversation keeps coming up because each release brings changes that feel major enough to deserve a &quot;3.0&quot; label.</p>
+<p>Here&#39;s what actually happened in the recent releases worth knowing about.</p>
+<h2>Kubernetes 1.35 (January 2026)</h2>
+<p>This was a substantial release with 44 enhancements — 14 GA, 18 beta, 12 alpha.</p>
+<p><strong>ML job orchestration went beta.</strong> The MLJob API provides a first-class abstraction for distributed training and batch inference with gang scheduling and fault tolerance. This matters because it means Kubernetes can natively schedule ML training jobs without custom controllers or third-party operators.</p>
+<p><strong>Cluster-level automation went GA.</strong> You can now declaratively manage node pools, feature gates, and component versions. The control plane reconciles drift automatically. This is a big deal for fleet operations — managing hundreds of clusters becomes manageable when you can declare the desired state of your entire fleet.</p>
+<p><strong>Network observability went beta.</strong> Standard metrics for traffic flow, policy decisions, and latency mean consistent interfaces across service meshes, gateways, and CNI plugins. No more vendor-specific dashboards for basic network visibility.</p>
+<p><strong>WASM workload integration went beta.</strong> You can now run WebAssembly workloads on Kubernetes using RuntimeClass. Not ready for critical production yet, but the foundation is there.</p>
+<p><strong>KMS v3 went GA.</strong> Automatic key rotation and multi-provider envelope encryption for secrets. If you&#39;re running production Kubernetes, this is a significant security upgrade.</p>
+<h2>Kubernetes 1.36 (May 2026)</h2>
+<p>The latest release focuses on API quality and hardware scheduling.</p>
+<p><strong>Declarative validation went GA.</strong> This replaces thousands of lines of handwritten validation code with a unified framework. For users, it means more predictable APIs and fewer validation bugs. The new <code>validation-gen</code> code generator reads <code>+k8s:</code> tags and automatically generates validation functions.</p>
+<p><strong>SELinux volume mounting improvements went GA.</strong> Instead of recursive file relabeling (slow), the system now uses <code>mount -o context=XYZ</code> at mount time. Faster pod startup on SELinux systems.</p>
+<p><strong>DRA support for partitionable devices.</strong> A single GPU can now be split into multiple logical units shared across workloads. This directly addresses the problem of GPU underutilization — dedicating an entire 80GB A100 to a small inference workload is wasteful.</p>
+<p><strong>externalIPs deprecation.</strong> The <code>externalIPs</code> field on Services is finally being deprecated due to CVE-2020-8554 (man-in-the-middle attacks). Full removal in 1.43.</p>
+<p><strong>gitRepo volume type disabled.</strong> This was deprecated since 1.11. It&#39;s now permanently disabled due to a critical security issue where attackers could run code as root via gitRepo volumes.</p>
+<h2>What About Kubernetes 3.0?</h2>
+<p>The &quot;3.0&quot; rumor started because some people expected a major version bump when significant architectural changes landed. But the Kubernetes project has been clear: there are no plans for a 3.0. The 1.x numbering continues.</p>
+<p>What has changed is the scope of what Kubernetes handles. It started as a container orchestrator. In 2026, it&#39;s a platform that orchestrates containers, VMs, WASM modules, ML training jobs, and GPUs. The underlying architecture supports all of these through the same API primitives — pods, controllers, schedulers.</p>
+<p>If that&#39;s not a 3.0 level of evolution, I don&#39;t know what is. The version number just hasn&#39;t caught up.</p>
+<h2>What to Do</h2>
+<p>Upgrade to 1.36 if you haven&#39;t already. The security improvements alone are worth it — KMS v3, SELinux fixes, gitRepo removal, and externalIPs deprecation all reduce your attack surface. The ML and WASM features are worth evaluating for new workloads, but don&#39;t rush production migrations until they&#39;ve had more time to mature.</p>
 </div>
       </section>
     </main>

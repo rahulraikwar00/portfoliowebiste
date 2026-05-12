@@ -4,47 +4,30 @@ date: September 28, 2022
 slug: abandoned-kubernetes-after-18-months-2022
 ---
 
-Abandoned Kubernetes After 18 Months 2022 has fundamentally changed how we build software. What started as an experimental approach in 2019 is now production-standard across the industry.
+We ran Kubernetes for 18 months. We had a managed cluster (EKS). We had a platform team. We had Helm charts, Argo CD, Prometheus, and all the standard tooling. And after 18 months, we moved our workloads to simpler infrastructure. Here's what we learned.
 
-## Why This Matters
+## The Problem
 
-The shift toward abandoned kubernetes after 18 months 2022 represents a significant evolution in developer productivity and system reliability. Companies adopting this approach see measurable improvements in deployment frequency and mean time to recovery.
+Kubernetes was the right choice for our future requirements and the wrong choice for our current requirements. We needed a place to run our API servers and background workers. We didn't need multi-tenant isolation, rolling deployments with fine-grained canary analysis, or horizontal pod autoscaling based on custom metrics. But Kubernetes forces you to think about all of these things.
 
-Key benefits observed in production:
+The operational burden was real. Someone needed to understand Etcd backup and recovery — if etcd dies, your cluster dies with it. Someone needed to debug CoreDNS issues — DNS resolution failures are a common Kubernetes problem that manifests as intermittent service timeouts. Someone needed to manage cluster upgrades, which inevitably broke something — a CNI version incompatibility here, a changed API version there. For a team of six, this was too much.
 
-- Reduced cognitive load on development teams
-- Faster feedback loops through automation
-- Consistent environments across development and production
-- Improved security posture via standardized practices
+The control plane cost was significant. EKS control plane: $73/month. Three worker nodes: ~$150/month. But the real cost was the tooling required to operate it safely. VPC CNI, CoreDNS, kube-proxy, AWS Load Balancer Controller, ExternalDNS, cert-manager, Argo CD, Prometheus, Grafana, Loki, Fluent Bit, and a dozen other components. Each one required configuration, updates, and occasional debugging. The Kubernetes ecosystem is powerful but the number of moving parts is staggering.
 
-## Real-World Implementation
+## What We Did Instead
 
-Here's how teams are implementing abandoned kubernetes after 18 months 2022 today:
+We moved to a simpler setup: application load balancer -> ECS Fargate. ECS doesn't have pods, services, deployments, or the rest of the Kubernetes object model. You define a task definition (what container to run, how much CPU/memory), specify desired count, and ECS keeps it running. The task definition is a JSON document, not a complex CRD hierarchy. Service discovery uses AWS Cloud Map. Logging goes to CloudWatch Logs automatically.
 
-```typescript
-// Example implementation pattern
-export class AbandonedKubernetesAfter18Months2022Service {
-  async deploy(options: DeployOptions) {
-    const config = await this.validate(options);
-    const result = await this.execute(config);
-    return this.monitor(result);
-  }
-}
-```
+The migration took about two weeks. We defined task definitions for each service, set up the load balancer target groups, configured CI/CD to deploy to ECS instead of EKS, and turned down the Kubernetes cluster. The ECS service was managed by AWS. Upgrades happened automatically — when a new ECS agent version was available, AWS rolled it out. If the service broke, AWS handled the infrastructure. We were responsible for our application, not the orchestration layer.
 
-The key insight? Abstraction without sacrificing control. We provide golden paths that cover 80% of use cases while supporting escape hatches for edge cases.
+The tradeoff was significant. We lost the Kubernetes ecosystem — no custom resource definitions, no operators, no native Helm, no Argo CD syncs. But we gained operational simplicity. We didn't need a dedicated DevOps engineer for infrastructure anymore. Our application developers could handle ECS deployments because the mental model was simpler.
 
-## Measurable Outcomes
+## When Kubernetes Makes Sense
 
-Organizations that have fully adopted abandoned kubernetes after 18 months 2022 report:
+Kubernetes is worth the complexity when you have multiple teams sharing a cluster (multi-tenancy with namespace isolation, resource quotas, and network policies). It makes sense when you need advanced deployment strategies (blue-green, canary, A/B testing with traffic splitting). It's valuable when you run diverse workloads (stateful, stateless, batch, ML training) on shared infrastructure and need custom scheduling. And it matters when you need portability across clouds or on-prem.
 
-- 3x faster onboarding for new engineers
-- 60% reduction in configuration drift
-- 90% decrease in "works on my machine" incidents
-- Significant improvement in DORA metrics
+If none of these apply, you're paying the Kubernetes complexity tax without getting the benefits. This is the "Kubernetes tax" — the operational overhead of running a distributed systems platform that you might not need. Estimate your tax honestly: include control plane costs, tooling maintenance, upgrade testing time, and the opportunity cost of your team learning Kubernetes internals instead of building product features.
 
-## Looking Ahead
+## The Lesson
 
-As we move into 2023, abandoned kubernetes after 18 months 2022 will continue evolving toward greater simplicity and automation. The most successful teams balance standardization with flexibility — enforcing guardrails without stifling innovation.
-
-The question isn't whether to adopt abandoned kubernetes after 18 months 2022 but how to do it effectively for your organization's context and constraints.
+The best infrastructure is the simplest infrastructure that meets your requirements. Kubernetes is a powerful tool for complex environments. For simpler environments, it's a distraction. Know what you actually need before choosing the tool. The question isn't "should we use Kubernetes?" — it's "what problems are we solving, and is Kubernetes the simplest tool for those problems?" In our case, the answer was no. For many teams, it might still be yes. The key is being honest about the complexity you're taking on.

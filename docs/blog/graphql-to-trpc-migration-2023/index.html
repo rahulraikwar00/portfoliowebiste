@@ -3,23 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Why We Moved From GraphQL to tRPC | Rahul Raikwar</title>
-    <meta name="description" content="Graphql To Trpc Migration 2023 has fundamentally changed how we build software. What started as an experimental approach in 2020 is now production-standard acro" />
+    <title>From GraphQL to tRPC — Why We Migrated | Rahul Raikwar</title>
+    <meta name="description" content="GraphQL was the default choice for API development for years. It solved real problems — over-fetching, under-fetching, client-driven queries. But in practice, m" />
     <link rel="canonical" href="https://iamrahulraikwar.online/blog/graphql-to-trpc-migration-2023/" />
-    <meta property="og:title" content="Why We Moved From GraphQL to tRPC" />
-    <meta property="og:description" content="Graphql To Trpc Migration 2023 has fundamentally changed how we build software. What started as an experimental approach in 2020 is now production-standard acro" />
+    <meta property="og:title" content="From GraphQL to tRPC — Why We Migrated" />
+    <meta property="og:description" content="GraphQL was the default choice for API development for years. It solved real problems — over-fetching, under-fetching, client-driven queries. But in practice, m" />
     <meta property="og:url" content="https://iamrahulraikwar.online/blog/graphql-to-trpc-migration-2023/" />
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="Rahul Raikwar" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Why We Moved From GraphQL to tRPC" />
-    <meta name="twitter:description" content="Graphql To Trpc Migration 2023 has fundamentally changed how we build software. What started as an experimental approach in 2020 is now production-standard acro" />
+    <meta name="twitter:title" content="From GraphQL to tRPC — Why We Migrated" />
+    <meta name="twitter:description" content="GraphQL was the default choice for API development for years. It solved real problems — over-fetching, under-fetching, client-driven queries. But in practice, m" />
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
-      "headline": "Why We Moved From GraphQL to tRPC",
-      "datePublished": "August 30, 2023",
+      "headline": "From GraphQL to tRPC — Why We Migrated",
+      "datePublished": "August 20, 2023",
       "author": {
         "@type": "Person",
         "name": "Rahul Raikwar",
@@ -33,41 +33,31 @@
     <main>
       <section>
         <p><a href="../">&larr; All Posts</a></p>
-        <h1>Why We Moved From GraphQL to tRPC</h1>
-        <p>August 30, 2023</p>
-        <div><p>Graphql To Trpc Migration 2023 has fundamentally changed how we build software. What started as an experimental approach in 2020 is now production-standard across the industry.</p>
-<h2>Why This Matters</h2>
-<p>The shift toward graphql to trpc migration 2023 represents a significant evolution in developer productivity and system reliability. Companies adopting this approach see measurable improvements in deployment frequency and mean time to recovery.</p>
-<p>Key benefits observed in production:</p>
-<ul>
-<li>Reduced cognitive load on development teams</li>
-<li>Faster feedback loops through automation</li>
-<li>Consistent environments across development and production</li>
-<li>Improved security posture via standardized practices</li>
-</ul>
-<h2>Real-World Implementation</h2>
-<p>Here&#39;s how teams are implementing graphql to trpc migration 2023 today:</p>
-<pre><code class="language-typescript">// Example implementation pattern
-export class GraphqlToTrpcMigration2023Service {
-  async deploy(options: DeployOptions) {
-    const config = await this.validate(options);
-    const result = await this.execute(config);
-    return this.monitor(result);
-  }
-}
+        <h1>From GraphQL to tRPC — Why We Migrated</h1>
+        <p>August 20, 2023</p>
+        <div><p>GraphQL was the default choice for API development for years. It solved real problems — over-fetching, under-fetching, client-driven queries. But in practice, many teams discovered that GraphQL&#39;s complexity wasn&#39;t justified by the benefits. tRPC emerged as a simpler alternative, and by 2026, it&#39;s become the default for full-stack TypeScript projects. We migrated our main API from GraphQL to tRPC, and the experience changed how I think about API design.</p>
+<h2>What tRPC Does Differently</h2>
+<p>tRPC gives you end-to-end type safety without a schema definition language. You write TypeScript functions on the server, and the client imports the types directly. No code generation. No GraphQL schema. No resolvers. No Apollo Client. The types flow from server to client at compile time.</p>
+<pre><code class="language-typescript">// Server
+const appRouter = t.router({
+  getUser: t.procedure
+    .input(z.string())
+    .query(({ input }) =&gt; db.user.find(input)),
+})
+
+// Client — fully typed, no codegen
+const user = await trpc.getUser.query(&quot;123&quot;)
+// user is typed as User
 </code></pre>
-<p>The key insight? Abstraction without sacrificing control. We provide golden paths that cover 80% of use cases while supporting escape hatches for edge cases.</p>
-<h2>Measurable Outcomes</h2>
-<p>Organizations that have fully adopted graphql to trpc migration 2023 report:</p>
-<ul>
-<li>3x faster onboarding for new engineers</li>
-<li>60% reduction in configuration drift</li>
-<li>90% decrease in &quot;works on my machine&quot; incidents</li>
-<li>Significant improvement in DORA metrics</li>
-</ul>
-<h2>Looking Ahead</h2>
-<p>As we move into 2024, graphql to trpc migration 2023 will continue evolving toward greater simplicity and automation. The most successful teams balance standardization with flexibility — enforcing guardrails without stifling innovation.</p>
-<p>The question isn&#39;t whether to adopt graphql to trpc migration 2023 but how to do it effectively for your organization&#39;s context and constraints.</p>
+<p>This eliminates an entire category of boilerplate. No more writing GraphQL types, matching resolvers to schema, generating TypeScript types, or maintaining separate client and server type definitions.</p>
+<p>The key insight: if your frontend and backend are both TypeScript in the same repo, there&#39;s no reason to use a schema DSL. TypeScript&#39;s type system is powerful enough to define your API contract. tRPC leverages that so your types are derived from implementation, not maintained separately.</p>
+<h2>Why We Moved</h2>
+<p><strong>Boilerplate reduction.</strong> Our GraphQL implementation had: schema definition files, resolver implementations, TypeScript type generation script, generated type files (committed to git), client query definitions with fragments, and a type-safe client wrapper. tRPC eliminated everything except the server procedures and the client import. The API layer codebase shrunk by roughly 40%.</p>
+<p><strong>No codegen step.</strong> GraphQL code generation was a constant source of friction. Running the codegen script was a manual step that everyone forgot. CI sometimes caught type mismatches between the schema and the generated types, but by then the schema was already deployed. Outdated schemas, mismatched versions, CI failures when generated types diverged from actual resolver implementations — it was a constant tax on development velocity.</p>
+<p><strong>Simpler deployment.</strong> GraphQL servers needed caching strategies (response caching, query planning), query complexity analysis (depth limiting, cost analysis), and abuse prevention (rate limiting by query). tRPC maps to standard HTTP procedures. Caching is straightforward HTTP caching. Abuse prevention is handled at the framework level (Express/Fastify middleware). The operational complexity dropped significantly.</p>
+<h2>When GraphQL Still Wins</h2>
+<p>tRPC is TypeScript-only. If your backend is in Go, Python, or Rust, tRPC doesn&#39;t help. GraphQL&#39;s language-agnostic schema makes sense for polyglot architectures. GraphQL also wins for public APIs — external developers benefit from self-documenting schemas, introspection queries, and GraphQL IDE tools. tRPC&#39;s type safety is internal-only.</p>
+<p>Our migration was pragmatic: new endpoints as tRPC procedures alongside existing GraphQL resolvers. After about three months, we had migrated all active use cases to tRPC and deprecated the GraphQL schema. Not revolutionary — just fewer layers between the code and the database. The result was faster development velocity and fewer type-related bugs.</p>
 </div>
       </section>
     </main>

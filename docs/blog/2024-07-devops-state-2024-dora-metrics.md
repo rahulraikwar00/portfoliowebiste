@@ -1,50 +1,29 @@
 ---
-title: The State of DevOps in 2024: DORA Metrics Still Matter
-date: July 8, 2024
+title: The State of DevOps 2024 — DORA Metrics and Real Trends
+date: July 10, 2024
 slug: devops-state-2024-dora-metrics
 ---
 
-Devops State 2024 Dora Metrics has fundamentally changed how we build software. What started as an experimental approach in 2021 is now production-standard across the industry.
+The DORA research program published its 2025 report with a focus that signals where the industry is: AI-assisted software development. After years of studying delivery performance (deployment frequency, lead time, MTTR, change failure rate), DORA shifted attention to how AI changes the equation. The findings are worth understanding because they confirm what many teams are experiencing.
 
-## Why This Matters
+## AI Is Now Standard
 
-The shift toward devops state 2024 dora metrics represents a significant evolution in developer productivity and system reliability. Companies adopting this approach see measurable improvements in deployment frequency and mean time to recovery.
+90% of surveyed developers use AI at work. More than 80% report increased productivity. AI adoption has become nearly universal in less than two years. But the interesting finding is that 30% of respondents have low trust in AI-generated code, which suggests a mature approach — developers are using AI but not blindly accepting its output.
 
-Key benefits observed in production:
+The key takeaway from the report: AI does not fix systemic problems — it amplifies them. Organizations with strong architecture, clear processes, and a healthy work culture gain the greatest benefits from AI. Where chaos, technical debt, or poor collaboration prevail, AI leads to local improvements that get lost in later delivery stages. Bad code written faster is still bad code, and if your CI/CD pipeline doesn't catch it, AI-generated bugs reach production sooner.
 
-- Reduced cognitive load on development teams
-- Faster feedback loops through automation
-- Consistent environments across development and production
-- Improved security posture via standardized practices
+DORA identified a new AI Capabilities Model with seven key capabilities that determine AI success: a clear AI policy communicated across the organization, working in small batches to limit blast radius, healthy data ecosystems with test data and monitoring, user focus driving priorities, internal data accessible to AI for context-aware suggestions, high-quality internal platforms that reduce cognitive load, and strong version control practices with meaningful review.
 
-## Real-World Implementation
+None of these are about the AI tool itself. They're all about organizational discipline.
 
-Here's how teams are implementing devops state 2024 dora metrics today:
+## The Throughput vs. Stability Tradeoff
 
-```typescript
-// Example implementation pattern
-export class DevopsState2024DoraMetricsService {
-  async deploy(options: DeployOptions) {
-    const config = await this.validate(options);
-    const result = await this.execute(config);
-    return this.monitor(result);
-  }
-}
-```
+2025 was the first year DORA found that AI genuinely increases throughput — the speed of delivering changes. But delivery instability also increased: more rollbacks, more hotfixes, more unplanned work. Teams have learned to write code faster with AI, but quality control systems haven't kept pace.
 
-The key insight? Abstraction without sacrificing control. We provide golden paths that cover 80% of use cases while supporting escape hatches for edge cases.
+The implication is clear: invest in automated testing, CI/CD quality gates, and deployment safety before assuming AI will make you faster. The AI accelerates the pipeline. If the pipeline has weak quality checks, it accelerates bad code into production. The teams that succeed with AI are the ones that already had strong engineering practices.
 
-## Measurable Outcomes
+## Platform Engineering Is the Foundation
 
-Organizations that have fully adopted devops state 2024 dora metrics report:
+90% of organizations have adopted platform engineering. The report found a direct correlation between a high-quality internal platform and an organization's ability to unlock AI value. Organizations that treat their platform as an internal product designed to improve developer experience see significantly greater returns from AI investments.
 
-- 3x faster onboarding for new engineers
-- 60% reduction in configuration drift
-- 90% decrease in "works on my machine" incidents
-- Significant improvement in DORA metrics
-
-## Looking Ahead
-
-As we move into 2025, devops state 2024 dora metrics will continue evolving toward greater simplicity and automation. The most successful teams balance standardization with flexibility — enforcing guardrails without stifling innovation.
-
-The question isn't whether to adopt devops state 2024 dora metrics but how to do it effectively for your organization's context and constraints.
+If you're investing in AI tooling in 2026, invest at least as much in the systems that ensure AI-generated code is safe, tested, and deployable. The tools are the easy part. The discipline — code review, testing, monitoring, gradual rollout, rollback capability — is the hard part that determines whether AI makes you faster or just generates more problems faster.
