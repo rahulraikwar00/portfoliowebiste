@@ -125,6 +125,7 @@ footer { padding: 2.5rem 0; border-top: 1px solid var(--border); text-align: cen
 .modal-content h3 { font-size: 1.3rem; margin-bottom: 0.3rem; }
 .modal-content p { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem; }
 .qr-code { border-radius: 12px; margin: 0 auto; display: block; }
+html[data-theme="dark"] .qr-code { filter: invert(1); }
 .upi-id {
   font-size: 0.9rem; font-weight: 600;
   background: var(--bg-alt); padding: 0.5rem 1rem;
