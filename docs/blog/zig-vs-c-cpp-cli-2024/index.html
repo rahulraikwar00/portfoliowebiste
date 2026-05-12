@@ -4,16 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Why We Chose Zig Over C/C++ for Our CLI Tool | Rahul Raikwar</title>
-    <meta name="description" content="Zig Vs C Cpp Cli 2024 has fundamentally changed how we build software. What started as an experimental approach in 2021 is now production-standard across the in" />
+    <meta name="description" content="We needed to build a cross-platform CLI tool for processing telemetry data. Performance mattered — we process millions of events per second. Memory safety matte" />
     <link rel="canonical" href="https://iamrahulraikwar.online/blog/zig-vs-c-cpp-cli-2024/" />
     <meta property="og:title" content="Why We Chose Zig Over C/C++ for Our CLI Tool" />
-    <meta property="og:description" content="Zig Vs C Cpp Cli 2024 has fundamentally changed how we build software. What started as an experimental approach in 2021 is now production-standard across the in" />
+    <meta property="og:description" content="We needed to build a cross-platform CLI tool for processing telemetry data. Performance mattered — we process millions of events per second. Memory safety matte" />
     <meta property="og:url" content="https://iamrahulraikwar.online/blog/zig-vs-c-cpp-cli-2024/" />
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="Rahul Raikwar" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Why We Chose Zig Over C/C++ for Our CLI Tool" />
-    <meta name="twitter:description" content="Zig Vs C Cpp Cli 2024 has fundamentally changed how we build software. What started as an experimental approach in 2021 is now production-standard across the in" />
+    <meta name="twitter:description" content="We needed to build a cross-platform CLI tool for processing telemetry data. Performance mattered — we process millions of events per second. Memory safety matte" />
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -35,39 +35,17 @@
         <p><a href="../">&larr; All Posts</a></p>
         <h1>Why We Chose Zig Over C/C++ for Our CLI Tool</h1>
         <p>February 12, 2024</p>
-        <div><p>Zig Vs C Cpp Cli 2024 has fundamentally changed how we build software. What started as an experimental approach in 2021 is now production-standard across the industry.</p>
-<h2>Why This Matters</h2>
-<p>The shift toward zig vs c cpp cli 2024 represents a significant evolution in developer productivity and system reliability. Companies adopting this approach see measurable improvements in deployment frequency and mean time to recovery.</p>
-<p>Key benefits observed in production:</p>
-<ul>
-<li>Reduced cognitive load on development teams</li>
-<li>Faster feedback loops through automation</li>
-<li>Consistent environments across development and production</li>
-<li>Improved security posture via standardized practices</li>
-</ul>
-<h2>Real-World Implementation</h2>
-<p>Here&#39;s how teams are implementing zig vs c cpp cli 2024 today:</p>
-<pre><code class="language-typescript">// Example implementation pattern
-export class ZigVsCCppCli2024Service {
-  async deploy(options: DeployOptions) {
-    const config = await this.validate(options);
-    const result = await this.execute(config);
-    return this.monitor(result);
-  }
-}
-</code></pre>
-<p>The key insight? Abstraction without sacrificing control. We provide golden paths that cover 80% of use cases while supporting escape hatches for edge cases.</p>
-<h2>Measurable Outcomes</h2>
-<p>Organizations that have fully adopted zig vs c cpp cli 2024 report:</p>
-<ul>
-<li>3x faster onboarding for new engineers</li>
-<li>60% reduction in configuration drift</li>
-<li>90% decrease in &quot;works on my machine&quot; incidents</li>
-<li>Significant improvement in DORA metrics</li>
-</ul>
-<h2>Looking Ahead</h2>
-<p>As we move into 2025, zig vs c cpp cli 2024 will continue evolving toward greater simplicity and automation. The most successful teams balance standardization with flexibility — enforcing guardrails without stifling innovation.</p>
-<p>The question isn&#39;t whether to adopt zig vs c cpp cli 2024 but how to do it effectively for your organization&#39;s context and constraints.</p>
+        <div><p>We needed to build a cross-platform CLI tool for processing telemetry data. Performance mattered — we process millions of events per second. Memory safety mattered — a crash in production telemetry processing is not acceptable. Developer velocity mattered — we needed to iterate quickly. Our team had deep C++ experience, but we chose Zig anyway. Two years later, it was the right call for our use case.</p>
+<h2>What Zig Does Differently</h2>
+<p><strong>No hidden control flow.</strong> In C++, <code>operator new</code> can throw exceptions. Destructors run at surprising times during stack unwinding. RAII means allocation and deallocation happen implicitly, which is convenient until it&#39;s not — tracking when memory is freed requires understanding the entire lifetime of every object. In Zig, everything is explicit. Allocation takes an allocator parameter that you pass explicitly. There are no constructors or destructors. The control flow you see is the control flow that executes. This sounds tedious. In practice, it means bugs are obvious and resource lifetimes are always clear.</p>
+<p><strong>Comptime.</strong> Zig&#39;s compile-time function execution is genuinely novel and unlike anything in C or C++. You can run arbitrary code at compile time — generating lookup tables for protocol parsing, validating configuration at compile time, unrolling loops for performance-critical sections — without macros, templates, or code generation scripts. The syntax is the same as runtime Zig, so there&#39;s no separate compile-time language to learn.</p>
+<p><strong>Cross-compilation.</strong> Zig ships the full set of C/C++ headers for every target platform. Cross-compiling for Windows from Linux is <code>-target x86_64-windows</code> and it just works. No cross-compilation toolchain setup. No sysroot. No multiarch headaches. This alone saved us a week of CI configuration and eliminated the &quot;it builds on my machine&quot; problem for cross-platform builds.</p>
+<p><strong>C interop.</strong> Zig can import C headers directly using <code>@cImport</code> and <code>@cInclude</code>, so you call C libraries without writing binding code. For a CLI tool that needed to interface with system libraries (libcurl for HTTP, libpcap for packet capture), this meant we could gradually replace C code while keeping existing library integrations.</p>
+<h2>Where Zig Struggles</h2>
+<p><strong>Ecosystem immaturity.</strong> Zig&#39;s package manager is usable but sparse. The standard library covers basics (file I/O, networking, memory allocation) but doesn&#39;t have the breadth of Rust&#39;s ecosystem. If you need an HTTP client, JSON parser, or database driver, you might need to write it or wrap a C library. Our team invested about two weeks in building wrappers for the libraries we needed.</p>
+<p><strong>Learning curve.</strong> Zig is simpler than C++ but not simple. Ownership semantics, error union types, and comptime require mental effort. Experienced C++ developers pick it up in a week. Junior developers working on a C++ codebase might struggle longer with Zig&#39;s explicitness.</p>
+<h2>The Verdict</h2>
+<p>Zig is the best choice for new systems-level CLI tools if you care about performance and can tolerate a smaller ecosystem. It replaces C for greenfield work and C++ for projects that value explicitness over convenience. Our CLI tool runs 30% faster than the C++ version it replaced, has fewer runtime bugs, and compiles in half the time. The ecosystem is the cost; the language is the benefit. For most projects, Rust is the safer choice — larger ecosystem, more libraries, more production validation. For projects that need maximum control and minimum hidden behavior, Zig is worth the ecosystem tradeoff.</p>
 </div>
       </section>
     </main>

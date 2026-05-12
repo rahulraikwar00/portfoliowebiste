@@ -3,23 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Introduction to Kubernetes for JavaScript Developers | Rahul Raikwar</title>
-    <meta name="description" content="K8S Intro Javascript Developers 2019 has fundamentally changed how we build software. What started as an experimental approach in 2016 is now production-standar" />
+    <title>Kubernetes for JavaScript Developers — An Introduction | Rahul Raikwar</title>
+    <meta name="description" content="Kubernetes is infrastructure. JavaScript developers don&#039;t need to be Kubernetes experts. But understanding the basics helps you deploy better, debug faster, and" />
     <link rel="canonical" href="https://iamrahulraikwar.online/blog/k8s-intro-javascript-developers-2019/" />
-    <meta property="og:title" content="Introduction to Kubernetes for JavaScript Developers" />
-    <meta property="og:description" content="K8S Intro Javascript Developers 2019 has fundamentally changed how we build software. What started as an experimental approach in 2016 is now production-standar" />
+    <meta property="og:title" content="Kubernetes for JavaScript Developers — An Introduction" />
+    <meta property="og:description" content="Kubernetes is infrastructure. JavaScript developers don&#039;t need to be Kubernetes experts. But understanding the basics helps you deploy better, debug faster, and" />
     <meta property="og:url" content="https://iamrahulraikwar.online/blog/k8s-intro-javascript-developers-2019/" />
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="Rahul Raikwar" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Introduction to Kubernetes for JavaScript Developers" />
-    <meta name="twitter:description" content="K8S Intro Javascript Developers 2019 has fundamentally changed how we build software. What started as an experimental approach in 2016 is now production-standar" />
+    <meta name="twitter:title" content="Kubernetes for JavaScript Developers — An Introduction" />
+    <meta name="twitter:description" content="Kubernetes is infrastructure. JavaScript developers don&#039;t need to be Kubernetes experts. But understanding the basics helps you deploy better, debug faster, and" />
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
-      "headline": "Introduction to Kubernetes for JavaScript Developers",
-      "datePublished": "August 8, 2019",
+      "headline": "Kubernetes for JavaScript Developers — An Introduction",
+      "datePublished": "August 5, 2019",
       "author": {
         "@type": "Person",
         "name": "Rahul Raikwar",
@@ -33,41 +33,34 @@
     <main>
       <section>
         <p><a href="../">&larr; All Posts</a></p>
-        <h1>Introduction to Kubernetes for JavaScript Developers</h1>
-        <p>August 8, 2019</p>
-        <div><p>K8S Intro Javascript Developers 2019 has fundamentally changed how we build software. What started as an experimental approach in 2016 is now production-standard across the industry.</p>
-<h2>Why This Matters</h2>
-<p>The shift toward k8s intro javascript developers 2019 represents a significant evolution in developer productivity and system reliability. Companies adopting this approach see measurable improvements in deployment frequency and mean time to recovery.</p>
-<p>Key benefits observed in production:</p>
-<ul>
-<li>Reduced cognitive load on development teams</li>
-<li>Faster feedback loops through automation</li>
-<li>Consistent environments across development and production</li>
-<li>Improved security posture via standardized practices</li>
-</ul>
-<h2>Real-World Implementation</h2>
-<p>Here&#39;s how teams are implementing k8s intro javascript developers 2019 today:</p>
-<pre><code class="language-typescript">// Example implementation pattern
-export class K8SIntroJavascriptDevelopers2019Service {
-  async deploy(options: DeployOptions) {
-    const config = await this.validate(options);
-    const result = await this.execute(config);
-    return this.monitor(result);
-  }
-}
-</code></pre>
-<p>The key insight? Abstraction without sacrificing control. We provide golden paths that cover 80% of use cases while supporting escape hatches for edge cases.</p>
-<h2>Measurable Outcomes</h2>
-<p>Organizations that have fully adopted k8s intro javascript developers 2019 report:</p>
-<ul>
-<li>3x faster onboarding for new engineers</li>
-<li>60% reduction in configuration drift</li>
-<li>90% decrease in &quot;works on my machine&quot; incidents</li>
-<li>Significant improvement in DORA metrics</li>
-</ul>
-<h2>Looking Ahead</h2>
-<p>As we move into 2020, k8s intro javascript developers 2019 will continue evolving toward greater simplicity and automation. The most successful teams balance standardization with flexibility — enforcing guardrails without stifling innovation.</p>
-<p>The question isn&#39;t whether to adopt k8s intro javascript developers 2019 but how to do it effectively for your organization&#39;s context and constraints.</p>
+        <h1>Kubernetes for JavaScript Developers — An Introduction</h1>
+        <p>August 5, 2019</p>
+        <div><p>Kubernetes is infrastructure. JavaScript developers don&#39;t need to be Kubernetes experts. But understanding the basics helps you deploy better, debug faster, and communicate more effectively with the platform team. I&#39;ve seen too many JavaScript developers treat Kubernetes as a black box — push code and hope it works. That approach fails when things go wrong, and in Kubernetes, things always go wrong eventually.</p>
+<h2>Why JavaScript Developers Need Kubernetes</h2>
+<p>You deploy your Node.js or TypeScript application to a cluster. It runs fine in development. In production, it crashes with an out-of-memory error. Your deployment doesn&#39;t have resource limits. Another service on the same node consumed all the memory, and your pod was evicted. This happened to me on my first Kubernetes deployment. The application worked perfectly in local Docker Compose. In production, it was killed every few hours during traffic spikes. The fix was adding a single line to the deployment YAML — <code>resources.limits.memory</code>. But finding that took three days of debugging.</p>
+<p>Understanding resource requests and limits would have prevented this. Understanding probes (liveness, readiness, startup) would tell you why your service isn&#39;t receiving traffic. Understanding ConfigMaps and Secrets would help you manage configuration without redeploying. Each of these is a simple concept that saves hours of debugging time.</p>
+<h2>The Minimal Kubernetes Knowledge</h2>
+<p><strong>Pods.</strong> The smallest deployable unit. One or more containers that share networking and storage. For most applications, one pod runs one container. Think of a pod as a &quot;logical host&quot; for your application process. Pods are ephemeral — they die and get replaced frequently. Don&#39;t store data in them.</p>
+<p><strong>Deployments.</strong> Manages pod replicas. Handles rolling updates. If a pod crashes, the deployment creates a new one. You almost never work with pods directly — you work with deployments. The deployment controller ensures the desired number of replicas is always running. If a node fails, the deployment reschedules the pods on healthy nodes.</p>
+<p><strong>Services.</strong> Provides a stable network endpoint for a set of pods. Pods have dynamic IP addresses (they change when pods restart). A service gives you a consistent DNS name that routes to healthy pods. There are different service types: ClusterIP (internal only), NodePort (exposes on node IP), and LoadBalancer (provisions a cloud load balancer).</p>
+<p><strong>Ingress.</strong> HTTP/HTTPS routing. Maps domain names to services. Handles TLS termination. Think of it as a reverse proxy configuration that lives in your cluster instead of in an Nginx config file. Most cloud providers have an Ingress Controller (ALB Ingress Controller for AWS, GCE Ingress for GCP).</p>
+<p><strong>ConfigMaps and Secrets.</strong> Configuration data injected into pods as environment variables or files. ConfigMaps are for non-sensitive data (API URLs, feature flags). Secrets are for sensitive data (API keys, database passwords). Both can be updated without rebuilding the container image. This is the biggest quality-of-life improvement over hardcoded configuration.</p>
+<h2>Common Pitfalls and Fixes</h2>
+<p><strong>Not setting resource limits.</strong> Your pod can consume all node resources. Always set requests and limits for CPU and memory. Requests guarantee minimum resources. Limits cap maximum usage. Setting limits too low causes throttling (for CPU) or OOM kills (for memory). Setting requests too high wastes cluster capacity. Start with your local resource usage and adjust based on production monitoring.</p>
+<p><strong>Not configuring probes.</strong> Your pod might be running but not ready to serve traffic. Liveness probes know when to restart a container. Readiness probes know when a container is ready to accept traffic. Startup probes are for slow-starting applications. Without these, Kubernetes doesn&#39;t know if your application is healthy. A common pattern: HTTP GET probe on a <code>/healthz</code> endpoint that checks database connectivity, cache connectivity, and internal state.</p>
+<p><strong>Hardcoding configuration.</strong> Use ConfigMaps for non-sensitive config. Use Secrets for sensitive data. Both can be mounted as environment variables or files. The rule: if it changes between environments, it doesn&#39;t belong in the container image.</p>
+<p><strong>Forgetting about pod-to-pod communication.</strong> In development, services communicate via localhost. In Kubernetes, every service has a DNS name within the cluster (servicename.namespace.svc.cluster.local). Your application needs to respect the <code>SERVICE_HOST</code> and <code>SERVICE_PORT</code> environment variables that Kubernetes injects, or use service discovery.</p>
+<h2>Practical Debugging</h2>
+<p>When your application isn&#39;t working in Kubernetes, start with:</p>
+<ol>
+<li><code>kubectl get pods</code> — are your pods running?</li>
+<li><code>kubectl describe pod &lt;name&gt;</code> — what events happened? Failed pulls? OOM kills? Probe failures?</li>
+<li><code>kubectl logs &lt;name&gt;</code> — what does the application say?</li>
+<li><code>kubectl get svc</code> — is the service pointing at the right pods? (Check selector labels match pod labels)</li>
+<li><code>kubectl get ingress</code> — is the ingress routing correctly?</li>
+</ol>
+<p>These five commands cover 90% of debugging scenarios. The other 10% involve digging into network policies, RBAC permissions, and storage configurations.</p>
+<p>You don&#39;t need to be a Kubernetes administrator to deploy applications effectively. Understanding these concepts covers 90% of what JavaScript developers encounter. The remaining 10% is learning how your specific organization configures the cluster and what debugging workflows they&#39;ve established.</p>
 </div>
       </section>
     </main>

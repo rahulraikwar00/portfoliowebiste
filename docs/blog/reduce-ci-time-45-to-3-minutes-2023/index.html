@@ -3,23 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>How We Reduced CI Time from 45 to 3 Minutes | Rahul Raikwar</title>
-    <meta name="description" content="Reduce Ci Time 45 To 3 Minutes 2023 has fundamentally changed how we build software. What started as an experimental approach in 2020 is now production-standard" />
+    <title>How We Reduced CI Time From 45 Minutes to 3 Minutes | Rahul Raikwar</title>
+    <meta name="description" content="Our CI pipeline took 45 minutes. Developers pushed code and went for coffee. Some went for lunch. Merging a PR took half a day because each commit triggered the" />
     <link rel="canonical" href="https://iamrahulraikwar.online/blog/reduce-ci-time-45-to-3-minutes-2023/" />
-    <meta property="og:title" content="How We Reduced CI Time from 45 to 3 Minutes" />
-    <meta property="og:description" content="Reduce Ci Time 45 To 3 Minutes 2023 has fundamentally changed how we build software. What started as an experimental approach in 2020 is now production-standard" />
+    <meta property="og:title" content="How We Reduced CI Time From 45 Minutes to 3 Minutes" />
+    <meta property="og:description" content="Our CI pipeline took 45 minutes. Developers pushed code and went for coffee. Some went for lunch. Merging a PR took half a day because each commit triggered the" />
     <meta property="og:url" content="https://iamrahulraikwar.online/blog/reduce-ci-time-45-to-3-minutes-2023/" />
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="Rahul Raikwar" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="How We Reduced CI Time from 45 to 3 Minutes" />
-    <meta name="twitter:description" content="Reduce Ci Time 45 To 3 Minutes 2023 has fundamentally changed how we build software. What started as an experimental approach in 2020 is now production-standard" />
+    <meta name="twitter:title" content="How We Reduced CI Time From 45 Minutes to 3 Minutes" />
+    <meta name="twitter:description" content="Our CI pipeline took 45 minutes. Developers pushed code and went for coffee. Some went for lunch. Merging a PR took half a day because each commit triggered the" />
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
-      "headline": "How We Reduced CI Time from 45 to 3 Minutes",
-      "datePublished": "April 22, 2023",
+      "headline": "How We Reduced CI Time From 45 Minutes to 3 Minutes",
+      "datePublished": "April 15, 2023",
       "author": {
         "@type": "Person",
         "name": "Rahul Raikwar",
@@ -33,41 +33,39 @@
     <main>
       <section>
         <p><a href="../">&larr; All Posts</a></p>
-        <h1>How We Reduced CI Time from 45 to 3 Minutes</h1>
-        <p>April 22, 2023</p>
-        <div><p>Reduce Ci Time 45 To 3 Minutes 2023 has fundamentally changed how we build software. What started as an experimental approach in 2020 is now production-standard across the industry.</p>
-<h2>Why This Matters</h2>
-<p>The shift toward reduce ci time 45 to 3 minutes 2023 represents a significant evolution in developer productivity and system reliability. Companies adopting this approach see measurable improvements in deployment frequency and mean time to recovery.</p>
-<p>Key benefits observed in production:</p>
+        <h1>How We Reduced CI Time From 45 Minutes to 3 Minutes</h1>
+        <p>April 15, 2023</p>
+        <div><p>Our CI pipeline took 45 minutes. Developers pushed code and went for coffee. Some went for lunch. Merging a PR took half a day because each commit triggered the full pipeline. We got it down to 3 minutes. Here&#39;s exactly how we did it, in order of impact.</p>
+<h2>Find the Bottleneck First</h2>
+<p>We assumed the tests were slow. They weren&#39;t. The bottleneck was dependency installation — downloading 500MB of node_modules on every build. The actual test execution was 4 minutes. npm install was 25 minutes. The remaining 16 minutes was Docker image building.</p>
+<p>This is a common pattern: teams optimize the wrong thing because they guess instead of measuring. Use CI analytics (GitHub Actions has built-in timing breakdown, GitLab has job traces with duration) to identify where time is actually going. Optimize in order of total time spent, not perceived slowness.</p>
+<p>Our pipeline breakdown was:</p>
 <ul>
-<li>Reduced cognitive load on development teams</li>
-<li>Faster feedback loops through automation</li>
-<li>Consistent environments across development and production</li>
-<li>Improved security posture via standardized practices</li>
+<li>Dependency installation: 25 min (55%)</li>
+<li>Docker build: 16 min (36%)</li>
+<li>Unit tests: 4 min (9%)</li>
+<li>Linting: negligible</li>
 </ul>
-<h2>Real-World Implementation</h2>
-<p>Here&#39;s how teams are implementing reduce ci time 45 to 3 minutes 2023 today:</p>
-<pre><code class="language-typescript">// Example implementation pattern
-export class ReduceCiTime45To3Minutes2023Service {
-  async deploy(options: DeployOptions) {
-    const config = await this.validate(options);
-    const result = await this.execute(config);
-    return this.monitor(result);
-  }
-}
-</code></pre>
-<p>The key insight? Abstraction without sacrificing control. We provide golden paths that cover 80% of use cases while supporting escape hatches for edge cases.</p>
-<h2>Measurable Outcomes</h2>
-<p>Organizations that have fully adopted reduce ci time 45 to 3 minutes 2023 report:</p>
+<p>We optimized in this order: dependencies first (highest impact), then Docker, then tests.</p>
+<h2>What Worked</h2>
+<p><strong>Dependency caching.</strong> This is the highest-impact change for most projects. Cache <code>node_modules</code> (or the package manager&#39;s cache directory) between builds. Use a cache key based on the lockfile hash — if <code>package-lock.json</code> or <code>yarn.lock</code> hasn&#39;t changed, restore from cache.</p>
+<p>Implementation was simple: add a <code>actions/cache</code> step before <code>npm ci</code>. The cache key used a hash of <code>package-lock.json</code>. Cache hit rate was about 80% — most builds don&#39;t change dependencies. Average dependency step time dropped from 25 minutes to 2 minutes.</p>
+<p>One gotcha: npm&#39;s cache can grow large. Set a <code>npm cache clean --force</code> as a cron job or size-limit the cache. We also switched to <code>npm ci</code> instead of <code>npm install</code> — it&#39;s faster and produces deterministic builds.</p>
+<p><strong>Selective test execution.</strong> Run only the tests that are affected by the changes. Jest&#39;s <code>--onlyChanged</code> and <code>jest-changed-files</code> identify which tests to run based on git diffs. For monorepos, Nx and Turborepo do this at build level — only build and test packages that changed.</p>
+<p>Implementation: we used <code>jest --onlyChanged</code> in CI and a full <code>jest</code> run nightly. The selective run covered about 30% of tests on average, cutting test time from 4 minutes to 1.5 minutes. The nightly full run caught regressions in unchanged code.</p>
+<p><strong>Parallelization.</strong> Split tests across multiple CI runners. Jest supports <code>--shard</code> natively. GitHub Actions matrix strategy runs shards in parallel. Four shards instead of one cuts test time from 4 minutes to 1 minute.</p>
+<p>Implementation: three CI runners, each running a third of the tests. The slowest shard took about 1.5 minutes. We used <code>jest --shard=1/3</code>, <code>jest --shard=2/3</code>, <code>jest --shard=3/3</code>. The matrix strategy in GitHub Actions made this configuration trivial.</p>
+<p><strong>Docker layer caching.</strong> Order your Dockerfile so infrequently-changed layers come first. <code>apt-get install</code>, <code>npm ci</code>, then application code. Use Docker BuildKit&#39;s cache mounts for additional speed.</p>
+<p>Implementation: restructured Dockerfile to copy <code>package.json</code> and run <code>npm ci</code> before copying application code. This way, the <code>npm ci</code> layer only invalidates when dependencies change. Used <code>docker build --cache-from</code> with a cached image. Docker build time dropped from 16 minutes to 3 minutes.</p>
+<h2>The Result</h2>
 <ul>
-<li>3x faster onboarding for new engineers</li>
-<li>60% reduction in configuration drift</li>
-<li>90% decrease in &quot;works on my machine&quot; incidents</li>
-<li>Significant improvement in DORA metrics</li>
+<li>Before: 45 minutes</li>
+<li>After dependency caching: 7 minutes</li>
+<li>After selective tests + parallelization: 3 minutes</li>
+<li>After Docker caching: 3 minutes (Docker runs in parallel with tests)</li>
 </ul>
-<h2>Looking Ahead</h2>
-<p>As we move into 2024, reduce ci time 45 to 3 minutes 2023 will continue evolving toward greater simplicity and automation. The most successful teams balance standardization with flexibility — enforcing guardrails without stifling innovation.</p>
-<p>The question isn&#39;t whether to adopt reduce ci time 45 to 3 minutes 2023 but how to do it effectively for your organization&#39;s context and constraints.</p>
+<p>The total change was about two days of work. The developer productivity gain was enormous. A 3-minute CI means developers stay in flow — they don&#39;t context-switch away while waiting, they don&#39;t start a second task that distracts from the first one. Code review happens faster because PRs are tested quickly. Deploys happen more frequently because the feedback loop is short.</p>
+<p>If your CI is slow, start with the first step: measure. Then cache dependencies. Then parallelize. The order matters — optimizing test execution before caching dependencies would have saved 2 minutes instead of 20 minutes. Measure first, optimize the biggest bottleneck.</p>
 </div>
       </section>
     </main>

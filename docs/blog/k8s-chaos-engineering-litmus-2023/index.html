@@ -3,23 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kubernetes Chaos Engineering with LitmusChaos | Rahul Raikwar</title>
-    <meta name="description" content="K8S Chaos Engineering Litmus 2023 has fundamentally changed how we build software. What started as an experimental approach in 2020 is now production-standard a" />
+    <title>Kubernetes Chaos Engineering With Litmus | Rahul Raikwar</title>
+    <meta name="description" content="Chaos engineering in Kubernetes has evolved from let&#039;s kill some pods and see what happens to a structured practice with mature tooling. LitmusChaos, now a CNCF" />
     <link rel="canonical" href="https://iamrahulraikwar.online/blog/k8s-chaos-engineering-litmus-2023/" />
-    <meta property="og:title" content="Kubernetes Chaos Engineering with LitmusChaos" />
-    <meta property="og:description" content="K8S Chaos Engineering Litmus 2023 has fundamentally changed how we build software. What started as an experimental approach in 2020 is now production-standard a" />
+    <meta property="og:title" content="Kubernetes Chaos Engineering With Litmus" />
+    <meta property="og:description" content="Chaos engineering in Kubernetes has evolved from let&#039;s kill some pods and see what happens to a structured practice with mature tooling. LitmusChaos, now a CNCF" />
     <meta property="og:url" content="https://iamrahulraikwar.online/blog/k8s-chaos-engineering-litmus-2023/" />
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="Rahul Raikwar" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Kubernetes Chaos Engineering with LitmusChaos" />
-    <meta name="twitter:description" content="K8S Chaos Engineering Litmus 2023 has fundamentally changed how we build software. What started as an experimental approach in 2020 is now production-standard a" />
+    <meta name="twitter:title" content="Kubernetes Chaos Engineering With Litmus" />
+    <meta name="twitter:description" content="Chaos engineering in Kubernetes has evolved from let&#039;s kill some pods and see what happens to a structured practice with mature tooling. LitmusChaos, now a CNCF" />
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
-      "headline": "Kubernetes Chaos Engineering with LitmusChaos",
-      "datePublished": "July 14, 2023",
+      "headline": "Kubernetes Chaos Engineering With Litmus",
+      "datePublished": "July 20, 2023",
       "author": {
         "@type": "Person",
         "name": "Rahul Raikwar",
@@ -33,41 +33,31 @@
     <main>
       <section>
         <p><a href="../">&larr; All Posts</a></p>
-        <h1>Kubernetes Chaos Engineering with LitmusChaos</h1>
-        <p>July 14, 2023</p>
-        <div><p>K8S Chaos Engineering Litmus 2023 has fundamentally changed how we build software. What started as an experimental approach in 2020 is now production-standard across the industry.</p>
-<h2>Why This Matters</h2>
-<p>The shift toward k8s chaos engineering litmus 2023 represents a significant evolution in developer productivity and system reliability. Companies adopting this approach see measurable improvements in deployment frequency and mean time to recovery.</p>
-<p>Key benefits observed in production:</p>
-<ul>
-<li>Reduced cognitive load on development teams</li>
-<li>Faster feedback loops through automation</li>
-<li>Consistent environments across development and production</li>
-<li>Improved security posture via standardized practices</li>
-</ul>
-<h2>Real-World Implementation</h2>
-<p>Here&#39;s how teams are implementing k8s chaos engineering litmus 2023 today:</p>
-<pre><code class="language-typescript">// Example implementation pattern
-export class K8SChaosEngineeringLitmus2023Service {
-  async deploy(options: DeployOptions) {
-    const config = await this.validate(options);
-    const result = await this.execute(config);
-    return this.monitor(result);
-  }
-}
-</code></pre>
-<p>The key insight? Abstraction without sacrificing control. We provide golden paths that cover 80% of use cases while supporting escape hatches for edge cases.</p>
-<h2>Measurable Outcomes</h2>
-<p>Organizations that have fully adopted k8s chaos engineering litmus 2023 report:</p>
-<ul>
-<li>3x faster onboarding for new engineers</li>
-<li>60% reduction in configuration drift</li>
-<li>90% decrease in &quot;works on my machine&quot; incidents</li>
-<li>Significant improvement in DORA metrics</li>
-</ul>
-<h2>Looking Ahead</h2>
-<p>As we move into 2024, k8s chaos engineering litmus 2023 will continue evolving toward greater simplicity and automation. The most successful teams balance standardization with flexibility — enforcing guardrails without stifling innovation.</p>
-<p>The question isn&#39;t whether to adopt k8s chaos engineering litmus 2023 but how to do it effectively for your organization&#39;s context and constraints.</p>
+        <h1>Kubernetes Chaos Engineering With Litmus</h1>
+        <p>July 20, 2023</p>
+        <div><p>Chaos engineering in Kubernetes has evolved from &quot;let&#39;s kill some pods and see what happens&quot; to a structured practice with mature tooling. LitmusChaos, now a CNCF project, is the most popular tool for this. When we started our chaos engineering practice, we found bugs that had been in production for months — services with no retry logic, timeouts that were too short, dependencies that couldn&#39;t tolerate failures. Chaos engineering found them in hours.</p>
+<h2>What Litmus Does</h2>
+<p>Litmus injects failures into Kubernetes clusters — pod failures, node failures, network latency, CPU stress, DNS failures, and more. You define experiments as Kubernetes custom resources. The experiments run as jobs, inject the failure, monitor the system&#39;s response, and generate a report.</p>
+<p>Experiments are organized into charts. The Litmus Hub hosts community-contributed experiments covering common failure scenarios. You can install an experiment with a single <code>kubectl apply</code> and run it immediately. The experiment defines the failure injection, the steady-state validation (probes that verify the system is healthy), and the rollback procedure.</p>
+<h2>The Right Way to Do Chaos</h2>
+<p>Start small. Run experiments in a staging environment that mirrors production. The goal isn&#39;t to break things — it&#39;s to validate that your system survives failures. Each experiment should have a clear hypothesis: &quot;When a pod in the user-service deployment fails, the API should return 503 errors for no more than 5 seconds while Kubernetes reschedules the pod.&quot;</p>
+<p>A typical progression we followed:</p>
+<ol>
+<li><p><strong>Pod failures.</strong> Kill a pod in a deployment. Does the deployment recover? Does the service route around the failure? How long does recovery take? We discovered that our liveness probes were too aggressive — the service took 15 seconds to start, but the probe started checking at 10 seconds, causing a restart loop. Fix: increased <code>initialDelaySeconds</code> to 30.</p>
+</li>
+<li><p><strong>Network latency.</strong> Add latency between services. Do timeouts trigger? Are retries configured correctly? Does the degraded performance cause cascading failures? We found that service A had a 500ms timeout calling service B, but B&#39;s p99 response time was 600ms. The timeout should have been 2 seconds. Fix: increased timeouts and added exponential backoff.</p>
+</li>
+<li><p><strong>Node failures.</strong> Drain a node. Do pods reschedule correctly? Does the load balancer handle the reduced capacity? We discovered that our pod disruption budgets weren&#39;t configured, so draining a node evicted all pods simultaneously, causing a temporary outage. Fix: configured PDBs with <code>minAvailable: 1</code>.</p>
+</li>
+<li><p><strong>DNS failures.</strong> Block DNS resolution. Do services have cached DNS entries? Do they handle resolution failures gracefully? Our services had no DNS caching — they made DNS queries for every request. When CoreDNS had an issue (which happened during a cluster upgrade), all services were affected. Fix: added DNS caching to our service mesh configuration.</p>
+</li>
+</ol>
+<h2>Automating Chaos</h2>
+<p>Litmus supports continuous chaos — running experiments on a schedule in production. This is the end state: you have ongoing validation that your system&#39;s resilience properties hold. We started with weekly experiments in staging, moved successful experiments to production after validation, and eventually ran critical experiments (pod failures for deployed services) on a daily schedule.</p>
+<p>The automation pattern: schedule experiments to run during low-traffic hours, use the Litmus result CRD to capture outcomes, and integrate with alerting (PagerDuty, Slack) for failures. A failing experiment triggers an incident, just like a production alert.</p>
+<h2>The Investment</h2>
+<p>Litmus is open-source and free. The investment is in setting up experiments, building a hypothesis framework, and creating the observability to measure results. Plan for two weeks to set up a basic chaos program for a moderate Kubernetes deployment. Start with the Litmus community experiments — run pod-delete, node-drain, and network-latency against your staging environment. Those three experiments will catch the most common resilience gaps.</p>
+<p>Chaos engineering pays for itself the first time it catches a resilience gap before a real incident does. For us, that happened in week two of our program — a pod-delete experiment revealed that our payment processing service couldn&#39;t handle any pod failure because all replicas were on the same node. A real incident would have caused payment processing downtime. The chaos experiment cost 30 minutes of setup.</p>
 </div>
       </section>
     </main>

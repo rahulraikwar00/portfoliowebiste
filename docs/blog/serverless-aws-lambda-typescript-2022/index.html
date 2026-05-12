@@ -3,23 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Building Serverless APIs with AWS Lambda and TypeScript | Rahul Raikwar</title>
-    <meta name="description" content="Serverless Aws Lambda Typescript 2022 has fundamentally changed how we build software. What started as an experimental approach in 2019 is now production-standa" />
+    <title>Serverless with AWS Lambda and TypeScript — Lessons Learned | Rahul Raikwar</title>
+    <meta name="description" content="I&#039;ve been running TypeScript on AWS Lambda since 2022. The experience has improved dramatically, but there are still patterns that work and patterns that don&#039;t." />
     <link rel="canonical" href="https://iamrahulraikwar.online/blog/serverless-aws-lambda-typescript-2022/" />
-    <meta property="og:title" content="Building Serverless APIs with AWS Lambda and TypeScript" />
-    <meta property="og:description" content="Serverless Aws Lambda Typescript 2022 has fundamentally changed how we build software. What started as an experimental approach in 2019 is now production-standa" />
+    <meta property="og:title" content="Serverless with AWS Lambda and TypeScript — Lessons Learned" />
+    <meta property="og:description" content="I&#039;ve been running TypeScript on AWS Lambda since 2022. The experience has improved dramatically, but there are still patterns that work and patterns that don&#039;t." />
     <meta property="og:url" content="https://iamrahulraikwar.online/blog/serverless-aws-lambda-typescript-2022/" />
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="Rahul Raikwar" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Building Serverless APIs with AWS Lambda and TypeScript" />
-    <meta name="twitter:description" content="Serverless Aws Lambda Typescript 2022 has fundamentally changed how we build software. What started as an experimental approach in 2019 is now production-standa" />
+    <meta name="twitter:title" content="Serverless with AWS Lambda and TypeScript — Lessons Learned" />
+    <meta name="twitter:description" content="I&#039;ve been running TypeScript on AWS Lambda since 2022. The experience has improved dramatically, but there are still patterns that work and patterns that don&#039;t." />
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
-      "headline": "Building Serverless APIs with AWS Lambda and TypeScript",
-      "datePublished": "December 8, 2022",
+      "headline": "Serverless with AWS Lambda and TypeScript — Lessons Learned",
+      "datePublished": "December 5, 2022",
       "author": {
         "@type": "Person",
         "name": "Rahul Raikwar",
@@ -33,41 +33,19 @@
     <main>
       <section>
         <p><a href="../">&larr; All Posts</a></p>
-        <h1>Building Serverless APIs with AWS Lambda and TypeScript</h1>
-        <p>December 8, 2022</p>
-        <div><p>Serverless Aws Lambda Typescript 2022 has fundamentally changed how we build software. What started as an experimental approach in 2019 is now production-standard across the industry.</p>
-<h2>Why This Matters</h2>
-<p>The shift toward serverless aws lambda typescript 2022 represents a significant evolution in developer productivity and system reliability. Companies adopting this approach see measurable improvements in deployment frequency and mean time to recovery.</p>
-<p>Key benefits observed in production:</p>
-<ul>
-<li>Reduced cognitive load on development teams</li>
-<li>Faster feedback loops through automation</li>
-<li>Consistent environments across development and production</li>
-<li>Improved security posture via standardized practices</li>
-</ul>
-<h2>Real-World Implementation</h2>
-<p>Here&#39;s how teams are implementing serverless aws lambda typescript 2022 today:</p>
-<pre><code class="language-typescript">// Example implementation pattern
-export class ServerlessAwsLambdaTypescript2022Service {
-  async deploy(options: DeployOptions) {
-    const config = await this.validate(options);
-    const result = await this.execute(config);
-    return this.monitor(result);
-  }
-}
-</code></pre>
-<p>The key insight? Abstraction without sacrificing control. We provide golden paths that cover 80% of use cases while supporting escape hatches for edge cases.</p>
-<h2>Measurable Outcomes</h2>
-<p>Organizations that have fully adopted serverless aws lambda typescript 2022 report:</p>
-<ul>
-<li>3x faster onboarding for new engineers</li>
-<li>60% reduction in configuration drift</li>
-<li>90% decrease in &quot;works on my machine&quot; incidents</li>
-<li>Significant improvement in DORA metrics</li>
-</ul>
-<h2>Looking Ahead</h2>
-<p>As we move into 2023, serverless aws lambda typescript 2022 will continue evolving toward greater simplicity and automation. The most successful teams balance standardization with flexibility — enforcing guardrails without stifling innovation.</p>
-<p>The question isn&#39;t whether to adopt serverless aws lambda typescript 2022 but how to do it effectively for your organization&#39;s context and constraints.</p>
+        <h1>Serverless with AWS Lambda and TypeScript — Lessons Learned</h1>
+        <p>December 5, 2022</p>
+        <div><p>I&#39;ve been running TypeScript on AWS Lambda since 2022. The experience has improved dramatically, but there are still patterns that work and patterns that don&#39;t. Here&#39;s what I&#39;ve learned about building serverless APIs with Lambda and TypeScript — the good, the bad, and what I&#39;d do differently.</p>
+<h2>The Good</h2>
+<p><strong>Cold starts are mostly solved.</strong> Lambda SnapStart reduces cold starts for Java and Python dramatically. For TypeScript specifically, Bun runs on Lambda now and cuts cold start times from ~500ms to ~150ms compared to Node.js. If you&#39;re using Node.js, keeping your deployment package small (under 5MB) and using the <code>node:22</code> runtime keeps cold starts under 300ms for most applications. Provisioned concurrency eliminates cold starts entirely for critical paths, though it costs extra.</p>
+<p><strong>The tooling caught up.</strong> The Serverless Framework is still around but the ecosystem has moved to SST (Serverless Stack), which gives you a CDK-like experience with live Lambda development. <code>sst dev</code> starts a local environment that proxies Lambda invocations to your machine, so you can debug with breakpoints and hot reload. This is genuinely good — it makes the local development experience comparable to a regular Express or Fastify server.</p>
+<p><strong>Lambda response streaming is GA.</strong> You can stream responses from Lambda instead of buffering them. This matters for AI inference (streaming tokens), large file generation, and any workload where time-to-first-byte matters. The streaming response starts sending data within milliseconds, and the Lambda keeps generating data as the client receives it. This eliminates one of the biggest complaints about Lambda for real-time use cases.</p>
+<h2>The Bad</h2>
+<p><strong>The IAM maze is real.</strong> Every Lambda needs permissions for every resource it touches. A typical API uses DynamoDB (read/write), SQS (send message), S3 (read objects), Secrets Manager (read secrets), and CloudWatch (logs). That&#39;s five separate resource policies in the execution role. Debugging IAM permission errors at 2 AM is not fun — the error messages are often generic and don&#39;t tell you which permission is missing.</p>
+<p><strong>Testing requires infrastructure.</strong> Unit testing a Lambda handler is straightforward — you mock the event object and assert on the response. Integration testing requires actual AWS resources or LocalStack. The pattern I&#39;ve settled on: unit test the business logic with mocked dependencies, integration test the handler with LocalStack for the database and queue interactions, and rely on production monitoring for end-to-end validation. Skip the full integration test suite if it&#39;s slowing down your deployment pipeline.</p>
+<p><strong>Cost surprises.</strong> Lambda is cheap at low volume and expensive at high volume compared to containers. A Lambda handling 10M requests/month with 1-second execution costs roughly $500 in compute plus API Gateway costs. The same workload on ECS Fargate would be ~$150. Lambda&#39;s value proposition is not needing to manage servers and paying only for what you use. If you can predict your traffic patterns, containers are cheaper.</p>
+<h2>What I&#39;d Do Differently</h2>
+<p>Start with SST or AWS CDK instead of hand-written CloudFormation templates. Keep functions small but not microscopic — one function per API endpoint creates too many functions to manage. Group related endpoints into a single handler with a routing mechanism. Use Lambda Layers for shared dependencies (SDK clients, utility libraries) to reduce deployment package size. Instrument with OpenTelemetry from day one — debugging Lambda without distributed tracing is misery because you can&#39;t SSH into the running function. Set budget alerts before you launch. Lambda&#39;s &quot;infinite scale&quot; is a feature until you get the bill for a runaway process.</p>
 </div>
       </section>
     </main>

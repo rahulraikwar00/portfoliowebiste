@@ -1,50 +1,44 @@
 ---
-title: How to Build Observability without Selling Your Soul
-date: April 5, 2022
+title: Observability Without Selling Your Soul
+date: April 15, 2022
 slug: observability-without-selling-soul-2022
 ---
 
-Observability Without Selling Soul 2022 has fundamentally changed how we build software. What started as an experimental approach in 2019 is now production-standard across the industry.
+Observability has become synonymous with expensive SaaS vendors. Datadog bills that grow faster than your infrastructure. New Relic pricing that changes yearly. Honeycomb's value proposition that doesn't scale for smaller teams. The message from vendors is consistent: spend more for better visibility. I've been through this cycle with multiple companies — the first Datadog bill over $10K/month, the frantic optimization, the realization that most of the value comes from basic instrumentation.
 
-## Why This Matters
+But observability doesn't require a six-figure vendor budget. An open-source stack with OpenTelemetry and Grafana can handle serious production workloads. The tradeoff is operational overhead, not capability.
 
-The shift toward observability without selling soul 2022 represents a significant evolution in developer productivity and system reliability. Companies adopting this approach see measurable improvements in deployment frequency and mean time to recovery.
+## What You Actually Need
 
-Key benefits observed in production:
+Most teams need three things: metrics (CPU, memory, request rate, error rate, latency), traces (distributed request flow), and logs (structured, searchable). That's it. Everything else is nice-to-have. The vendors sell you on APM, infrastructure monitoring, rum, synthetic monitoring, and profiler integrations. These are valuable but not essential. Start with the basics, add specialized tools when you hit specific pain points.
 
-- Reduced cognitive load on development teams
-- Faster feedback loops through automation
-- Consistent environments across development and production
-- Improved security posture via standardized practices
+The core stack:
 
-## Real-World Implementation
+**OpenTelemetry** is the data collection layer. It's vendor-neutral, CNCF-graduating, and supports traces, metrics, and logs. Instrument your application with OTel SDKs, export to the OTel Collector, and the Collector sends data to your backend. The OTel Collector is the crucial piece — it handles batching, retries, filtering, and multi-backend routing. You instrument once and send to any backend.
 
-Here's how teams are implementing observability without selling soul 2022 today:
+**Grafana** is the visualization layer. Dashboards for metrics, traces, and logs. Alerting with Grafana Alerting (or Alertmanager for Prometheus-native). Explore for ad-hoc querying. Grafana is the best visualization tool regardless of your backend — it supports Prometheus, Tempo, Loki, Elasticsearch, Datadog, and dozens of other data sources.
 
-```typescript
-// Example implementation pattern
-export class ObservabilityWithoutSellingSoul2022Service {
-  async deploy(options: DeployOptions) {
-    const config = await this.validate(options);
-    const result = await this.execute(config);
-    return this.monitor(result);
-  }
-}
-```
+**For metrics:** Prometheus or VictoriaMetrics. Prometheus is simpler for smaller deployments and has excellent Kubernetes integration (service discovery, pod monitoring). VictoriaMetrics handles more scale with less resources — it's a drop-in Prometheus-compatible replacement that uses 10x less storage for the same data.
 
-The key insight? Abstraction without sacrificing control. We provide golden paths that cover 80% of use cases while supporting escape hatches for edge cases.
+**For traces:** Grafana Tempo or Jaeger. Tempo is designed for large-scale trace storage without indexing everything. This makes it cheaper to store traces than solutions that index span names, attributes, and tags. Tempo queries traces by service name, operation name, and time range — the most common query patterns. For deep analysis, it can access raw trace data from object storage.
 
-## Measurable Outcomes
+**For logs:** Loki. It indexes labels (service name, pod, namespace), not the full text of log lines. This makes it dramatically cheaper to store logs than Elasticsearch. Loki compresses logs efficiently and stores them in object storage (S3, GCS, MinIO). A typical log retention of 30 days costs pennies per GB in S3.
 
-Organizations that have fully adopted observability without selling soul 2022 report:
+## The Cost Comparison
 
-- 3x faster onboarding for new engineers
-- 60% reduction in configuration drift
-- 90% decrease in "works on my machine" incidents
-- Significant improvement in DORA metrics
+For a cluster with 20 services, 100GB/day logs, and moderate tracing:
 
-## Looking Ahead
+- Datadog Pro tier: ~$3,000/month for reasonable retention
+- Self-hosted OTel + Prometheus + Grafana + Tempo + Loki: ~$300/month in compute costs
 
-As we move into 2023, observability without selling soul 2022 will continue evolving toward greater simplicity and automation. The most successful teams balance standardization with flexibility — enforcing guardrails without stifling innovation.
+The 10x difference compounds over time. A startup spending $3K/month on observability at 20 services will spend $10K/month at 60 services. The self-hosted stack scales sub-linearly because most components can share infrastructure.
 
-The question isn't whether to adopt observability without selling soul 2022 but how to do it effectively for your organization's context and constraints.
+The tradeoff is operational overhead. Someone needs to maintain the OTel Collector, Prometheus, Grafana, Tempo, and Loki. An SRE can manage it in about 5 hours per week. A platform team can automate it to near-zero with Kubernetes operators and GitOps. For a team without operational capacity, the vendor premium is worth it.
+
+## When to Pay
+
+The SaaS vendors provide real value: less operational overhead, better integrations, support, and advanced features like APM insights, SLO tracking, and error tracking. If observability isn't your team's core competency, the vendor premium is often justified.
+
+But the baseline — collecting and visualizing traces, metrics, and logs — is achievable with open-source tools at a fraction of the cost. Start with the open-source stack. Add paid tools only when you need specific features that justify the cost. Most teams find the open-source stack sufficient for years.
+
+Don't let observability vendors own your data and your budget. The open-source ecosystem is mature enough for production workloads. If you outgrow it, the experience you gained managing it will help you evaluate vendor offerings — you'll know what you actually need.

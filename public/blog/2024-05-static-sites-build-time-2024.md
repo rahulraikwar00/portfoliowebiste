@@ -1,50 +1,27 @@
 ---
-title: The Return of Static Sites Generated at Build Time
-date: May 2, 2024
+title: Static Sites and Build Time in 2024
+date: May 15, 2024
 slug: static-sites-build-time-2024
 ---
 
-Static Sites Build Time 2024 has fundamentally changed how we build software. What started as an experimental approach in 2021 is now production-standard across the industry.
+Static site generation is the default for content websites. The tools are mature, the performance is excellent, and the hosting is cheap or free. The main challenge became build time. As sites grew, build times ballooned. A 500-page marketing site built in 30 seconds. A 50,000-page documentation site built in 30 minutes. The tooling ecosystem responded with incremental builds, which became the deciding factor in framework choice.
 
-## Why This Matters
+## The Build Time Problem
 
-The shift toward static sites build time 2024 represents a significant evolution in developer productivity and system reliability. Companies adopting this approach see measurable improvements in deployment frequency and mean time to recovery.
+Early static site generators rebuilt the entire site on every change. For a 1,000-page site, this took 30 seconds. For a 50,000-page site, it took 30 minutes. Incremental builds solved this. By 2024, most frameworks supported building only the pages that changed.
 
-Key benefits observed in production:
+The build time problem is acute in the development workflow. A 10-minute build means you can't iterate quickly. You make a change, wait 10 minutes, see the result, make another change, wait 10 minutes. The feedback loop kills productivity. Incremental builds reduced this to seconds or milliseconds.
 
-- Reduced cognitive load on development teams
-- Faster feedback loops through automation
-- Consistent environments across development and production
-- Improved security posture via standardized practices
+Astro's content collections with incremental builds rebuild only pages referencing changed content. If you update one Markdown file, Astro rebuilds only the pages that use that content. For a 10,000-page site, a change to one page rebuilds one page. Build time drops from 10 minutes to 100 milliseconds.
 
-## Real-World Implementation
+Next.js's Static Generation with `revalidate` rebuilds incrementally on demand. When a request comes in for a stale page, Next.js rebuilds that page in the background. This is ideal for content that changes regularly but doesn't need instant updates.
 
-Here's how teams are implementing static sites build time 2024 today:
+Eleventy (11ty) has incremental builds built in since version 2. It tracks file dependencies and rebuilds only affected pages. For a 1,000-page site, the first build takes 20 seconds and subsequent builds take 200 milliseconds.
 
-```typescript
-// Example implementation pattern
-export class StaticSitesBuildTime2024Service {
-  async deploy(options: DeployOptions) {
-    const config = await this.validate(options);
-    const result = await this.execute(config);
-    return this.monitor(result);
-  }
-}
-```
+Hugo was always fast — sub-second builds for 10,000 pages — because it's written in Go. Hugo doesn't need incremental builds because it's fast enough to rebuild everything in milliseconds. For very large sites (100,000+ pages), Hugo is still the fastest option.
 
-The key insight? Abstraction without sacrificing control. We provide golden paths that cover 80% of use cases while supporting escape hatches for edge cases.
+## The Framework Decision in 2026
 
-## Measurable Outcomes
+Choose Astro for content-focused sites with rich components — best developer experience for most sites. Choose Eleventy for simpler content sites where you want minimal JavaScript overhead. Choose Hugo for very large sites (10,000+ pages) where build speed matters. Choose Next.js for sites that also need server-side rendering, API routes, or dynamic features.
 
-Organizations that have fully adopted static sites build time 2024 report:
-
-- 3x faster onboarding for new engineers
-- 60% reduction in configuration drift
-- 90% decrease in "works on my machine" incidents
-- Significant improvement in DORA metrics
-
-## Looking Ahead
-
-As we move into 2025, static sites build time 2024 will continue evolving toward greater simplicity and automation. The most successful teams balance standardization with flexibility — enforcing guardrails without stifling innovation.
-
-The question isn't whether to adopt static sites build time 2024 but how to do it effectively for your organization's context and constraints.
+Build times are no longer a bottleneck for static sites if you choose the right tool for your scale. The frameworks have solved incremental builds. What matters now is ecosystem fit and developer experience. Pick the tool that makes you fastest for your specific use case, not the one with the most features.

@@ -1,50 +1,68 @@
 ---
-title: Clean Architecture in TypeScript: A Practical Guide
-date: March 15, 2021
+title: Clean Architecture in TypeScript
+date: March 8, 2021
 slug: clean-architecture-typescript-2021
 ---
 
-Clean Architecture Typescript 2021 has fundamentally changed how we build software. What started as an experimental approach in 2018 is now production-standard across the industry.
+Clean Architecture separates software into layers with a dependency rule: inner layers don't know about outer layers. The domain layer has no dependency on frameworks, databases, or external APIs. Use cases orchestrate domain logic. Interface adapters translate between use cases and external systems. I've applied this pattern in several TypeScript projects over the years, and my take has evolved significantly from the strict interpretation I started with.
 
-## Why This Matters
+## The Structure
 
-The shift toward clean architecture typescript 2021 represents a significant evolution in developer productivity and system reliability. Companies adopting this approach see measurable improvements in deployment frequency and mean time to recovery.
+```
+src/
+├── domain/          # Entities, value objects, domain events
+├── application/     # Use cases, ports (interfaces)
+├── infrastructure/  # Database, HTTP, message queue implementations
+└── presentation/    # Controllers, request/response handling
+```
 
-Key benefits observed in production:
+The dependency rule: `presentation` -> `application` -> `domain`. Nothing depends on `infrastructure`. The `application` layer defines interfaces (ports), and `infrastructure` implements them.
 
-- Reduced cognitive load on development teams
-- Faster feedback loops through automation
-- Consistent environments across development and production
-- Improved security posture via standardized practices
+This structure enforces a specific kind of discipline. When you're tempted to import a database driver in a use case, the folder structure stops you. When a controller directly instantiates a repository, it violates the direction of dependencies. The architecture makes violations visible, which is its primary value.
 
-## Real-World Implementation
+## What Works
 
-Here's how teams are implementing clean architecture typescript 2021 today:
+**Testability.** Business logic is pure TypeScript with no framework dependencies. You test it without mocking databases or HTTP. The infrastructure layer implementations are tested separately with integration tests. This separation means your unit tests run in milliseconds and don't require database connections. Your integration tests are explicit about what infrastructure they need.
+
+I've found that the testability benefit is real but comes with a cost. Testing the application layer requires creating mock implementations of every port interface. For a service with three dependencies (repository, message queue, email service), you need three mock objects per test. This boilerplate adds up. Using a factory function pattern helps:
 
 ```typescript
-// Example implementation pattern
-export class CleanArchitectureTypescript2021Service {
-  async deploy(options: DeployOptions) {
-    const config = await this.validate(options);
-    const result = await this.execute(config);
-    return this.monitor(result);
+function createUserService(mocks?: Partial<UserServiceDependencies>) {
+  const deps = {
+    userRepo: new MockUserRepo(),
+    emailService: new MockEmailService(),
+    auditLog: new MockAuditLog(),
+    ...mocks,
   }
+  return new UserService(deps)
 }
 ```
 
-The key insight? Abstraction without sacrificing control. We provide golden paths that cover 80% of use cases while supporting escape hatches for edge cases.
+**Framework independence.** The domain and application layers don't import Express, Prisma, or any framework. You can swap Express for Fastify without touching business logic. You can swap Prisma for Drizzle without touching use cases. We did this migration — Prisma to Drizzle — and changed exactly two files: the repository implementation and the dependency injection configuration. The use cases didn't change at all.
 
-## Measurable Outcomes
+**Boundary clarity.** The architecture forces you to make explicit decisions about where things belong. Is this a business rule (domain)? A workflow (application)? A technical detail (infrastructure)? This clarity is invaluable for onboarding new team members. They can look at the folder structure and understand the system's architecture without reading documentation.
 
-Organizations that have fully adopted clean architecture typescript 2021 report:
+## What Doesn't
 
-- 3x faster onboarding for new engineers
-- 60% reduction in configuration drift
-- 90% decrease in "works on my machine" incidents
-- Significant improvement in DORA metrics
+**Boilerplate.** Clean Architecture generates more files than simpler patterns. Each use case typically gets its own file with input/output types, a handler function, and tests. For a project with 50 use cases, that's 150+ files for the application layer alone. For small projects, this overhead outweighs the benefits. If your application is a CRUD API with simple business logic, a controller that directly calls a repository is cleaner than the layered abstraction.
 
-## Looking Ahead
+**TypeScript generics complexity.** Clean Architecture patterns often involve generic repository interfaces, mapper types, and use case contracts. The type signatures become complex. `Repository<T, ID>` with `findById`, `findAll`, `save`, `delete` methods, where `T` extends `Entity<ID>`. Teams spend time on type gymnastics that don't deliver business value. Keep interfaces simple. A repository interface with five methods is better than a generic interface that requires advanced TypeScript knowledge to use.
 
-As we move into 2022, clean architecture typescript 2021 will continue evolving toward greater simplicity and automation. The most successful teams balance standardization with flexibility — enforcing guardrails without stifling innovation.
+**Premature abstraction.** If you only have one implementation of a repository, the interface adds complexity without benefit. Extract interfaces when you actually have multiple implementations (in-memory for tests, PostgreSQL for production), not when you anticipate them. YAGNI applies to clean architecture too.
 
-The question isn't whether to adopt clean architecture typescript 2021 but how to do it effectively for your organization's context and constraints.
+## The Balance
+
+Clean Architecture works well for medium-to-large applications with complex business logic and multiple delivery mechanisms (API, CLI, background jobs). For simple CRUD applications, it's overkill.
+
+My evolved approach: apply the dependency rule (domain doesn't depend on infrastructure) but skip the full five-layer structure for simple projects. Use a three-layer structure instead:
+
+```
+src/
+├── domain/       # Business logic, no framework imports
+├── api/          # Routes, controllers, request handling
+└── data/         # Database access, external APIs
+```
+
+The `api` and `data` layers can import from `domain`, but `domain` imports nothing. This gives you 80% of the benefit with 20% of the boilerplate. You can always add more layers later when the need justifies it.
+
+The principles (dependency inversion, separation of concerns) are valuable. The strict structure is optional. Apply the dependency rule. Keep domain logic decoupled from frameworks. But don't create interfaces for every dependency unless you have multiple implementations.

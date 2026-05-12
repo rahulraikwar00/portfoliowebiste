@@ -3,23 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>How to Build Observability without Selling Your Soul | Rahul Raikwar</title>
-    <meta name="description" content="Observability Without Selling Soul 2022 has fundamentally changed how we build software. What started as an experimental approach in 2019 is now production-stan" />
+    <title>Observability Without Selling Your Soul | Rahul Raikwar</title>
+    <meta name="description" content="Observability has become synonymous with expensive SaaS vendors. Datadog bills that grow faster than your infrastructure. New Relic pricing that changes yearly." />
     <link rel="canonical" href="https://iamrahulraikwar.online/blog/observability-without-selling-soul-2022/" />
-    <meta property="og:title" content="How to Build Observability without Selling Your Soul" />
-    <meta property="og:description" content="Observability Without Selling Soul 2022 has fundamentally changed how we build software. What started as an experimental approach in 2019 is now production-stan" />
+    <meta property="og:title" content="Observability Without Selling Your Soul" />
+    <meta property="og:description" content="Observability has become synonymous with expensive SaaS vendors. Datadog bills that grow faster than your infrastructure. New Relic pricing that changes yearly." />
     <meta property="og:url" content="https://iamrahulraikwar.online/blog/observability-without-selling-soul-2022/" />
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="Rahul Raikwar" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="How to Build Observability without Selling Your Soul" />
-    <meta name="twitter:description" content="Observability Without Selling Soul 2022 has fundamentally changed how we build software. What started as an experimental approach in 2019 is now production-stan" />
+    <meta name="twitter:title" content="Observability Without Selling Your Soul" />
+    <meta name="twitter:description" content="Observability has become synonymous with expensive SaaS vendors. Datadog bills that grow faster than your infrastructure. New Relic pricing that changes yearly." />
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
-      "headline": "How to Build Observability without Selling Your Soul",
-      "datePublished": "April 5, 2022",
+      "headline": "Observability Without Selling Your Soul",
+      "datePublished": "April 15, 2022",
       "author": {
         "@type": "Person",
         "name": "Rahul Raikwar",
@@ -33,41 +33,30 @@
     <main>
       <section>
         <p><a href="../">&larr; All Posts</a></p>
-        <h1>How to Build Observability without Selling Your Soul</h1>
-        <p>April 5, 2022</p>
-        <div><p>Observability Without Selling Soul 2022 has fundamentally changed how we build software. What started as an experimental approach in 2019 is now production-standard across the industry.</p>
-<h2>Why This Matters</h2>
-<p>The shift toward observability without selling soul 2022 represents a significant evolution in developer productivity and system reliability. Companies adopting this approach see measurable improvements in deployment frequency and mean time to recovery.</p>
-<p>Key benefits observed in production:</p>
+        <h1>Observability Without Selling Your Soul</h1>
+        <p>April 15, 2022</p>
+        <div><p>Observability has become synonymous with expensive SaaS vendors. Datadog bills that grow faster than your infrastructure. New Relic pricing that changes yearly. Honeycomb&#39;s value proposition that doesn&#39;t scale for smaller teams. The message from vendors is consistent: spend more for better visibility. I&#39;ve been through this cycle with multiple companies — the first Datadog bill over $10K/month, the frantic optimization, the realization that most of the value comes from basic instrumentation.</p>
+<p>But observability doesn&#39;t require a six-figure vendor budget. An open-source stack with OpenTelemetry and Grafana can handle serious production workloads. The tradeoff is operational overhead, not capability.</p>
+<h2>What You Actually Need</h2>
+<p>Most teams need three things: metrics (CPU, memory, request rate, error rate, latency), traces (distributed request flow), and logs (structured, searchable). That&#39;s it. Everything else is nice-to-have. The vendors sell you on APM, infrastructure monitoring, rum, synthetic monitoring, and profiler integrations. These are valuable but not essential. Start with the basics, add specialized tools when you hit specific pain points.</p>
+<p>The core stack:</p>
+<p><strong>OpenTelemetry</strong> is the data collection layer. It&#39;s vendor-neutral, CNCF-graduating, and supports traces, metrics, and logs. Instrument your application with OTel SDKs, export to the OTel Collector, and the Collector sends data to your backend. The OTel Collector is the crucial piece — it handles batching, retries, filtering, and multi-backend routing. You instrument once and send to any backend.</p>
+<p><strong>Grafana</strong> is the visualization layer. Dashboards for metrics, traces, and logs. Alerting with Grafana Alerting (or Alertmanager for Prometheus-native). Explore for ad-hoc querying. Grafana is the best visualization tool regardless of your backend — it supports Prometheus, Tempo, Loki, Elasticsearch, Datadog, and dozens of other data sources.</p>
+<p><strong>For metrics:</strong> Prometheus or VictoriaMetrics. Prometheus is simpler for smaller deployments and has excellent Kubernetes integration (service discovery, pod monitoring). VictoriaMetrics handles more scale with less resources — it&#39;s a drop-in Prometheus-compatible replacement that uses 10x less storage for the same data.</p>
+<p><strong>For traces:</strong> Grafana Tempo or Jaeger. Tempo is designed for large-scale trace storage without indexing everything. This makes it cheaper to store traces than solutions that index span names, attributes, and tags. Tempo queries traces by service name, operation name, and time range — the most common query patterns. For deep analysis, it can access raw trace data from object storage.</p>
+<p><strong>For logs:</strong> Loki. It indexes labels (service name, pod, namespace), not the full text of log lines. This makes it dramatically cheaper to store logs than Elasticsearch. Loki compresses logs efficiently and stores them in object storage (S3, GCS, MinIO). A typical log retention of 30 days costs pennies per GB in S3.</p>
+<h2>The Cost Comparison</h2>
+<p>For a cluster with 20 services, 100GB/day logs, and moderate tracing:</p>
 <ul>
-<li>Reduced cognitive load on development teams</li>
-<li>Faster feedback loops through automation</li>
-<li>Consistent environments across development and production</li>
-<li>Improved security posture via standardized practices</li>
+<li>Datadog Pro tier: ~$3,000/month for reasonable retention</li>
+<li>Self-hosted OTel + Prometheus + Grafana + Tempo + Loki: ~$300/month in compute costs</li>
 </ul>
-<h2>Real-World Implementation</h2>
-<p>Here&#39;s how teams are implementing observability without selling soul 2022 today:</p>
-<pre><code class="language-typescript">// Example implementation pattern
-export class ObservabilityWithoutSellingSoul2022Service {
-  async deploy(options: DeployOptions) {
-    const config = await this.validate(options);
-    const result = await this.execute(config);
-    return this.monitor(result);
-  }
-}
-</code></pre>
-<p>The key insight? Abstraction without sacrificing control. We provide golden paths that cover 80% of use cases while supporting escape hatches for edge cases.</p>
-<h2>Measurable Outcomes</h2>
-<p>Organizations that have fully adopted observability without selling soul 2022 report:</p>
-<ul>
-<li>3x faster onboarding for new engineers</li>
-<li>60% reduction in configuration drift</li>
-<li>90% decrease in &quot;works on my machine&quot; incidents</li>
-<li>Significant improvement in DORA metrics</li>
-</ul>
-<h2>Looking Ahead</h2>
-<p>As we move into 2023, observability without selling soul 2022 will continue evolving toward greater simplicity and automation. The most successful teams balance standardization with flexibility — enforcing guardrails without stifling innovation.</p>
-<p>The question isn&#39;t whether to adopt observability without selling soul 2022 but how to do it effectively for your organization&#39;s context and constraints.</p>
+<p>The 10x difference compounds over time. A startup spending $3K/month on observability at 20 services will spend $10K/month at 60 services. The self-hosted stack scales sub-linearly because most components can share infrastructure.</p>
+<p>The tradeoff is operational overhead. Someone needs to maintain the OTel Collector, Prometheus, Grafana, Tempo, and Loki. An SRE can manage it in about 5 hours per week. A platform team can automate it to near-zero with Kubernetes operators and GitOps. For a team without operational capacity, the vendor premium is worth it.</p>
+<h2>When to Pay</h2>
+<p>The SaaS vendors provide real value: less operational overhead, better integrations, support, and advanced features like APM insights, SLO tracking, and error tracking. If observability isn&#39;t your team&#39;s core competency, the vendor premium is often justified.</p>
+<p>But the baseline — collecting and visualizing traces, metrics, and logs — is achievable with open-source tools at a fraction of the cost. Start with the open-source stack. Add paid tools only when you need specific features that justify the cost. Most teams find the open-source stack sufficient for years.</p>
+<p>Don&#39;t let observability vendors own your data and your budget. The open-source ecosystem is mature enough for production workloads. If you outgrow it, the experience you gained managing it will help you evaluate vendor offerings — you&#39;ll know what you actually need.</p>
 </div>
       </section>
     </main>

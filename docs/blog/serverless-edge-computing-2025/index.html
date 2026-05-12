@@ -3,23 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Serverless Edge Computing: Real-World Patterns | Rahul Raikwar</title>
-    <meta name="description" content="Serverless Edge Computing 2025 has fundamentally changed how we build software. What started as an experimental approach in 2022 is now production-standard acro" />
+    <title>Serverless at the Edge in 2025 — A Practical Guide | Rahul Raikwar</title>
+    <meta name="description" content="Serverless edge computing hit maturity in 2025. The arguments about whether to use it are over. The real question is when to use edge functions, when to use ser" />
     <link rel="canonical" href="https://iamrahulraikwar.online/blog/serverless-edge-computing-2025/" />
-    <meta property="og:title" content="Serverless Edge Computing: Real-World Patterns" />
-    <meta property="og:description" content="Serverless Edge Computing 2025 has fundamentally changed how we build software. What started as an experimental approach in 2022 is now production-standard acro" />
+    <meta property="og:title" content="Serverless at the Edge in 2025 — A Practical Guide" />
+    <meta property="og:description" content="Serverless edge computing hit maturity in 2025. The arguments about whether to use it are over. The real question is when to use edge functions, when to use ser" />
     <meta property="og:url" content="https://iamrahulraikwar.online/blog/serverless-edge-computing-2025/" />
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="Rahul Raikwar" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Serverless Edge Computing: Real-World Patterns" />
-    <meta name="twitter:description" content="Serverless Edge Computing 2025 has fundamentally changed how we build software. What started as an experimental approach in 2022 is now production-standard acro" />
+    <meta name="twitter:title" content="Serverless at the Edge in 2025 — A Practical Guide" />
+    <meta name="twitter:description" content="Serverless edge computing hit maturity in 2025. The arguments about whether to use it are over. The real question is when to use edge functions, when to use ser" />
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
-      "headline": "Serverless Edge Computing: Real-World Patterns",
-      "datePublished": "May 15, 2025",
+      "headline": "Serverless at the Edge in 2025 — A Practical Guide",
+      "datePublished": "May 7, 2025",
       "author": {
         "@type": "Person",
         "name": "Rahul Raikwar",
@@ -33,41 +33,39 @@
     <main>
       <section>
         <p><a href="../">&larr; All Posts</a></p>
-        <h1>Serverless Edge Computing: Real-World Patterns</h1>
-        <p>May 15, 2025</p>
-        <div><p>Serverless Edge Computing 2025 has fundamentally changed how we build software. What started as an experimental approach in 2022 is now production-standard across the industry.</p>
-<h2>Why This Matters</h2>
-<p>The shift toward serverless edge computing 2025 represents a significant evolution in developer productivity and system reliability. Companies adopting this approach see measurable improvements in deployment frequency and mean time to recovery.</p>
-<p>Key benefits observed in production:</p>
+        <h1>Serverless at the Edge in 2025 — A Practical Guide</h1>
+        <p>May 7, 2025</p>
+        <div><p>Serverless edge computing hit maturity in 2025. The arguments about whether to use it are over. The real question is when to use edge functions, when to use serverless in the cloud, and when to use containers — because in 2026, the winning architecture uses all three.</p>
+<h2>What the Edge Is Good At</h2>
+<p>Edge functions run in CDN nodes close to users. They&#39;re good at the things that need to happen fast and close to the requester:</p>
 <ul>
-<li>Reduced cognitive load on development teams</li>
-<li>Faster feedback loops through automation</li>
-<li>Consistent environments across development and production</li>
-<li>Improved security posture via standardized practices</li>
+<li><strong>Authentication checks.</strong> Verify a JWT, check a session, redirect to login. The edge can do this in single-digit milliseconds without a round trip to a central region.</li>
+<li><strong>Request routing.</strong> A/B test routing, geolocation-based redirects, feature flag evaluation. Make the decision at the edge, serve the right content.</li>
+<li><strong>Personalization.</strong> Read a cookie or token, customize the response. Done at the edge, it&#39;s effectively instant.</li>
+<li><strong>Bot mitigation and rate limiting.</strong> Block bad traffic before it reaches your origin servers.</li>
+<li><strong>API composition.</strong> Call multiple backend APIs and compose the response. The edge parallelizes requests that would otherwise be serial from the client.</li>
 </ul>
-<h2>Real-World Implementation</h2>
-<p>Here&#39;s how teams are implementing serverless edge computing 2025 today:</p>
-<pre><code class="language-typescript">// Example implementation pattern
-export class ServerlessEdgeComputing2025Service {
-  async deploy(options: DeployOptions) {
-    const config = await this.validate(options);
-    const result = await this.execute(config);
-    return this.monitor(result);
-  }
-}
-</code></pre>
-<p>The key insight? Abstraction without sacrificing control. We provide golden paths that cover 80% of use cases while supporting escape hatches for edge cases.</p>
-<h2>Measurable Outcomes</h2>
-<p>Organizations that have fully adopted serverless edge computing 2025 report:</p>
+<p>Cloudflare Workers processes over 10 million requests per second at 330+ locations. That&#39;s production scale, not a demo.</p>
+<h2>What the Edge Is Bad At</h2>
 <ul>
-<li>3x faster onboarding for new engineers</li>
-<li>60% reduction in configuration drift</li>
-<li>90% decrease in &quot;works on my machine&quot; incidents</li>
-<li>Significant improvement in DORA metrics</li>
+<li><strong>Long-running processes.</strong> Edge functions have tight CPU and memory limits. Cloudflare Workers enforce 30ms CPU budget and 128MB memory. Don&#39;t try to process video at the edge.</li>
+<li><strong>Complex state.</strong> Edge functions are inherently stateless. You can use distributed KV stores (Cloudflare KV, DynamoDB Global Tables), but strong consistency at the edge is hard.</li>
+<li><strong>Heavy compute.</strong> If you need GPU acceleration or significant processing, the edge isn&#39;t ready yet. Containers in a region are still better.</li>
 </ul>
-<h2>Looking Ahead</h2>
-<p>As we move into 2026, serverless edge computing 2025 will continue evolving toward greater simplicity and automation. The most successful teams balance standardization with flexibility — enforcing guardrails without stifling innovation.</p>
-<p>The question isn&#39;t whether to adopt serverless edge computing 2025 but how to do it effectively for your organization&#39;s context and constraints.</p>
+<h2>The Three-Tier Pattern</h2>
+<p>The emerging best practice in 2025-2026 is a three-tier architecture:</p>
+<ol>
+<li><strong>Edge</strong> for ingress decisions — auth, routing, caching, rate limiting</li>
+<li><strong>Serverless (cloud region)</strong> for bursty business events — order processing, notifications, webhooks</li>
+<li><strong>Containers</strong> for durable services — databases, long-running processes, GPU workloads</li>
+</ol>
+<p>Each layer handles different failure modes. The edge handles latency and policy. Serverless absorbs traffic spikes. Containers provide stability.</p>
+<h2>Cold Starts Are (Mostly) Solved</h2>
+<p>Cold starts were the big knock against serverless edge. They&#39;re largely a solved problem now. WASM-based edge functions start in microseconds. V8 isolates are pre-warmed. Function providers use ML-based prediction to warm instances before traffic arrives.</p>
+<p>Tail latency at the edge is now under 100ms for most providers. Cold starts are still possible for rarely-invoked functions, but for frequently-used paths, they&#39;re effectively gone.</p>
+<h2>Getting Started</h2>
+<p>Pick one latency-sensitive endpoint and move it to the edge. Auth verification is the easiest starting point. Instrument it with distributed tracing so you can see the latency improvement. Then expand.</p>
+<p>Serverless edge isn&#39;t the future — it&#39;s the present. The best teams in 2026 are using all three tiers together, not trying to force everything into one model.</p>
 </div>
       </section>
     </main>

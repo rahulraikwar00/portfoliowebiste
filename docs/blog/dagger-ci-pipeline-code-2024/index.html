@@ -3,23 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dagger CI: The Future of Pipeline as Code | Rahul Raikwar</title>
-    <meta name="description" content="Dagger Ci Pipeline Code 2024 has fundamentally changed how we build software. What started as an experimental approach in 2021 is now production-standard across" />
+    <title>Dagger CI — Pipelines as Code | Rahul Raikwar</title>
+    <meta name="description" content="Dagger is a CI/CD engine that lets you define pipelines in code (Go, TypeScript, Python) rather than YAML. It launched in 2022 and has been steadily gaining ado" />
     <link rel="canonical" href="https://iamrahulraikwar.online/blog/dagger-ci-pipeline-code-2024/" />
-    <meta property="og:title" content="Dagger CI: The Future of Pipeline as Code" />
-    <meta property="og:description" content="Dagger Ci Pipeline Code 2024 has fundamentally changed how we build software. What started as an experimental approach in 2021 is now production-standard across" />
+    <meta property="og:title" content="Dagger CI — Pipelines as Code" />
+    <meta property="og:description" content="Dagger is a CI/CD engine that lets you define pipelines in code (Go, TypeScript, Python) rather than YAML. It launched in 2022 and has been steadily gaining ado" />
     <meta property="og:url" content="https://iamrahulraikwar.online/blog/dagger-ci-pipeline-code-2024/" />
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="Rahul Raikwar" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Dagger CI: The Future of Pipeline as Code" />
-    <meta name="twitter:description" content="Dagger Ci Pipeline Code 2024 has fundamentally changed how we build software. What started as an experimental approach in 2021 is now production-standard across" />
+    <meta name="twitter:title" content="Dagger CI — Pipelines as Code" />
+    <meta name="twitter:description" content="Dagger is a CI/CD engine that lets you define pipelines in code (Go, TypeScript, Python) rather than YAML. It launched in 2022 and has been steadily gaining ado" />
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
-      "headline": "Dagger CI: The Future of Pipeline as Code",
-      "datePublished": "January 30, 2024",
+      "headline": "Dagger CI — Pipelines as Code",
+      "datePublished": "January 10, 2024",
       "author": {
         "@type": "Person",
         "name": "Rahul Raikwar",
@@ -33,41 +33,37 @@
     <main>
       <section>
         <p><a href="../">&larr; All Posts</a></p>
-        <h1>Dagger CI: The Future of Pipeline as Code</h1>
-        <p>January 30, 2024</p>
-        <div><p>Dagger Ci Pipeline Code 2024 has fundamentally changed how we build software. What started as an experimental approach in 2021 is now production-standard across the industry.</p>
-<h2>Why This Matters</h2>
-<p>The shift toward dagger ci pipeline code 2024 represents a significant evolution in developer productivity and system reliability. Companies adopting this approach see measurable improvements in deployment frequency and mean time to recovery.</p>
-<p>Key benefits observed in production:</p>
-<ul>
-<li>Reduced cognitive load on development teams</li>
-<li>Faster feedback loops through automation</li>
-<li>Consistent environments across development and production</li>
-<li>Improved security posture via standardized practices</li>
-</ul>
-<h2>Real-World Implementation</h2>
-<p>Here&#39;s how teams are implementing dagger ci pipeline code 2024 today:</p>
-<pre><code class="language-typescript">// Example implementation pattern
-export class DaggerCiPipelineCode2024Service {
-  async deploy(options: DeployOptions) {
-    const config = await this.validate(options);
-    const result = await this.execute(config);
-    return this.monitor(result);
+        <h1>Dagger CI — Pipelines as Code</h1>
+        <p>January 10, 2024</p>
+        <div><p>Dagger is a CI/CD engine that lets you define pipelines in code (Go, TypeScript, Python) rather than YAML. It launched in 2022 and has been steadily gaining adoption. By 2026, it&#39;s a mature alternative to GitHub Actions, GitLab CI, and Jenkins for teams that want programmatic pipelines. The core insight: CI/CD is software engineering, and software engineering tools should be written in programming languages, not markup languages.</p>
+<h2>The Problem Dagger Solves</h2>
+<p>CI/CD YAML files start simple and grow into unmaintainable messes. GitHub Actions workflows with 500 lines of YAML and 15 job dependencies. GitLab CI files with complex <code>rules:</code> blocks and <code>extends:</code> chains. Jenkinsfiles that nobody wants to touch. I&#39;ve maintained all three, and the pattern is always the same: the first 50 lines are clean, the next 100 are functional, and everything after that is held together by workarounds.</p>
+<p>The fundamental problem: YAML is a data serialization language, not a programming language. It has no functions, no loops, no variables (in the programming sense), no type checking, and no testing framework. When you need conditional logic, you use YAML conditionals that are specific to your CI provider. When you need reusable logic, you use YAML anchors or <code>extends</code> templates. When you need to debug, you commit and push because there&#39;s no local test runner.</p>
+<p>Dagger replaces YAML with general-purpose programming languages. Your pipeline is a function that takes inputs and returns outputs. You can use loops, conditionals, functions, and types. You can test your pipeline locally. You can compose pipelines from reusable modules.</p>
+<h2>How It Works</h2>
+<pre><code class="language-typescript">import { dag, Container, Directory, object, func } from &quot;@dagger.io/dagger&quot;
+
+@object()
+class MyPipeline {
+  @func()
+  async build(source: Directory): Promise&lt;Container&gt; {
+    return dag
+      .container()
+      .from(&quot;node:22&quot;)
+      .withDirectory(&quot;/src&quot;, source)
+      .withWorkdir(&quot;/src&quot;)
+      .withExec([&quot;npm&quot;, &quot;install&quot;])
+      .withExec([&quot;npm&quot;, &quot;run&quot;, &quot;build&quot;])
+      .withExec([&quot;npm&quot;, &quot;test&quot;])
   }
 }
 </code></pre>
-<p>The key insight? Abstraction without sacrificing control. We provide golden paths that cover 80% of use cases while supporting escape hatches for edge cases.</p>
-<h2>Measurable Outcomes</h2>
-<p>Organizations that have fully adopted dagger ci pipeline code 2024 report:</p>
-<ul>
-<li>3x faster onboarding for new engineers</li>
-<li>60% reduction in configuration drift</li>
-<li>90% decrease in &quot;works on my machine&quot; incidents</li>
-<li>Significant improvement in DORA metrics</li>
-</ul>
-<h2>Looking Ahead</h2>
-<p>As we move into 2025, dagger ci pipeline code 2024 will continue evolving toward greater simplicity and automation. The most successful teams balance standardization with flexibility — enforcing guardrails without stifling innovation.</p>
-<p>The question isn&#39;t whether to adopt dagger ci pipeline code 2024 but how to do it effectively for your organization&#39;s context and constraints.</p>
+<p>This pipeline runs locally (<code>dagger run ts-node pipeline.ts</code>), in CI (GitHub Actions, GitLab, Jenkins), or anywhere else Dagger runs. The same code, the same behavior, regardless of platform. The Dagger engine (a Docker container) executes each step in a containerized environment, caching outputs and parallelizing where possible.</p>
+<p>The local development experience is what sold me. With traditional CI, debugging a pipeline requires committing, pushing, waiting for the CI runner, reading the logs, and repeating. With Dagger, you run <code>dagger run pipeline.ts</code> and it executes locally. You see the output immediately. You can add <code>console.log</code> statements. You can set breakpoints in your IDE. The feedback loop is seconds instead of minutes.</p>
+<h2>The Tradeoffs</h2>
+<p>Dagger is more powerful than YAML but more complex. Writing a pipeline in TypeScript requires understanding Dagger&#39;s SDK, the container model, and the caching semantics. For simple projects (build -&gt; test -&gt; deploy), a 20-line GitHub Actions YAML is faster to write and easier to understand. The complexity investment only pays off when your pipeline has non-trivial logic.</p>
+<p>Dagger shines when you have complex pipeline logic (conditional deployments, matrix builds, environment- specific steps), when you want to test your pipeline locally before committing, when you need reusable pipeline modules across projects, and when you run the same pipeline across multiple CI providers. For these use cases, Dagger is transformative. The ability to test a deployment pipeline locally before merging to main saves hours of iteration time.</p>
+<p>For straightforward CI, stay with your provider&#39;s YAML. For complex pipelines, Dagger&#39;s programming-language approach is a significant improvement over YAML workarounds. The deciding factor is whether your CI pipeline is simple enough to fit in 100 lines of YAML. If it is, YAML is fine. If it&#39;s not, Dagger will save you debugging time.</p>
 </div>
       </section>
     </main>

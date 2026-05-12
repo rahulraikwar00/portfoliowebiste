@@ -3,22 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Infrastructure as Code is Dead, Long Live Desired State | Rahul Raikwar</title>
-    <meta name="description" content="Iac Dead Desired State 2025 has fundamentally changed how we build software. What started as an experimental approach in 2022 is now production-standard across" />
+    <title>Is IaC Dead? The Rise of Desired State | Rahul Raikwar</title>
+    <meta name="description" content="Every few years someone declares Infrastructure as Code dead. The arguments sound compelling. YAML is not code! Terraform is too verbose! Just use Pulumi in Typ" />
     <link rel="canonical" href="https://iamrahulraikwar.online/blog/iac-dead-desired-state-2025/" />
-    <meta property="og:title" content="Infrastructure as Code is Dead, Long Live Desired State" />
-    <meta property="og:description" content="Iac Dead Desired State 2025 has fundamentally changed how we build software. What started as an experimental approach in 2022 is now production-standard across" />
+    <meta property="og:title" content="Is IaC Dead? The Rise of Desired State" />
+    <meta property="og:description" content="Every few years someone declares Infrastructure as Code dead. The arguments sound compelling. YAML is not code! Terraform is too verbose! Just use Pulumi in Typ" />
     <meta property="og:url" content="https://iamrahulraikwar.online/blog/iac-dead-desired-state-2025/" />
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="Rahul Raikwar" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Infrastructure as Code is Dead, Long Live Desired State" />
-    <meta name="twitter:description" content="Iac Dead Desired State 2025 has fundamentally changed how we build software. What started as an experimental approach in 2022 is now production-standard across" />
+    <meta name="twitter:title" content="Is IaC Dead? The Rise of Desired State" />
+    <meta name="twitter:description" content="Every few years someone declares Infrastructure as Code dead. The arguments sound compelling. YAML is not code! Terraform is too verbose! Just use Pulumi in Typ" />
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
-      "headline": "Infrastructure as Code is Dead, Long Live Desired State",
+      "headline": "Is IaC Dead? The Rise of Desired State",
       "datePublished": "January 22, 2025",
       "author": {
         "@type": "Person",
@@ -33,41 +33,22 @@
     <main>
       <section>
         <p><a href="../">&larr; All Posts</a></p>
-        <h1>Infrastructure as Code is Dead, Long Live Desired State</h1>
+        <h1>Is IaC Dead? The Rise of Desired State</h1>
         <p>January 22, 2025</p>
-        <div><p>Iac Dead Desired State 2025 has fundamentally changed how we build software. What started as an experimental approach in 2022 is now production-standard across the industry.</p>
-<h2>Why This Matters</h2>
-<p>The shift toward iac dead desired state 2025 represents a significant evolution in developer productivity and system reliability. Companies adopting this approach see measurable improvements in deployment frequency and mean time to recovery.</p>
-<p>Key benefits observed in production:</p>
-<ul>
-<li>Reduced cognitive load on development teams</li>
-<li>Faster feedback loops through automation</li>
-<li>Consistent environments across development and production</li>
-<li>Improved security posture via standardized practices</li>
-</ul>
-<h2>Real-World Implementation</h2>
-<p>Here&#39;s how teams are implementing iac dead desired state 2025 today:</p>
-<pre><code class="language-typescript">// Example implementation pattern
-export class IacDeadDesiredState2025Service {
-  async deploy(options: DeployOptions) {
-    const config = await this.validate(options);
-    const result = await this.execute(config);
-    return this.monitor(result);
-  }
-}
-</code></pre>
-<p>The key insight? Abstraction without sacrificing control. We provide golden paths that cover 80% of use cases while supporting escape hatches for edge cases.</p>
-<h2>Measurable Outcomes</h2>
-<p>Organizations that have fully adopted iac dead desired state 2025 report:</p>
-<ul>
-<li>3x faster onboarding for new engineers</li>
-<li>60% reduction in configuration drift</li>
-<li>90% decrease in &quot;works on my machine&quot; incidents</li>
-<li>Significant improvement in DORA metrics</li>
-</ul>
-<h2>Looking Ahead</h2>
-<p>As we move into 2026, iac dead desired state 2025 will continue evolving toward greater simplicity and automation. The most successful teams balance standardization with flexibility — enforcing guardrails without stifling innovation.</p>
-<p>The question isn&#39;t whether to adopt iac dead desired state 2025 but how to do it effectively for your organization&#39;s context and constraints.</p>
+        <div><p>Every few years someone declares Infrastructure as Code dead. The arguments sound compelling. &quot;YAML is not code!&quot; &quot;Terraform is too verbose!&quot; &quot;Just use Pulumi in TypeScript!&quot; But IaC isn&#39;t dying. It&#39;s evolving from imperative provisioning toward desired state management.</p>
+<h2>The Problem with Classic IaC</h2>
+<p>Traditional IaC (Terraform, CloudFormation, ARM templates) works well for initial provisioning. You define resources, run <code>apply</code>, and infrastructure appears. The problems start afterward.</p>
+<p><strong>Drift is inevitable.</strong> Someone goes into the AWS console to fix a production issue at 2 AM. They change a security group rule. They resize an instance. They add a tag. The IaC template no longer matches reality. The next <code>terraform plan</code> shows changes that might overwrite the emergency fix. Now you have a decision to make — revert the change or update the template.</p>
+<p>AWS CloudFormation addressed this in 2025 with drift-aware change sets that do a three-way diff between your template, last deployed state, and actual infrastructure. Terraform has health assessments for the same purpose. But these are band-aids on a fundamental problem: reconciling declarative config with imperative reality.</p>
+<p><strong>Configuration management isn&#39;t deployment.</strong> IaC tools are great at saying &quot;make the infrastructure look like this.&quot; They&#39;re less good at ongoing management — certificate rotation, auto-scaling adjustments, gradual rollouts. You end up layering scripts on top of IaC.</p>
+<h2>What Desired State Means</h2>
+<p>The desired state model flips the approach. Instead of running a tool that makes infrastructure match a template, you have a continuous reconciliation loop. The system constantly compares actual state to desired state and corrects drift automatically.</p>
+<p>Kubernetes operators are the canonical example. You define a desired state in a custom resource. The operator watches for drift and reconciles. No manual <code>apply</code> needed. GitOps tools like Argo CD and Flux extend this pattern to the entire deployment pipeline.</p>
+<p>Crossplane takes this further — managing cloud resources (databases, buckets, queues) through Kubernetes-style reconciliation. Your infrastructure becomes custom resources in a cluster. Drift is corrected automatically.</p>
+<h2>What This Means for Practitioners</h2>
+<p>Terraform isn&#39;t dead. Pulumi isn&#39;t dead. They&#39;re still the right tools for initial provisioning and for teams that don&#39;t run Kubernetes. But the direction is clear: continuous reconciliation replaces periodic apply.</p>
+<p>If you&#39;re starting a new project in 2026, consider whether desired state makes sense for your use case. If you&#39;re already on Kubernetes, Crossplane or the AWS Controllers for Kubernetes (ACK) give you desired state for cloud resources. If you&#39;re not on Kubernetes, Terraform with automated drift detection is the pragmatic choice.</p>
+<p>The &quot;IaC is dead&quot; headlines are wrong. But the practice is changing. IaC used to mean &quot;I run a script to configure infrastructure.&quot; Increasingly, it means &quot;I declare what I want and the system makes it so.&quot;</p>
 </div>
       </section>
     </main>
