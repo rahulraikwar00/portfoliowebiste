@@ -1,6 +1,7 @@
 import './style.css';
 import { marked } from 'marked';
 import { createIcons, icons } from 'lucide';
+import { createHeader, createFooter } from './components';
 
 function addCopyButtons() {
   const preBlocks = document.querySelectorAll('#blog-post pre');
@@ -116,8 +117,8 @@ async function renderBlogPost(slug: string) {
   const idx = blogPosts.indexOf(post);
   const related = [blogPosts[idx - 1], blogPosts[idx + 1]].filter(Boolean);
 
-  const header = document.getElementById('main-header');
-  const footer = document.querySelector('footer');
+  const header = document.getElementById('header-container');
+  const footer = document.getElementById('footer-container');
   if (header) header.style.display = 'none';
   if (footer) footer.style.display = 'none';
 
@@ -131,9 +132,6 @@ async function renderBlogPost(slug: string) {
       <div class="meta">${post.date} · ${post.readingTime}</div>
       <div class="content">${html}</div>
       ${related.length ? `<div class="related"><p>More posts</p><div class="related-grid">${related.map(p => `<a href="#${p.slug}">${p.title}</a>`).join('')}</div></div>` : ''}
-      <div class="blog-support" style="text-align:center;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border)">
-        <button class="coffee-btn" id="blog-support-btn">☕ Support me</button>
-      </div>
     </section>`;
   
   const backLink = document.getElementById('back-link');
@@ -172,7 +170,6 @@ function renderBlogList() {
 
 function initSupportModal() {
   const btn = document.getElementById('support-btn');
-  const blogBtn = document.getElementById('blog-support-btn');
   const modal = document.getElementById('support-modal');
   const close = document.getElementById('modal-close');
   const upiEl = document.getElementById('upi-id');
@@ -183,7 +180,6 @@ function initSupportModal() {
   const closeModal = () => modal.classList.add('hidden');
 
   btn.addEventListener('click', open);
-  if (blogBtn) blogBtn.addEventListener('click', open);
   close.addEventListener('click', closeModal);
   modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
@@ -204,6 +200,11 @@ function initSupportModal() {
 }
 
 async function init() {
+  const headerContainer = document.getElementById('header-container');
+  const footerContainer = document.getElementById('footer-container');
+  if (headerContainer) headerContainer.innerHTML = createHeader();
+  if (footerContainer) footerContainer.innerHTML = createFooter();
+
   const saved = localStorage.getItem('theme');
   if (saved) {
     document.documentElement.setAttribute('data-theme', saved);

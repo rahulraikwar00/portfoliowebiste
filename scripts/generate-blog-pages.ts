@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { marked } from 'marked';
+import { createFooter } from '../src/components/Footer.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -9,9 +10,16 @@ const __dirname = path.dirname(__filename);
 const publicBlogDir = path.join(__dirname, '..', 'public', 'blog');
 const docsDir = path.join(__dirname, '..', 'docs');
 
-function parseFrontmatter(content) {
+interface BlogMeta {
+  slug?: string;
+  title?: string;
+  date?: string;
+  [key: string]: string | undefined;
+}
+
+function parseFrontmatter(content: string): { meta: BlogMeta; content: string } {
   const lines = content.split('\n');
-  const meta = {};
+  const meta: BlogMeta = {};
   let contentStart = 0;
   let inFrontmatter = false;
 
@@ -37,16 +45,16 @@ function parseFrontmatter(content) {
   };
 }
 
-function getDescription(content) {
+function getDescription(content: string): string {
   const text = content.replace(/^#.+$/m, '').trim().split('\n\n')[0] || '';
   return text.replace(/<[^>]*>/g, '').replace(/[""]/g, '').slice(0, 160).trim() || 'Read this blog post by Rahul Raikwar';
 }
 
-function escHtml(str) {
+function escHtml(str: string): string {
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 }
 
-function escJson(str) {
+function escJson(str: string): string {
   return str.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n').replace(/\r/g, '\\r');
 }
 
@@ -59,7 +67,7 @@ for (const file of files) {
   const slug = meta.slug;
   if (!slug) continue;
 
-  const htmlContent = marked.parse(content);
+  const htmlContent = marked.parse(content) as string;
   const description = getDescription(content);
   const postDir = path.join(docsDir, 'blog', slug);
 
@@ -70,23 +78,23 @@ for (const file of files) {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>${escHtml(meta.title)} | Rahul Raikwar</title>
+    <title>${escHtml(meta.title || '')} | Rahul Raikwar</title>
     <meta name="description" content="${escHtml(description)}" />
     <link rel="canonical" href="https://iamrahulraikwar.online/blog/${slug}/" />
-    <meta property="og:title" content="${escHtml(meta.title)}" />
+    <meta property="og:title" content="${escHtml(meta.title || '')}" />
     <meta property="og:description" content="${escHtml(description)}" />
     <meta property="og:url" content="https://iamrahulraikwar.online/blog/${slug}/" />
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="Rahul Raikwar" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="${escHtml(meta.title)}" />
+    <meta name="twitter:title" content="${escHtml(meta.title || '')}" />
     <meta name="twitter:description" content="${escHtml(description)}" />
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
-      "headline": "${escJson(meta.title)}",
-      "datePublished": "${escJson(meta.date)}",
+      "headline": "${escJson(meta.title || '')}",
+      "datePublished": "${escJson(meta.date || '')}",
       "author": {
         "@type": "Person",
         "name": "Rahul Raikwar",
@@ -100,16 +108,12 @@ for (const file of files) {
     <main>
       <section>
         <p><a href="../">&larr; All Posts</a></p>
-        <h1>${escHtml(meta.title)}</h1>
-        <p>${escHtml(meta.date)}</p>
+        <h1>${escHtml(meta.title || '')}</h1>
+        <p>${escHtml(meta.date || '')}</p>
         <div>${htmlContent}</div>
-        <div style="text-align:center;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border)">
-          <a href="https://iamrahulraikwar.online/" style="display:inline-flex;align-items:center;gap:0.35rem;padding:0.5rem 1.2rem;background:#0d9488;color:#fff;border-radius:8px;font-weight:600;text-decoration:none">☕ Support me</a>
-        </div>
       </section>
     </main>
-    <footer>
-      <p>&copy; ${new Date().getFullYear()} Rahul Raikwar</p>
+    ${createFooter()}
   </body>
 </html>`;
 
