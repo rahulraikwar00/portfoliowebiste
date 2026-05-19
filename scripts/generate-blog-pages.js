@@ -117,7 +117,8 @@ for (const file of files) {
   console.log('Generated blog page:', slug);
 }
 
-let sitemapUrls = `<url><loc>https://iamrahulraikwar.online/</loc><priority>1.0</priority><changefreq>daily</changefreq></url>`;
+let sitemapUrls = `<url><loc>https://iamrahulraikwar.online/</loc><priority>1.0</priority><changefreq>daily</changefreq></url>
+<url><loc>https://iamrahulraikwar.online/privacy-policy/</loc><priority>0.5</priority><changefreq>monthly</changefreq></url>`;
 
 for (const file of files) {
   const raw = fs.readFileSync(path.join(publicBlogDir, file), 'utf-8');
