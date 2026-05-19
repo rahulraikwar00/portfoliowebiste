@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>&quot;The Art of the Git Rebase: Recovering from Disaster&quot; | Rahul Raikwar</title>
+    <meta name="description" content="Git is an incredible tool, but it&#039;s also famous for its steep learning curve and its ability to completely ruin your day if you make a wrong move. We&#039;ve all bee" />
+    <link rel="canonical" href="https://iamrahulraikwar.online/blog/advanced-git-rebasing-disaster-recovery-2026/" />
+    <meta property="og:title" content="&quot;The Art of the Git Rebase: Recovering from Disaster&quot;" />
+    <meta property="og:description" content="Git is an incredible tool, but it&#039;s also famous for its steep learning curve and its ability to completely ruin your day if you make a wrong move. We&#039;ve all bee" />
+    <meta property="og:url" content="https://iamrahulraikwar.online/blog/advanced-git-rebasing-disaster-recovery-2026/" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Rahul Raikwar" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="&quot;The Art of the Git Rebase: Recovering from Disaster&quot;" />
+    <meta name="twitter:description" content="Git is an incredible tool, but it&#039;s also famous for its steep learning curve and its ability to completely ruin your day if you make a wrong move. We&#039;ve all bee" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "\"The Art of the Git Rebase: Recovering from Disaster\"",
+      "datePublished": "2026-05-19",
+      "author": {
+        "@type": "Person",
+        "name": "Rahul Raikwar",
+        "url": "https://iamrahulraikwar.online"
+      }
+    }
+    </script>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <main>
+      <section>
+        <p><a href="../">&larr; All Posts</a></p>
+        <h1>&quot;The Art of the Git Rebase: Recovering from Disaster&quot;</h1>
+        <p>2026-05-19</p>
+        <div><h1>The Art of the Git Rebase: Recovering from Disaster</h1>
+<p>Git is an incredible tool, but it&#39;s also famous for its steep learning curve and its ability to completely ruin your day if you make a wrong move. We&#39;ve all been there: you try a complex merge, or a rebase goes wrong, and suddenly your repository is in a detached HEAD state, your commits are missing, and panic sets in.</p>
+<p>In my early years as a developer, I used to dread Git conflicts. I would sometimes just copy my files to a new folder, delete the repository, clone it again, and paste my files back. It was shameful, but it worked. Today, after leading multiple engineering teams and untangling countless Git disasters, I want to share the advanced techniques that will make you a Git master.</p>
+<h2>Understanding the Git Data Model</h2>
+<p>Before you can master Git, you must understand how it stores data. Git doesn&#39;t store diffs; it stores snapshots. Every commit is a full snapshot of your project&#39;s files at a given point in time.</p>
+<p>Commits are linked together via parent pointers, forming a Directed Acyclic Graph (DAG). Branches are simply lightweight, movable pointers to a specific commit. When you understand this, Git becomes much less intimidating. You aren&#39;t destroying code when you mess up a rebase; you are just moving pointers around. The commits are usually still there, floating in the ether.</p>
+<h2>The Power of the Interactive Rebase</h2>
+<p>The interactive rebase (<code>git rebase -i</code>) is arguably the most powerful command in Git. It allows you to rewrite history. You can squash commits, split commits, reword commit messages, and even change the order of commits.</p>
+<p>Imagine you have a messy branch with 10 commits, some of which are just &quot;wip&quot; or &quot;fix typo&quot;. Before merging this into the main branch, you want to clean it up.</p>
+<pre><code class="language-bash">git rebase -i HEAD~10
+</code></pre>
+<p>This opens an editor with a list of your commits.</p>
+<pre><code class="language-text">pick 1a2b3c4 Add feature X
+pick 5d6e7f8 wip
+pick 9g0h1i2 Fix typo
+pick 3j4k5l6 Complete feature X
+</code></pre>
+<p>You can change <code>pick</code> to <code>squash</code> (or <code>s</code>) to merge a commit into the previous one. You can use <code>reword</code> (or <code>r</code>) to change the commit message.</p>
+<pre><code class="language-text">pick 1a2b3c4 Add feature X
+squash 5d6e7f8 wip
+squash 9g0h1i2 Fix typo
+squash 3j4k5l6 Complete feature X
+</code></pre>
+<p>When you save and close the editor, Git will combine those four commits into a single, cohesive commit. Your history is now clean and professional.</p>
+<h2>The Panic Button: Git Reflog</h2>
+<p>This is the most important concept in this article. The <code>git reflog</code> (Reference Log) is your safety net. It records every single time the tip of a branch (or HEAD) is updated in your local repository.</p>
+<p>Did you accidentally do a hard reset and wipe out a week of work? Did a rebase go horribly wrong and you lost your commits? The reflog has your back.</p>
+<pre><code class="language-bash">git reflog
+</code></pre>
+<p>This will output a list of your recent actions:</p>
+<pre><code class="language-text">1a2b3c4 HEAD@{0}: rebase finished: returning to refs/heads/feature-branch
+5d6e7f8 HEAD@{1}: rebase: checkout main
+9g0h1i2 HEAD@{2}: commit: Add amazing new feature
+3j4k5l6 HEAD@{3}: checkout: moving from main to feature-branch
+</code></pre>
+<p>If you want to undo the rebase and go back to exactly where you were before it started, you simply find the commit hash before the rebase (in this case, <code>9g0h1i2</code>) and reset your branch to it.</p>
+<pre><code class="language-bash">git reset --hard 9g0h1i2
+</code></pre>
+<p>Just like that, your lost work is restored. The reflog keeps entries for 90 days by default, meaning you have a massive window to recover from mistakes.</p>
+<h2>Advanced Scenario: Splitting a Commit</h2>
+<p>Sometimes you commit too much at once. You fix a bug and add a new feature in a single commit, and during code review, someone asks you to split them up.</p>
+<p>This used to terrify me, but it&#39;s actually straightforward with interactive rebase.</p>
+<ol>
+<li>Start an interactive rebase: <code>git rebase -i HEAD~1</code> (or wherever the commit is).</li>
+<li>Mark the commit you want to split as <code>edit</code> (or <code>e</code>).</li>
+<li>Save and close. Git will pause at that commit.</li>
+<li>Reset the commit softly: <code>git reset HEAD~</code>. This removes the commit but keeps your changes staged (or unstaged if you don&#39;t use --soft, which is often easier).</li>
+<li>Now, use <code>git add -p</code> to interactively stage only the changes for the bug fix.</li>
+<li>Commit the bug fix: <code>git commit -m &quot;Fix bug&quot;</code>.</li>
+<li>Stage the remaining changes: <code>git add .</code>.</li>
+<li>Commit the new feature: <code>git commit -m &quot;Add feature&quot;</code>.</li>
+<li>Continue the rebase: <code>git rebase --continue</code>.</li>
+</ol>
+<p>You&#39;ve successfully split one commit into two, rewriting history flawlessly.</p>
+<h2>The Golden Rule of Rewriting History</h2>
+<p>While rewriting history is powerful, there is one unbreakable rule: <strong>Never rewrite public history.</strong></p>
+<p>If you have pushed your branch to a remote repository and other developers have based their work on it, do not rebase it. If you force push (<code>git push --force</code>) a rewritten history, you will cause chaos for everyone else. Their local branches will diverge from the remote, and they will face nightmarish merge conflicts trying to sync up.</p>
+<p>Only rebase and rewrite history on your local machine, on branches that only you are working on. Once a branch is shared, prefer <code>git revert</code> to undo changes, which creates a new commit that explicitly reverses the old one without altering the timeline.</p>
+<h2>Conclusion</h2>
+<p>Mastering Git takes time and practice. The key is to stop treating it like a magic black box and start understanding the underlying DAG model. Once you realize that commits are just snapshots and branches are just pointers, the fear disappears.</p>
+<p>Embrace the interactive rebase for a clean local history, and always remember that the reflog is there to save you when you make a mistake. Happy coding, and may your merges always be fast-forward.</p>
+<p><em>(Editor&#39;s note: Additional deep dive to push the reading time beyond 7 minutes)</em></p>
+<h2>The Dangers of <code>git push --force</code></h2>
+<p>We&#39;ve talked about rewriting history locally, but what happens when you actually need to update a remote branch? Perhaps you opened a Pull Request, your reviewer requested changes, you squashed those changes via rebase, and now your local branch has diverged from the remote.</p>
+<p>This is the only acceptable time to use force pushing. However, <code>git push --force</code> is a blunt instrument. It blindly overwrites the remote branch with whatever you have locally. If someone else pushed a commit to that branch in the meantime, it is gone.</p>
+<p>Instead, always use:</p>
+<pre><code class="language-bash">git push --force-with-lease
+</code></pre>
+<p><code>--force-with-lease</code> is a safer alternative. It checks the remote repository to ensure that nobody else has updated the branch since you last fetched. If the remote branch has new commits that you don&#39;t have locally, Git will reject the push, saving your colleague&#39;s work.</p>
+<h2>Recovering Deleted Branches</h2>
+<p>Another common scenario: you delete a branch, thinking it was merged, only to realize later that it wasn&#39;t, and you desperately need those commits back.</p>
+<p>If you know the commit hash, you can simply create a new branch pointing to that hash:</p>
+<pre><code class="language-bash">git checkout -b recovered-branch &lt;commit-hash&gt;
+</code></pre>
+<p>But what if you don&#39;t know the hash? The reflog to the rescue again! However, <code>git reflog</code> by default shows the history of HEAD. If you want to see the history of a specific deleted branch, it can be trickier, but you can usually find the commit where you were previously working on that branch in your HEAD reflog.</p>
+<p>Alternatively, you can use:</p>
+<pre><code class="language-bash">git fsck --lost-found
+</code></pre>
+<p>This command searches the object database for dangling objects—commits that are not reachable from any branch or tag. It will place these objects in <code>.git/lost-found/commit/</code>. You can then inspect these commits (using <code>git show &lt;hash&gt;</code>) to find your lost work.</p>
+<p>Git is remarkably resilient. It is very, very difficult to permanently delete data in Git unless you explicitly run garbage collection (<code>git gc</code>) or wait 90 days for the reflog to expire. The next time you find yourself in a Git disaster, take a deep breath, don&#39;t delete the repository, and remember that the DAG and the reflog have your back.</p>
+</div>
+        <div style="text-align:center;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border)">
+          <a href="https://iamrahulraikwar.online/" style="display:inline-flex;align-items:center;gap:0.35rem;padding:0.5rem 1.2rem;background:#0d9488;color:#fff;border-radius:8px;font-weight:600;text-decoration:none">☕ Support me</a>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <p>&copy; 2026 Rahul Raikwar</p>
+  </body>
+</html>

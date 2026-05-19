@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>&quot;Securing Your CI/CD Pipelines: Preventing Supply Chain Attacks&quot; | Rahul Raikwar</title>
+    <meta name="description" content="For years, cybersecurity focused primarily on the perimeter: securing firewalls, patching servers, and finding vulnerabilities in the application code itself. B" />
+    <link rel="canonical" href="https://iamrahulraikwar.online/blog/securing-ci-cd-pipelines-github-actions-2026/" />
+    <meta property="og:title" content="&quot;Securing Your CI/CD Pipelines: Preventing Supply Chain Attacks&quot;" />
+    <meta property="og:description" content="For years, cybersecurity focused primarily on the perimeter: securing firewalls, patching servers, and finding vulnerabilities in the application code itself. B" />
+    <meta property="og:url" content="https://iamrahulraikwar.online/blog/securing-ci-cd-pipelines-github-actions-2026/" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Rahul Raikwar" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="&quot;Securing Your CI/CD Pipelines: Preventing Supply Chain Attacks&quot;" />
+    <meta name="twitter:description" content="For years, cybersecurity focused primarily on the perimeter: securing firewalls, patching servers, and finding vulnerabilities in the application code itself. B" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "\"Securing Your CI/CD Pipelines: Preventing Supply Chain Attacks\"",
+      "datePublished": "2026-05-21",
+      "author": {
+        "@type": "Person",
+        "name": "Rahul Raikwar",
+        "url": "https://iamrahulraikwar.online"
+      }
+    }
+    </script>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <main>
+      <section>
+        <p><a href="../">&larr; All Posts</a></p>
+        <h1>&quot;Securing Your CI/CD Pipelines: Preventing Supply Chain Attacks&quot;</h1>
+        <p>2026-05-21</p>
+        <div><h1>Securing Your CI/CD Pipelines: Preventing Supply Chain Attacks</h1>
+<p>For years, cybersecurity focused primarily on the perimeter: securing firewalls, patching servers, and finding vulnerabilities in the application code itself. But the landscape has shifted. Attackers have realized that breaching a production environment directly is hard. Breaching the CI/CD pipeline that builds and deploys the application is often much easier.</p>
+<p>This is the era of the supply chain attack. The SolarWinds hack was a wake-up call, but smaller-scale attacks happen daily. Attackers compromise a developer&#39;s credentials, inject malicious code during the build process, or steal deployment secrets to gain direct access to production.</p>
+<p>As an industry, we treat our CI/CD systems (like GitHub Actions, GitLab CI, or Jenkins) as trusted domains. We give them administrative access to our cloud environments. If your CI/CD pipeline isn&#39;t locked down, your production environment is already compromised.</p>
+<h2>The Principle of Least Privilege in CI/CD</h2>
+<p>The most common mistake I see in CI/CD setups is overly permissive credentials. A developer creates an AWS IAM user with <code>AdministratorAccess</code>, generates static access keys, and pastes them into GitHub Secrets.</p>
+<p>If an attacker manages to execute code in that GitHub Action runner (perhaps via a compromised third-party dependency or a pull request from a fork), they can extract those keys and own your entire AWS account.</p>
+<p><strong>Stop using long-lived static credentials.</strong></p>
+<p>Instead, embrace OIDC (OpenID Connect). Modern CI/CD platforms can act as Identity Providers. You configure your cloud provider (AWS, GCP, Azure) to trust your GitHub repository. When the pipeline runs, it requests a short-lived, temporary token based on its identity.</p>
+<pre><code class="language-yaml"># Example: Using OIDC in GitHub Actions with AWS
+permissions:
+  id-token: write # Required for OIDC
+  contents: read
+
+steps:
+  - name: Configure AWS credentials
+    uses: aws-actions/configure-aws-credentials@v3
+    with:
+      role-to-assume: arn:aws:iam::123456789012:role/my-github-actions-role
+      aws-region: us-east-1
+</code></pre>
+<p>With OIDC, there are no static keys to steal. The token expires in 15 minutes. Furthermore, you must scope the IAM role strictly. If the pipeline only needs to upload files to an S3 bucket, give it <code>s3:PutObject</code> permissions on that specific bucket. Nothing more.</p>
+<h2>Securing Dependencies</h2>
+<p>Modern applications are built on thousands of open-source dependencies. An attacker can compromise a popular npm package, publish a malicious version, and wait for your CI system to install it.</p>
+<p>To mitigate this, you must control what enters your build environment:</p>
+<ol>
+<li><strong>Lockfiles are Mandatory</strong>: Always commit <code>package-lock.json</code>, <code>yarn.lock</code>, or <code>Cargo.lock</code>. The CI system must run <code>npm ci</code> (not <code>npm install</code>) to ensure it builds exactly the versions specified in the lockfile.</li>
+<li><strong>Dependency Scanning</strong>: Integrate tools like Dependabot or Snyk into your pipeline. They will alert you (and block builds) if you are using a library with a known CVE.</li>
+<li><strong>Private Registries</strong>: For enterprise environments, use a private artifact registry (like Artifactory or AWS CodeArtifact) that proxies public registries. This allows you to block malicious packages at the gateway.</li>
+</ol>
+<h2>Environment Protection and Approvals</h2>
+<p>Not all branches are created equal. The pipeline running on a feature branch should not have the same access as the pipeline running on the <code>main</code> branch.</p>
+<p>GitHub Actions and GitLab CI provide &quot;Environments&quot; to manage this. You can specify that a deployment to the &quot;Production&quot; environment requires manual approval from a specific team.</p>
+<pre><code class="language-yaml"># GitHub Actions Environment configuration
+jobs:
+  deploy-production:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://my-app.com
+    steps:
+      # Deployment steps...
+</code></pre>
+<p>More importantly, secrets tied to an environment can only be accessed when a job is approved to run in that environment. This prevents a malicious pull request from reading your production database password during a test run.</p>
+<h2>Pinning Actions by SHA</h2>
+<p>If you use GitHub Actions, you probably use third-party actions from the marketplace.</p>
+<pre><code class="language-yaml">steps:
+  - uses: actions/checkout@v4
+  - uses: some-random-dev/awesome-action@v1
+</code></pre>
+<p>What happens if <code>some-random-dev</code> turns malicious, or their account gets hacked? They can push a malicious update to the <code>v1</code> tag, and your pipeline will blindly download and execute it.</p>
+<p>To prevent this, you should pin actions by their commit SHA, not their tag. A tag can be moved; a commit SHA is immutable.</p>
+<pre><code class="language-yaml">steps:
+  - uses: some-random-dev/awesome-action@a1b2c3d4e5f6g7h8i9j0
+</code></pre>
+<p>Tools like Dependabot can automatically update these SHAs for you when new versions are released, giving you the best of both worlds: security and automatic updates.</p>
+<p><em>(Editor&#39;s note: Added deeper dive section into supply chain security to provide more advanced insights)</em></p>
+<h2>The Threat of Typosquatting and Dependency Confusion</h2>
+<p>Beyond directly hacking a repository, attackers use more subtle techniques to inject malicious code into your supply chain. Two common methods are typosquatting and dependency confusion.</p>
+<h3>Typosquatting</h3>
+<p>Typosquatting relies on human error. An attacker publishes a package with a name very similar to a popular package, hoping a developer will make a typo when installing it.</p>
+<p>For example, instead of <code>npm install express</code>, a tired developer might type <code>npm install exprss</code>. If an attacker has claimed that name, they just executed code on the developer&#39;s machine. To mitigate this:</p>
+<ol>
+<li><strong>Code Review</strong>: Treat <code>package.json</code> changes as critical code changes. Review new dependencies meticulously.</li>
+<li><strong>Tooling</strong>: Use tools that analyze your dependency tree and warn you about packages with low download counts or suspicious naming patterns compared to popular alternatives.</li>
+</ol>
+<h3>Dependency Confusion</h3>
+<p>Dependency confusion is a more sophisticated attack that targets organizations using private package registries.</p>
+<p>Imagine your company uses a private package named <code>@mycompany/internal-auth</code>. You configure your package manager to check your internal registry first, and then fall back to the public npm registry for open-source packages.</p>
+<p>An attacker realizes you use <code>@mycompany/internal-auth</code> (perhaps by scraping a leaked package.json). They create a malicious package with the <em>exact same name</em> and publish it to the public npm registry, giving it a ridiculously high version number like <code>99.9.9</code>.</p>
+<p>Due to misconfigurations in package managers, when you run <code>npm install</code>, the tool might query both registries, see the version <code>99.9.9</code> on the public registry, determine it is the &quot;newest&quot; version, and download the malicious package instead of your internal one.</p>
+<p>To prevent dependency confusion:</p>
+<ol>
+<li><strong>Scope Your Packages</strong>: Always use scoped packages (e.g., <code>@yourorg/package-name</code>) for internal tools.</li>
+<li><strong>Reserve Your Scope</strong>: Even if you only use a scope internally, go to the public npm registry and register that scope to your organization. This prevents anyone else from publishing under that name publicly.</li>
+<li><strong>Strict Routing</strong>: Configure your artifact repository (like Artifactory or Sonatype Nexus) to <em>never</em> proxy requests for your internal scope to the upstream public registry.</li>
+</ol>
+<h2>Conclusion</h2>
+<p>Securing your CI/CD pipeline is no longer optional; it is the frontline of your application security. Treat your build agents as hostile environments. Never pass static credentials, rigorously verify your dependencies, enforce environment approvals, and pin third-party actions.</p>
+<p>By implementing these practices, you drastically reduce your attack surface and ensure that your automated deployment machine doesn&#39;t become the weapon used against you.</p>
+</div>
+        <div style="text-align:center;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border)">
+          <a href="https://iamrahulraikwar.online/" style="display:inline-flex;align-items:center;gap:0.35rem;padding:0.5rem 1.2rem;background:#0d9488;color:#fff;border-radius:8px;font-weight:600;text-decoration:none">☕ Support me</a>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <p>&copy; 2026 Rahul Raikwar</p>
+  </body>
+</html>
